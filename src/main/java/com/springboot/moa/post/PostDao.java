@@ -19,14 +19,15 @@ public class PostDao {
 
     public List<GetPostsRes> selectPosts(int categoryId){
         String selectPostsQuery = "\n" +
-                "        SELECT p.post_id as postId,\n" +
-                "            p.user_id as userId,\n" +
+                "        SELECT p.post_id as post_id,\n" +
+                "            p.user_id as user_id,\n" +
                 "            p.point as point,\n" +
                 "            p.title as title,\n" +
                 "            p.content as content,\n" +
-                "            c.category_id as categoryId " +
+                "            p.deadline as deadline " +
                 "        FROM post as p\n" +
-                "            join category as c on p.categoryId = c.categoryId\n";
+                "            join category as c on p.category_id = c.category_id\n" +
+                "where p.category_id=?";
         int selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs,rowNum) -> new GetPostsRes(
@@ -35,7 +36,7 @@ public class PostDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getInt("category_id")
+                        rs.getInt("deadline")
                 ), selectPostsParam);
     }
     public int checkCategoryExist(int categoryId){
