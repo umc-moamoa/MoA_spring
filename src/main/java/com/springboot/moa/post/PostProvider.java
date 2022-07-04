@@ -1,6 +1,7 @@
 package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
+import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,25 @@ public class PostProvider {
         try{
             return postDao.checkCategoryExist(categoryId);
         } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetPostDetailRes> retrievePostDetail(int postId) throws BaseException {
+        if (checkPostExist(postId) == 0)
+            throw new BaseException(POSTS_EMPTY_POST_ID);
+        try {
+            List<GetPostDetailRes> getPostDetailRes = postDao.selectPostDetail(postId);
+            return getPostDetailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+    public int checkPostExist(int postId) throws BaseException{
+        try {
+            return postDao.checkPostDetailExist(postId);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

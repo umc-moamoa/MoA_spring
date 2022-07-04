@@ -1,5 +1,6 @@
 package com.springboot.moa.post;
 
+import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,4 +49,32 @@ public class PostDao {
 
     }
 
+    public List<GetPostDetailRes> selectPostDetail(int postId) {
+        String selectPostDetailQuery = "\n" +
+                "        SELECT \n" +
+                "            pd.post_detail_id as post_detail_id,\n" +
+                "            pd.question as question,\n" +
+                "            pd.type as type\n" +
+                "        FROM post_detail as pd\n" +
+                "where pd.post_id=?";
+        int selectPostDetailParam = postId;
+
+
+        return this.jdbcTemplate.query(selectPostDetailQuery,
+                (rs, rowNum) -> new GetPostDetailRes(
+                        rs.getInt("post_detail_id"),
+                        rs.getString("question"),
+                        rs.getInt("type")
+                ),selectPostDetailParam);
+
+    }
+
+    public int checkPostDetailExist(int postId) {
+        String checkPostDetailQuery = "select exists(select post_id from post_detail where post_id = ?)";
+        int checkPostDetailParams = postId;
+        return this.jdbcTemplate.queryForObject(checkPostDetailQuery,
+                int.class,
+                checkPostDetailParams);
+
+    }
 }

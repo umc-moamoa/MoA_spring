@@ -1,4 +1,4 @@
-package com.springboot.moa.involve.model;
+package com.springboot.moa.post.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,10 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetInvolvesRes {
-
+public class GetPostDetailRes {
     int postDetailId;
     String question;
     int type;
-
 }
