@@ -2,6 +2,7 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
+import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,17 @@ public class PostController {
             return new BaseResponse<>(getPostsRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{postId}")
+    public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId")int postId) {
+        try {
+            List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
+            return new BaseResponse<>(getPostDetailRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 }
