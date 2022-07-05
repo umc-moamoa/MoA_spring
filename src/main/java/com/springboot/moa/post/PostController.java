@@ -53,16 +53,16 @@ public class PostController {
     public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
         try{
             if(postPostsReq.getTitle().length() > 30)
-                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_TITLE);
+                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
 
             if(postPostsReq.getContent().length() > 500)
-                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
+                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
 
             if(postPostsReq.getPoint() < 0)
-                return new BaseResponse<>(BaseResponseStatus.POST_FAILED_POINT);
+                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_POINT);
 
             if(postPostsReq.getDeadline()<0)
-                return new BaseResponse<>(BaseResponseStatus.POST_FAILD_DEADLINE);
+                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILD_DEADLINE);
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
         } catch(BaseException exception){
