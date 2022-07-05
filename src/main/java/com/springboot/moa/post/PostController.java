@@ -61,6 +61,8 @@ public class PostController {
             if(postPostsReq.getPoint() < 0)
                 return new BaseResponse<>(BaseResponseStatus.POST_FAILED_POINT);
 
+            if(postPostsReq.getDeadline()<0)
+                return new BaseResponse<>(BaseResponseStatus.POST_FAILD_DEADLINE);
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
         } catch(BaseException exception){

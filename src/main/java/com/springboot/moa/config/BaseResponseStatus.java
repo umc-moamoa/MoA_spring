@@ -29,6 +29,7 @@ public enum BaseResponseStatus {
     // posts
     POSTS_EMPTY_CATEGORY_ID(false, 2012, "카테고리 아이디 값을 확인해주세요."),
     POST_FAILED_POINT(false,2013,"포인트를 잘못 입력하였습니다."),
+    POST_FAILD_DEADLINE(false,2014,"제출기한을 잘못 입력하였습니다"),
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
