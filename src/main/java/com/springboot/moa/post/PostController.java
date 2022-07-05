@@ -4,6 +4,8 @@ import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
+import com.springboot.moa.post.model.PostPostsReq;
+import com.springboot.moa.post.model.PostPostsRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +17,12 @@ public class PostController {
     @Autowired
     private final PostProvider postProvider;
 
-    public PostController(PostProvider postProvider){
+    @Autowired
+    private final PostService postService;
+
+    public PostController(PostProvider postProvider, PostService postService){
         this.postProvider = postProvider;
+        this.postService = postService;
     }
 
     @ResponseBody
@@ -38,6 +44,25 @@ public class PostController {
             return new BaseResponse<>(getPostDetailRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("")
+    public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
+        try{
+//            int userIdxByJwt = jwtService.getUserIdx();
+//            if(postPostsReq.getUserIdx() != userIdxByJwt)
+//                return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+////          형식적 validation 처리
+//            if(postPostsReq.getContent().length() > 450)
+//                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
+//            if(postPostsReq.getPostImgUrls().size() < 1)
+//                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_EMPTY_IMGURL);
+            PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
+            return new BaseResponse<>(postPostsRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 }

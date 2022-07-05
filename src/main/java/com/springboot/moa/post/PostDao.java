@@ -2,6 +2,8 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
+import com.springboot.moa.post.model.PostDetailsReq;
+import com.springboot.moa.post.model.PostPostsReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -77,4 +79,32 @@ public class PostDao {
                 checkPostDetailParams);
 
     }
+    public int insertPosts(int userId, PostPostsReq postPostsReq){
+        String insertPostQuery = "INSERT INTO post(user_id, point, category_id,title,content,deadline ) VALUES (?, ?, ?,?,?,?)";
+        Object[] insertPostParams = new Object[]{userId, postPostsReq.getPoint(), postPostsReq.getCategoryId(),
+                postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline()};
+        this.jdbcTemplate.update(insertPostQuery,
+                insertPostParams);
+        String lastInsertIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+    }
+
+    public int insertPostDetails(int postIdx, PostDetailsReq postDetailsReq){
+        String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,type) VALUES (?,?,?)";
+        Object[] insertPostDetailsParams = new Object[]{postIdx, postDetailsReq.getQuestion(),postDetailsReq.getType()};
+        this.jdbcTemplate.update(insertPostDetailsQuery,
+                insertPostDetailsParams);
+        String lastInsertIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+    }
+
+    public int insertPostFormats(int detailId, String content){
+        String insertPostFormatQuery = "INSERT INTO format(post_detail_id,content) VALUES (?,?)";
+        Object[] insertPostFormatParams = new Object[]{detailId, content};
+        this.jdbcTemplate.update(insertPostFormatQuery,
+                insertPostFormatParams);
+        String lastInsertIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+    }
+
 }
