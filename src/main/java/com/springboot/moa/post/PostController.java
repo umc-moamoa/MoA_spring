@@ -2,6 +2,7 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
+import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
 import com.springboot.moa.post.model.PostPostsReq;
@@ -51,14 +52,15 @@ public class PostController {
     @PostMapping("")
     public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
         try{
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            if(postPostsReq.getUserIdx() != userIdxByJwt)
-//                return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
-////          형식적 validation 처리
-//            if(postPostsReq.getContent().length() > 450)
-//                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
-//            if(postPostsReq.getPostImgUrls().size() < 1)
-//                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_EMPTY_IMGURL);
+            if(postPostsReq.getTitle().length() > 30)
+                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_TITLE);
+
+            if(postPostsReq.getContent().length() > 500)
+                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
+
+            if(postPostsReq.getPoint() < 0)
+                return new BaseResponse<>(BaseResponseStatus.POST_FAILED_POINT);
+
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
         } catch(BaseException exception){

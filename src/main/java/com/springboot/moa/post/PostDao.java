@@ -89,9 +89,9 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
-    public int insertPostDetails(int postIdx, PostDetailsReq postDetailsReq){
+    public int insertPostDetails(int postId, PostDetailsReq postDetailsReq){
         String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,type) VALUES (?,?,?)";
-        Object[] insertPostDetailsParams = new Object[]{postIdx, postDetailsReq.getQuestion(),postDetailsReq.getType()};
+        Object[] insertPostDetailsParams = new Object[]{postId, postDetailsReq.getQuestion(),postDetailsReq.getType()};
         this.jdbcTemplate.update(insertPostDetailsQuery,
                 insertPostDetailsParams);
         String lastInsertIdxQuery = "select last_insert_id()";
