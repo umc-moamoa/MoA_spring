@@ -3,10 +3,7 @@ package com.springboot.moa.post;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
-import com.springboot.moa.post.model.GetPostDetailRes;
-import com.springboot.moa.post.model.GetPostsRes;
-import com.springboot.moa.post.model.PostPostsReq;
-import com.springboot.moa.post.model.PostPostsRes;
+import com.springboot.moa.post.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +64,28 @@ public class PostController {
             return new BaseResponse<>(postPostsRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/participantsAsc")
+    public BaseResponse<List<GetParticipantsRes>> getParticipantsAsc() {
+        try {
+            List<GetParticipantsRes> getParticipantsRes = postProvider.retrieveParticipantAsc();
+            return new BaseResponse<>(getParticipantsRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/participantsDesc")
+    public BaseResponse<List<GetParticipantsRes>> getParticipantsDesc() {
+        try {
+            List<GetParticipantsRes> getParticipantsRes = postProvider.retrieveParticipantDesc();
+            return new BaseResponse<>(getParticipantsRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
         }
     }
 }
