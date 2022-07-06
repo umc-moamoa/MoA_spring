@@ -2,6 +2,7 @@ package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.user.model.GetUserInfoRes;
+import com.springboot.moa.user.model.GetUserPostRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,11 @@ public class UserProvider {
         this.userDao = userDao;
     }
 
-    public List<GetUserInfoRes> retrieveUser(int userId) throws BaseException {
+    public GetUserInfoRes retrieveUser(int userId) throws BaseException {
         if(checkUserExist(userId) == 0)
             throw new BaseException(USERS_EMPTY_USER_ID);
         try{
-            List<GetUserInfoRes> getUserInfoRes = userDao.selectUser(userId);
+            GetUserInfoRes getUserInfoRes = userDao.selectUser(userId);
             return getUserInfoRes;
         }
         catch (Exception exception) {
@@ -38,6 +39,19 @@ public class UserProvider {
         try{
             return userDao.checkUserExist(userId);
         } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetUserPostRes> retrieveUserPosts(int userId) throws BaseException{
+        if(checkUserExist(userId) == 0)
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        try{
+            List<GetUserPostRes> getUserPosts = userDao.selectUserPosts(userId);
+
+            return getUserPosts;
+        }
+        catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
