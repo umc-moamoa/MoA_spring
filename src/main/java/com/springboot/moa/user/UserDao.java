@@ -56,7 +56,6 @@ public class UserDao {
                 "where p.status = 'ACTIVE' " +
                 "and p.user_id=?\n" +
                 "group by pd.post_id";
-        System.out.println(selectUserPostsQuery);
         int selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs,rowNum) -> new GetUserPostRes(
