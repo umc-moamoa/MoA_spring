@@ -31,7 +31,7 @@ public class ResultController {
 
         // 답변 내용이 없을 때
         if(postResultReq.getPostDetailResults() == null){
-            return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
+            return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
         }
 
         // for 문을 돌며 postResultReq에 있는 postDetailResult 객체를 받아옴
@@ -41,11 +41,11 @@ public class ResultController {
 
             // 답변이 일정 길이를 초과했을 때
             if(postDetailResultReq.getResult().length()> 450){
-                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
+                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
             }
             // 답변이 입력되지 않았을 때
             if(postDetailResultReq.getResult().length() < 1){
-                return new BaseResponse<>(BaseResponseStatus.POST_POSTS_INVALID_CONTENTS);
+                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
             }
         }
 
