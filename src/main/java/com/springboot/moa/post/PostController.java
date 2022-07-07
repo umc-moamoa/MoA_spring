@@ -68,7 +68,7 @@ public class PostController {
     }
 
     @ResponseBody
-    @GetMapping("/participantsAsc")
+    @GetMapping("/asc")
     public BaseResponse<List<GetParticipantsRes>> getParticipantsAsc() {
         try {
             List<GetParticipantsRes> getParticipantsRes = postProvider.retrieveParticipantAsc();
@@ -79,7 +79,7 @@ public class PostController {
     }
 
     @ResponseBody
-    @GetMapping("/participantsDesc")
+    @GetMapping("/desc")
     public BaseResponse<List<GetParticipantsRes>> getParticipantsDesc() {
         try {
             List<GetParticipantsRes> getParticipantsRes = postProvider.retrieveParticipantDesc();
@@ -88,4 +88,7 @@ public class PostController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
+
 }

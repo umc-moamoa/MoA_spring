@@ -110,9 +110,10 @@ public class PostDao {
                 "            p.title as title,\n" +
                 "            p.status as status,\n" +
                 "            count(distinct post_detail_id) as numberOfQuestion\n" +
-                "        FROM post as p, post_detail as pd, result as r\n" +
-                "        WHERE p.post_id = pd.post_id AND p.post_id = r.post_id" +
-                "             AND p.status='ACTIVE'\n" +
+                "        FROM post as p\n" +
+                "             left join post_detail as pd on p.post_id=pd.post_id\n" +
+                "                 left join result as r on p.post_id=r.post_id\n" +
+                "        WHERE p.status='ACTIVE'\n" +
                 "        GROUP BY pd.post_id\n" +
                 "        ORDER BY count(distinct r.user_id) DESC" +
                 "        LIMIT 3";
@@ -131,9 +132,10 @@ public class PostDao {
                 "            p.title as title,\n" +
                 "            p.status as status,\n" +
                 "            count(distinct post_detail_id) as numberOfQuestion\n" +
-                "        FROM post as p, post_detail as pd, result as r\n" +
-                "        WHERE p.post_id = pd.post_id AND p.post_id = r.post_id" +
-                "             AND p.status='ACTIVE'\n" +
+                "        FROM post as p\n" +
+                "             left join post_detail as pd on p.post_id=pd.post_id\n" +
+            "                 left join result as r on p.post_id=r.post_id\n" +
+                "        WHERE p.status='ACTIVE'\n" +
                 "        GROUP BY pd.post_id\n" +
                 "        ORDER BY count(distinct r.user_id) ASC" +
                 "        LIMIT 3";
