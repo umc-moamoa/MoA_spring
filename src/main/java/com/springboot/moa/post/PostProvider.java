@@ -1,6 +1,7 @@
 package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
+import com.springboot.moa.post.model.GetParticipantsRes;
 import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
 import org.slf4j.Logger;
@@ -59,6 +60,24 @@ public class PostProvider {
     public int checkPostExist(int postId) throws BaseException{
         try {
             return postDao.checkPostDetailExist(postId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetParticipantsRes> retrieveParticipantAsc() throws BaseException {
+        try {
+            List<GetParticipantsRes> getParticipantsRes = postDao.selectParticipantsAsc();
+            return getParticipantsRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetParticipantsRes> retrieveParticipantDesc() throws BaseException {
+        try {
+            List<GetParticipantsRes> getParticipantsRes = postDao.selectParticipantsDesc();
+            return getParticipantsRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
