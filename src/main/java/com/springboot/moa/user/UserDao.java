@@ -3,6 +3,7 @@ package com.springboot.moa.user;
 import com.springboot.moa.user.model.GetUserInfoRes;
 import com.springboot.moa.user.model.GetUserPartPostRes;
 import com.springboot.moa.user.model.GetUserPostRes;
+import com.springboot.moa.user.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -84,5 +85,14 @@ public class UserDao {
                         rs.getInt("point"),
                         rs.getInt("qCount")
                 ), selectUserPostsParam);
+    }
+
+    public int createUser(PostUserReq postUserReq){
+        String createUserQuery = "insert into user (name, id, nick, pwd) VALUES (?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getName(), postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
+
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
 }
