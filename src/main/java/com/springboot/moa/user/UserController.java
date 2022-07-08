@@ -77,4 +77,16 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    // localhost:9000/users/1/interest
+    @ResponseBody
+    @GetMapping("{userId}/interest")
+    public BaseResponse<List<GetUserInterestRes>> getUserInterests(@PathVariable("userId") int userId){
+        try {
+            List<GetUserInterestRes> getUserInterestRes = userProvider.retrieveUserInterest(userId);
+            return new BaseResponse<>(getUserInterestRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
