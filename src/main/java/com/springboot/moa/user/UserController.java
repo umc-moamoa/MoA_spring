@@ -6,6 +6,7 @@ import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,4 +78,16 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @ResponseBody
+    @PostMapping("/point")
+    public BaseResponse<PostPointsRes> addPointHistory(@RequestBody PostPointsReq postPointsReq) {
+        try {
+            PostPointsRes postPointsRes = userService.addPointHistory(postPointsReq);
+            return new BaseResponse<>(postPointsRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }

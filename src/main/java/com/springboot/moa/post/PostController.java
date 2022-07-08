@@ -4,7 +4,13 @@ import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.post.model.*;
+import com.springboot.moa.user.UserController;
+import com.springboot.moa.user.UserService;
+import com.springboot.moa.user.model.GetUserInfoRes;
+import com.springboot.moa.user.model.PostPointsReq;
+import com.springboot.moa.user.model.PostPointsRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +24,14 @@ public class PostController {
     @Autowired
     private final PostService postService;
 
-    public PostController(PostProvider postProvider, PostService postService){
+    @Autowired
+    private final UserController userController;
+
+    public PostController(PostProvider postProvider, PostService postService, UserController userController){
         this.postProvider = postProvider;
         this.postService = postService;
+        this.userController = userController;
+
     }
 
     @ResponseBody
@@ -46,7 +57,7 @@ public class PostController {
     }
 
     @ResponseBody
-    @PostMapping("")
+    @PostMapping("/point")
     public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
         try{
             if(postPostsReq.getTitle().length() > 30)
@@ -60,8 +71,18 @@ public class PostController {
 
             if(postPostsReq.getDeadline()<0)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_DEADLINE);
+
+//            if(getUserInfoRes.getPoint()-100<0)
+//                return new BaseResponse<>(BaseResponseStatus.UPDATE_FAILED_USER_POINT);
+
+//            PostPointsReq postPointsReq = new PostPointsReq(postPostsReq.getUserId(), 0,  100);
+//            BaseResponse<PostPointsRes> postPointsRes = userController.addPointHistory(postPointsReq);
+
+
+
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
+
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
