@@ -1,9 +1,6 @@
 package com.springboot.moa.user;
 
-import com.springboot.moa.user.model.GetUserInfoRes;
-import com.springboot.moa.user.model.GetUserPartPostRes;
-import com.springboot.moa.user.model.GetUserPostRes;
-import com.springboot.moa.user.model.PostUserReq;
+import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -95,4 +92,22 @@ public class UserDao {
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
+
+    public int addPointHistory(PostPointsReq postPointsReq){
+
+        String addPointHistoryQuery = "insert into point (user_id, add_amount, sub_amount) values(?,?,?)";
+        Object addPointHistoryParams = new Object[] {postPointsReq.getUserId(),postPointsReq.getAddAmount(), postPointsReq.getSubAmount()};
+        this.jdbcTemplate.update(addPointHistoryQuery,addPointHistoryParams);
+        Object[] addUserPointParam = null;
+        String addUserPointQuery = "update user set point = point + ? where user_id = ?";
+        if(postPointsReq.getAddAmount() == 0)
+            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()), postPointsReq.getUserId()};
+        else if(postPointsReq.getSubAmount() == 0)
+            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(), postPointsReq.getUserId()};
+        this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
+        String lastInsertIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+
+    }
+
 }
