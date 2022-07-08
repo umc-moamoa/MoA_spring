@@ -94,14 +94,23 @@ public class UserDao {
     }
 
     public List<GetUserInterestRes> selectUserInterest(int userId) {
-        String selectUserInterestQuery = "SELECT post_id\n" +
-                "FROM       interest\n" +
-                "WHERE      user_id = ?";
+        String selectUserInterestQuery = "SELECT p.post_id as postId,\n" +
+                "           p.point as point,\n" +
+                "           p.title as title,\n" +
+                "           count(pd.post_detail_id) as numberOfQuestion\n" +
+                "FROM       interest as i, post as p, post_detail as pd\n" +
+                "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=?\n" +
+                "GROUP BY   p.post_id";
+
 
         int selectUserInterestParam = userId;
         return this.jdbcTemplate.query(selectUserInterestQuery,
                 (rs, rowNum) -> new GetUserInterestRes(
-                        rs.getInt("post_id")
+                        rs.getInt("postId"),
+                        rs.getInt("point"),
+                        rs.getString("title"),
+                        rs.getInt("numberOfQuestion")
                 ), selectUserInterestParam);
     }
+
 }

@@ -10,4 +10,9 @@ import lombok.Setter;
 
 public class GetUserInterestRes {
     int postId;
+    int point;
+    String title;
+    // 등록된 질문의 개수
+    int numberOfQuestion;
 }
+
