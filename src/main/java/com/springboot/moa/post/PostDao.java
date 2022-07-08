@@ -1,9 +1,6 @@
 package com.springboot.moa.post;
 
-import com.springboot.moa.post.model.GetPostDetailRes;
-import com.springboot.moa.post.model.GetPostsRes;
-import com.springboot.moa.post.model.PostDetailsReq;
-import com.springboot.moa.post.model.PostPostsReq;
+import com.springboot.moa.post.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -105,6 +102,50 @@ public class PostDao {
                 insertPostFormatParams);
         String lastInsertIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+    }
+
+    public List<GetParticipantsRes> selectParticipantsDesc() {
+        String selectParticipantsDescQuery = "\n" +
+                "        SELECT p.point as point,\n" +
+                "            p.title as title,\n" +
+                "            p.status as status,\n" +
+                "            count(distinct post_detail_id) as numberOfQuestion\n" +
+                "        FROM post as p\n" +
+                "             left join post_detail as pd on p.post_id=pd.post_id\n" +
+                "                 left join result as r on p.post_id=r.post_id\n" +
+                "        WHERE p.status='ACTIVE'\n" +
+                "        GROUP BY pd.post_id\n" +
+                "        ORDER BY count(distinct r.user_id) DESC" +
+                "        LIMIT 3";
+        return this.jdbcTemplate.query(selectParticipantsDescQuery,
+                (rs, rowNum) -> new GetParticipantsRes(
+                        rs.getInt("point"),
+                        rs.getString("title"),
+                        rs.getString("status"),
+                        rs.getInt("numberOfQuestion")
+                ));
+    }
+
+    public List<GetParticipantsRes> selectParticipantsAsc() {
+        String selectParticipantsAscQuery = "\n" +
+                "        SELECT p.point as point,\n" +
+                "            p.title as title,\n" +
+                "            p.status as status,\n" +
+                "            count(distinct post_detail_id) as numberOfQuestion\n" +
+                "        FROM post as p\n" +
+                "             left join post_detail as pd on p.post_id=pd.post_id\n" +
+            "                 left join result as r on p.post_id=r.post_id\n" +
+                "        WHERE p.status='ACTIVE'\n" +
+                "        GROUP BY pd.post_id\n" +
+                "        ORDER BY count(distinct r.user_id) ASC" +
+                "        LIMIT 3";
+        return this.jdbcTemplate.query(selectParticipantsAscQuery,
+                (rs, rowNum) -> new GetParticipantsRes(
+                        rs.getInt("point"),
+                        rs.getString("title"),
+                        rs.getString("status"),
+                        rs.getInt("numberOfQuestion")
+                ));
     }
 
 }
