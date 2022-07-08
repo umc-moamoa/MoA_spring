@@ -59,9 +59,8 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("") // (POST) 127.0.0.1:9000/users
+    @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         try{
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
