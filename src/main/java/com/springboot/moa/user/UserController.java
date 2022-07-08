@@ -2,6 +2,7 @@ package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
+import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,14 @@ public class UserController {
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         try{
+            if(postUserReq.getId().length() > 20)
+                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_ID);
+            if(postUserReq.getName().length() > 20)
+                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NAME);
+            if(postUserReq.getNick().length() > 20)
+                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NICK);
+            if(postUserReq.getPwd().length() > 20)
+                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_PWD);
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){

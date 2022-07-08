@@ -23,13 +23,17 @@ public enum BaseResponseStatus {
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
 
     // users
+    USERS_USERS_FAILED_NAME(false, 2005, "이름 글자 수를 확인해주세요."),
+    USERS_USERS_FAILED_ID(false, 2006, "아이디 글자 수를 확인해주세요."),
+    USERS_USERS_FAILED_NICK(false, 2007, "닉네임 글자 수를 확인해주세요."),
+    USERS_USERS_FAILED_PWD(false, 2008, "비밀번호 글자 수를 확인해주세요."),
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
     USERS_FAILED_USER_ID(false, 2011, "없는 유저 아이디 값입니다."),
 
     // posts
     POSTS_EMPTY_CATEGORY_ID(false, 2012, "카테고리 아이디 값을 확인해주세요."),
     POST_INPUT_FAILED_POINT(false,2013,"포인트를 잘못 입력하였습니다."),
-    POST_INPUT_FAILD_DEADLINE(false,2014,"제출기한을 잘못 입력하였습니다"),
+    POST_INPUT_FAILED_DEADLINE(false,2014,"제출기한을 잘못 입력하였습니다"),
 
     // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
