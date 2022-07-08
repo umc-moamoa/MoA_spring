@@ -3,6 +3,7 @@ package com.springboot.moa.user;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.user.model.GetUserInfoRes;
+import com.springboot.moa.user.model.GetUserPartPostRes;
 import com.springboot.moa.user.model.GetUserPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,17 @@ public class UserController {
         try{
             List<GetUserPostRes> getUserPostRes = userProvider.retrieveUserPosts(userId);
             return new BaseResponse<>(getUserPostRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{userId}/post")
+    public BaseResponse<List<GetUserPartPostRes>> getUserPartPost(@PathVariable("userId")int userId) {
+        try{
+            List<GetUserPartPostRes> getUserPartPostRes = userProvider.retrieveUserPartPosts(userId);
+            return new BaseResponse<>(getUserPartPostRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

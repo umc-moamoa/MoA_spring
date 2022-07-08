@@ -1,6 +1,7 @@
 package com.springboot.moa.user;
 
 import com.springboot.moa.user.model.GetUserInfoRes;
+import com.springboot.moa.user.model.GetUserPartPostRes;
 import com.springboot.moa.user.model.GetUserPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -62,6 +63,25 @@ public class UserDao {
                         rs.getString("postTitle"),
                         rs.getInt("point"),
                         rs.getInt("postResultCount"),
+                        rs.getInt("qCount")
+                ), selectUserPostsParam);
+    }
+
+    public List<GetUserPartPostRes> selectUserPartPosts(int userId){
+        String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
+                "p.point as point,\n" +
+                "COUNT(distinct pd.post_detail_id) as qCount\n" +
+                "from post as p\n" +
+                "left join post_detail as pd on p.post_id=pd.post_id\n" +
+                "left join result as r on p.post_id=r.post_id\n" +
+                "where p.status = 'ACTIVE' " +
+                "and r.user_id=?\n" +
+                "group by pd.post_id";
+        int selectUserPostsParam = userId;
+        return this.jdbcTemplate.query(selectUserPostsQuery,
+                (rs,rowNum) -> new GetUserPartPostRes(
+                        rs.getString("postTitle"),
+                        rs.getInt("point"),
                         rs.getInt("qCount")
                 ), selectUserPostsParam);
     }
