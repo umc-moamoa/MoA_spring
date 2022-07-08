@@ -2,9 +2,8 @@ package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
-import com.springboot.moa.user.model.GetUserInfoRes;
-import com.springboot.moa.user.model.GetUserPartPostRes;
-import com.springboot.moa.user.model.GetUserPostRes;
+import com.springboot.moa.user.model.*;
+import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +14,15 @@ import java.util.List;
 public class UserController {
     @Autowired
     private final UserProvider userProvider;
+    @Autowired
+    private final UserService userService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public UserController(UserProvider userProvider){
+    public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
         this.userProvider = userProvider;
+        this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @ResponseBody
@@ -53,4 +58,15 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("") // (POST) 127.0.0.1:9000/users
+    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
+        // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
+        try{
+            PostUserRes postUserRes = userService.createUser(postUserReq);
+            return new BaseResponse<>(postUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
