@@ -1,9 +1,6 @@
 package com.springboot.moa.user;
 
-import com.springboot.moa.user.model.GetUserInfoRes;
-import com.springboot.moa.user.model.GetUserPartPostRes;
-import com.springboot.moa.user.model.GetUserPostRes;
-import com.springboot.moa.user.model.PostUserReq;
+import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -94,5 +91,17 @@ public class UserDao {
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
+    public List<GetUserInterestRes> selectUserInterest(int userId) {
+        String selectUserInterestQuery = "SELECT post_id\n" +
+                "FROM       interest\n" +
+                "WHERE      user_id = ?";
+
+        int selectUserInterestParam = userId;
+        return this.jdbcTemplate.query(selectUserInterestQuery,
+                (rs, rowNum) -> new GetUserInterestRes(
+                        rs.getInt("post_id")
+                ), selectUserInterestParam);
     }
 }
