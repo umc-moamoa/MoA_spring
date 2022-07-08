@@ -2,6 +2,7 @@ package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.user.model.GetUserInfoRes;
+import com.springboot.moa.user.model.GetUserPartPostRes;
 import com.springboot.moa.user.model.GetUserPostRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,19 @@ public class UserProvider {
             List<GetUserPostRes> getUserPosts = userDao.selectUserPosts(userId);
 
             return getUserPosts;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetUserPartPostRes> retrieveUserPartPosts(int userId) throws BaseException{
+        if(checkUserExist(userId) == 0)
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        try{
+            List<GetUserPartPostRes> getUserPartPosts = userDao.selectUserPartPosts(userId);
+
+            return getUserPartPosts;
         }
         catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
