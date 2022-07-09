@@ -1,9 +1,6 @@
 package com.springboot.moa.user;
 
-import com.springboot.moa.user.model.GetUserInfoRes;
-import com.springboot.moa.user.model.GetUserPartPostRes;
-import com.springboot.moa.user.model.GetUserPostRes;
-import com.springboot.moa.user.model.PostUserReq;
+import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -95,4 +92,25 @@ public class UserDao {
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
     }
+
+    public List<GetUserInterestRes> selectUserInterest(int userId) {
+        String selectUserInterestQuery = "SELECT p.post_id as postId,\n" +
+                "           p.point as point,\n" +
+                "           p.title as title,\n" +
+                "           count(pd.post_detail_id) as numberOfQuestion\n" +
+                "FROM       interest as i, post as p, post_detail as pd\n" +
+                "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=?\n" +
+                "GROUP BY   p.post_id";
+
+
+        int selectUserInterestParam = userId;
+        return this.jdbcTemplate.query(selectUserInterestQuery,
+                (rs, rowNum) -> new GetUserInterestRes(
+                        rs.getInt("postId"),
+                        rs.getInt("point"),
+                        rs.getString("title"),
+                        rs.getInt("numberOfQuestion")
+                ), selectUserInterestParam);
+    }
+
 }
