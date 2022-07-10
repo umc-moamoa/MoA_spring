@@ -75,9 +75,9 @@ public class PostController {
 //            if(getUserInfoRes.getPoint()-100<0)
 //                return new BaseResponse<>(BaseResponseStatus.UPDATE_FAILED_USER_POINT);
 
-//            PostPointsReq postPointsReq = new PostPointsReq(postPostsReq.getUserId(), 0,  100);
-//            BaseResponse<PostPointsRes> postPointsRes = userController.addPointHistory(postPointsReq);
 
+            PostPointsReq postPointsReq = new PostPointsReq(postPostsReq.getUserId(), 0,  100);
+            BaseResponse<PostPointsRes> postPointsRes = userController.addPointHistory(postPointsReq);
 
 
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
@@ -109,6 +109,18 @@ public class PostController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/content")
+    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") int postId) {
+        try {
+            List<GetPostContentRes> getPostContentRes = postProvider.retrievePostContent(postId);
+            return new BaseResponse<>(getPostContentRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 
 
