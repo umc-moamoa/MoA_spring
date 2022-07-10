@@ -148,4 +148,36 @@ public class PostDao {
                 ));
     }
 
+    public int insertInterest(int postId, int userId) {
+        String insertInterestQuery = "INSERT INTO interest (post_id, user_id) VALUES (?, ?)";
+        Object[] insertInterestParams = new Object[]{postId, userId};
+        this.jdbcTemplate.update(insertInterestQuery, insertInterestParams);
+        String lastInsertIdxQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+    }
+
+//    public int checkPostIdExist(int postId) {
+//        String checkPostIdExistQuery = "select exists(select post_id from post where post_id = ?)";
+//        int checkPostIdExistParams = postId;
+//        return this.jdbcTemplate.queryForObject(checkPostIdExistQuery,
+//                int.class,
+//                checkPostIdExistParams);
+//    }
+
+    public int checkUserIdExist(int userId) {
+        String checkUserIdExistQuery = "select exists(select user_id from user where user_id = ?)";
+        int checkUserIdExistParams = userId;
+        return this.jdbcTemplate.queryForObject(checkUserIdExistQuery,
+                int.class,
+                checkUserIdExistParams);
+    }
+
+    public int checkDuplicateInterest(int postId, int userId) {
+        String checkDuplicateInterestQuery = "select exists(select post_id, user_id from interest where post_id = ? and user_id = ?)";
+        int checkDuplicateInterestParams1 = postId;
+        int checkDuplicateInterestParams2 = userId;
+        return this.jdbcTemplate.queryForObject(checkDuplicateInterestQuery, int.class, checkDuplicateInterestParams1, checkDuplicateInterestParams2);
+
+    }
+
 }

@@ -46,6 +46,8 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_PASSWORD(false, 2030, "비밀번호를 입력해주세요."),
     POST_USERS_INVALID_PASSWORD(false, 2031, "비밀번호 형식을 확인해주세요."),
 
+    // [POST] /interest
+    DUPLICATED_INTEREST(false, 2040, "관심 게시물이 중복되었습니다."),
     /**
      * 3000 : Response 오류
      */
