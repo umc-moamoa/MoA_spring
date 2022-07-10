@@ -2,6 +2,7 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.model.GetParticipantsRes;
+import com.springboot.moa.post.model.GetPostContentRes;
 import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
 import org.slf4j.Logger;
@@ -82,4 +83,14 @@ public class PostProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetPostContentRes> retrievePostContent(int postId) throws BaseException {
+        try {
+            List<GetPostContentRes> getPostContentRes = postDao.selectPostContent(postId);
+            return getPostContentRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }
