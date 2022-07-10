@@ -4,6 +4,7 @@ import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.model.GetParticipantsRes;
 import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.post.model.GetPostsRes;
+import com.springboot.moa.post.model.PostInterestRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,4 +83,39 @@ public class PostProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public int retrieveDuplicateInterest(int postId, int userId) throws BaseException{
+        if (checkPostExist(postId) == 0)
+            throw new BaseException(POSTS_EMPTY_CATEGORY_ID);
+        if(checkUserIdExist(userId) == 0)
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        if(checkDuplicateInterest(postId, userId) == 1)
+            throw new BaseException(DUPLICATED_INTEREST);
+        try {
+            int postInterestRes = postDao.insertInterest(postId, userId);
+            return postInterestRes;
+        }catch (Exception exception)
+        {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    private int checkDuplicateInterest(int postId, int userId) throws BaseException{
+        try {
+            return postDao.checkDuplicateInterest(postId, userId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    private int checkUserIdExist(int userId) throws BaseException{
+        try {
+            return postDao.checkUserIdExist(userId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
 }
