@@ -47,6 +47,7 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PASSWORD(false, 2031, "비밀번호 형식을 확인해주세요."),
 
     UPDATE_FAILED_USER_POINT(false, 2040,"설문조사 등록에 실패했습니다."),
+    POINT_HISTORY_INPUT_FAILED(false, 2050,"point를 잘못 입력하였습니다"),
     /**
      * 3000 : Response 오류
      */

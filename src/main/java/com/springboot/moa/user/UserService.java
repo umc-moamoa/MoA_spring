@@ -53,14 +53,9 @@ public class UserService {
         }
     }
 
-    public PostPointsRes addPointHistory(@RequestBody PostPointsReq postPointsReq) throws BaseException {
-        if (userProvider.checkUserExist(postPointsReq.getUserId()) == 0) {
-            throw new BaseException(USERS_EMPTY_USER_ID);
-        }
-
+    public PostPointsRes addPointHistory(PostPointsReq postPointsReq) throws BaseException {
         try {
             int pointId = userDao.addPointHistory(postPointsReq);
-
             return new PostPointsRes(pointId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
