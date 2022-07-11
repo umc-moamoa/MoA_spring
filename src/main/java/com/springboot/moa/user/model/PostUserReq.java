@@ -12,4 +12,8 @@ public class PostUserReq {
     String id;
     String nick;
     String pwd;
+
+    public PostUserReq(){
+
+    }
 }

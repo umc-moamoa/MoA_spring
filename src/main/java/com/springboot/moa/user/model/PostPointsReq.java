@@ -10,4 +10,8 @@ public class PostPointsReq {
     int userId;
     int addAmount;
     int subAmount;
+
+    public PostPointsReq(){
+
+    }
 }
