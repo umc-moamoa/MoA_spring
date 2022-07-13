@@ -2,8 +2,10 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.model.PostDetailsReq;
+import com.springboot.moa.post.model.PostInterestRes;
 import com.springboot.moa.post.model.PostPostsReq;
 import com.springboot.moa.post.model.PostPostsRes;
+import com.sun.source.tree.CatchTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +45,15 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public PostInterestRes insertInterests(int postId, int userId) throws BaseException {
+        try {
+            int interestId = postDao.insertInterest(postId, userId);
+            return new PostInterestRes(interestId);
+        }catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }

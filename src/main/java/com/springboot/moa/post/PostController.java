@@ -7,6 +7,7 @@ import com.springboot.moa.post.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.basic.BasicEditorPaneUI;
 import java.util.List;
 
 @RestController
@@ -89,6 +90,16 @@ public class PostController {
         }
     }
 
-
+    // localhost:9000/posts/1/1
+    @ResponseBody
+    @PostMapping("/{postId}/{userId}")
+    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") int postId, @PathVariable("userId") int userId){
+        try {
+            int postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
+            return new BaseResponse (postInterestRes);
+        } catch (BaseException exception) {
+            return new BaseResponse (exception.getStatus());
+        }
+    }
 
 }
