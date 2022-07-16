@@ -45,6 +45,7 @@ public class UserService {
         }
         try{
             int userId = userDao.createUser(postUserReq);
+            userDao.addPointHistory(userId,0,0);
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(jwt, userId);
         } catch (Exception exception) {
@@ -55,7 +56,9 @@ public class UserService {
 
     public PostPointsRes addPointHistory(PostPointsReq postPointsReq) throws BaseException {
         try {
-            int pointId = userDao.addPointHistory(postPointsReq);
+            System.out.println(postPointsReq.getUserId());
+            int pointId = userDao.addPointHistory(postPointsReq.getUserId(),postPointsReq.getAddAmount(),postPointsReq.getSubAmount());
+            userDao.updateUserPoint(postPointsReq);
             return new PostPointsRes(pointId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

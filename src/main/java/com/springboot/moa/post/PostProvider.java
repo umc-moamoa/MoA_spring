@@ -85,6 +85,8 @@ public class PostProvider {
     }
 
     public List<GetPostContentRes> retrievePostContent(int postId) throws BaseException {
+        if (checkPostExist(postId) == 0)
+            throw new BaseException(POSTS_EMPTY_POST_ID);
         try {
             List<GetPostContentRes> getPostContentRes = postDao.selectPostContent(postId);
             return getPostContentRes;
