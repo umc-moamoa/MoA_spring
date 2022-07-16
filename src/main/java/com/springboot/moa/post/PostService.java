@@ -36,18 +36,15 @@ public class PostService {
         this.userService = userService;
     }
 
-
     public PostPostsRes createPosts(int userId, PostPostsReq postPostsReq) throws BaseException {
-        if (userProvider.retrieveUser(userId).getPoint() - 100 < 0)
-            throw new BaseException(UPDATE_FAILED_USER_POINT);
+//        if (userProvider.retrieveUser(userId).getPoint() - 100 < 0)
+//            throw new BaseException(UPDATE_FAILED_USER_POINT);
         try {
-//            PostPointsReq postPointsReq = new PostPointsReq(postPostsReq.getUserId(), 0, 100);
-//            userService.addPointHistory(postPointsReq);
             int postId = postDao.insertPosts(userId, postPostsReq);
             for (int i = 0; i < postPostsReq.getPostDetails().size(); i++) {
+                System.out.println(postPostsReq.getPostDetails().size());
                 PostDetailsReq postDetailsReq = postPostsReq.getPostDetails().get(i);
                 int postDetailId = postDao.insertPostDetails(postId, postDetailsReq);
-
                 for (int j = 0; j < postDetailsReq.getPostFormat().size(); j++) {
                     postDao.insertPostFormats(postDetailId, postDetailsReq.getPostFormat().get(j));
                 }
@@ -57,5 +54,6 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
 }

@@ -26,7 +26,7 @@ public class UserDao {
                 "            join post as p on u.user_id = p.user_id\n" +
                 "        WHERE u.user_id=?\n" +
                 "        GROUP BY u.nick, u.point\n";
-        System.out.println(selectUserQuery);
+
         int selectUserParam = userId;
         return this.jdbcTemplate.queryForObject(selectUserQuery,
                 (rs,rowNum) -> new GetUserInfoRes(
@@ -87,35 +87,33 @@ public class UserDao {
     public int createUser(PostUserReq postUserReq){
         String createUserQuery = "insert into user(name, id, nick, pwd) VALUES (?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getName(), postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
+        System.out.println(createUserParams);
+
         this.jdbcTemplate.update(createUserQuery, createUserParams);
-
         String lastInsertIdQuery = "select last_insert_id()";
-        String userInitialPointQuery ="insert into point(user_id, add_amount, sub_amount) values (?,?,?)";
-
         int userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
-        Object[] userInitialPointParam = new Object[]{userIdx, 0, 0};
-        this.jdbcTemplate.update(userInitialPointQuery, userInitialPointParam);
 
         return userIdx;
     }
 
-    public int addPointHistory(PostPointsReq postPointsReq){
+    public int addPointHistory(int userId, int addAmount, int subAmount){
         String addPointHistoryQuery = "insert into point(user_id, add_amount, sub_amount) values(?,?,?)";
-        Object addPointHistoryParams = new Object[] {postPointsReq.getUserId(),postPointsReq.getAddAmount(), postPointsReq.getSubAmount()};
-        System.out.println("df");
-        this.jdbcTemplate.update(addPointHistoryQuery, addPointHistoryParams);
-        System.out.println("13245");
+        Object[] addPointHistoryParams = new Object[]{userId,addAmount,subAmount};
+        String lastInsertIdxQuery = "select last_insert_id()";
+        this.jdbcTemplate.update(addPointHistoryQuery,addPointHistoryParams);
+        int pointId = this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        return pointId;
+    }
+
+
+    public void updateUserPoint(PostPointsReq postPointsReq){
         Object[] addUserPointParam = null;
         String addUserPointQuery = "update user set point = point + ? where user_id = ?";
         if(postPointsReq.getAddAmount() == 0)
-            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()), postPointsReq.getUserId()};
+            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
         else if(postPointsReq.getSubAmount() == 0)
-            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(), postPointsReq.getUserId()};
-
+            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
         this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
-        String lastInsertIdxQuery = "select last_insert_id()";
-
-        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
 }
