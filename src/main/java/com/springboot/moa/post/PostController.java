@@ -102,4 +102,14 @@ public class PostController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/content/{postId}")
+    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") int postId) {
+        try {
+            List<GetPostContentRes> getPostContentRes = postProvider.retrievePostContent(postId);
+            return new BaseResponse<>(getPostContentRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

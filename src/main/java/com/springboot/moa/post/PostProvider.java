@@ -1,10 +1,7 @@
 package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
-import com.springboot.moa.post.model.GetParticipantsRes;
-import com.springboot.moa.post.model.GetPostDetailRes;
-import com.springboot.moa.post.model.GetPostsRes;
-import com.springboot.moa.post.model.PostInterestRes;
+import com.springboot.moa.post.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,5 +114,15 @@ public class PostProvider {
 
     }
 
+    public List<GetPostContentRes> retrievePostContent(int postId) throws BaseException {
+        if (checkPostExist(postId) == 0)
+            throw new BaseException(POSTS_EMPTY_POST_ID);
+        try {
+            List<GetPostContentRes> getPostContentRes = postDao.selectPostContent(postId);
+            return getPostContentRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 }
