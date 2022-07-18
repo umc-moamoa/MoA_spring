@@ -3,6 +3,8 @@ package com.springboot.moa.user;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.PostDao;
 import com.springboot.moa.post.PostProvider;
+import com.springboot.moa.user.model.PostPointsReq;
+import com.springboot.moa.user.model.PostPointsRes;
 import com.springboot.moa.user.model.PostUserReq;
 import com.springboot.moa.user.model.PostUserRes;
 import com.springboot.moa.utils.JwtService;
@@ -47,6 +49,17 @@ public class UserService {
             return new PostUserRes(jwt, userId);
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public PostPointsRes addPointHistory(PostPointsReq postPointsReq) throws BaseException {
+        try {
+            System.out.println(postPointsReq.getUserId());
+            int pointId = userDao.addPointHistory(postPointsReq.getUserId(),postPointsReq.getAddAmount(),postPointsReq.getSubAmount());
+            userDao.updateUserPoint(postPointsReq);
+            return new PostPointsRes(pointId);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

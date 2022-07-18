@@ -180,4 +180,25 @@ public class PostDao {
 
     }
 
+    public List<GetPostContentRes> selectPostContent(int postId) {
+        String selectPostContentQuery = "\n" +
+                "select p.title as title,\n" +
+                "p.content as content,\n" +
+                "count(distinct pd.post_detail_id) as qCount, \n" +
+                "p.user_id as postUserId\n" +
+                "from post as p\n" +
+                "left join post_detail as pd on pd.post_id = p.post_id\n" +
+                "left join result as r on r.post_id = p.post_id \n" +
+                "where p.post_id = ? \n";
+
+        int selectPostContentParam = postId;
+
+        return this.jdbcTemplate.query(selectPostContentQuery,
+                (rs, rowNum) -> new GetPostContentRes(
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("qCount"),
+                        rs.getInt("postUserId")
+                ), selectPostContentParam);
+    }
 }
