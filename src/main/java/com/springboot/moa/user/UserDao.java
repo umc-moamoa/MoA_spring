@@ -26,7 +26,7 @@ public class UserDao {
                 "            join post as p on u.user_id = p.user_id\n" +
                 "        WHERE u.user_id=?\n" +
                 "        GROUP BY u.nick, u.point\n";
-        System.out.println(selectUserQuery);
+
         int selectUserParam = userId;
         return this.jdbcTemplate.queryForObject(selectUserQuery,
                 (rs,rowNum) -> new GetUserInfoRes(
@@ -85,13 +85,26 @@ public class UserDao {
     }
 
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into user (name, id, nick, pwd) VALUES (?,?,?,?)";
+        String createUserQuery = "insert into user(name, id, nick, pwd) VALUES (?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getName(), postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
-        this.jdbcTemplate.update(createUserQuery, createUserParams);
+        System.out.println(createUserParams);
 
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
         String lastInsertIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+        int userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+        return userIdx;
     }
+
+    public int addPointHistory(int userId, int addAmount, int subAmount){
+        String addPointHistoryQuery = "insert into point(user_id, add_amount, sub_amount) values(?,?,?)";
+        Object[] addPointHistoryParams = new Object[]{userId,addAmount,subAmount};
+        String lastInsertIdxQuery = "select last_insert_id()";
+        this.jdbcTemplate.update(addPointHistoryQuery,addPointHistoryParams);
+        int pointId = this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        return pointId;
+    }
+
 
     public List<GetUserInterestRes> selectUserInterest(int userId) {
         String selectUserInterestQuery = "SELECT p.post_id as postId,\n" +
@@ -132,4 +145,5 @@ public class UserDao {
             addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
         this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
     }
+
 }

@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import static com.springboot.moa.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.springboot.moa.config.BaseResponseStatus.PASSWORD_ENCRYPTION_ERROR;
+import static com.springboot.moa.config.BaseResponseStatus.*;
 
 @Service
 public class UserService {
@@ -45,6 +45,7 @@ public class UserService {
         }
         try{
             int userId = userDao.createUser(postUserReq);
+            userDao.addPointHistory(userId,0,0);
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(jwt, userId);
         } catch (Exception exception) {
@@ -63,4 +64,5 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 }

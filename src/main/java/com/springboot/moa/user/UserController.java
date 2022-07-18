@@ -6,11 +6,15 @@ import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static com.springboot.moa.config.BaseResponseStatus.POINT_HISTORY_INPUT_FAILED;
+
+import static com.springboot.moa.config.BaseResponseStatus.USERS_EMPTY_USER_ID;
+
 
 @RestController
 @RequestMapping("/users")
@@ -105,4 +109,5 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
 }
