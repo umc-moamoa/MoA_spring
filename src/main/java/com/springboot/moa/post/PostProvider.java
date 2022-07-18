@@ -1,7 +1,12 @@
 package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
+
 import com.springboot.moa.post.model.*;
+import com.springboot.moa.post.model.GetParticipantsRes;
+import com.springboot.moa.post.model.GetPostContentRes;
+import com.springboot.moa.post.model.GetPostDetailRes;
+import com.springboot.moa.post.model.GetPostsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +86,7 @@ public class PostProvider {
         }
     }
 
+
     public int retrieveDuplicateInterest(int postId, int userId) throws BaseException{
         if (checkPostExist(postId) == 0)
             throw new BaseException(POSTS_EMPTY_CATEGORY_ID);
@@ -113,6 +119,7 @@ public class PostProvider {
         }
 
     }
+
 
     public List<GetPostContentRes> retrievePostContent(int postId) throws BaseException {
         if (checkPostExist(postId) == 0)
