@@ -126,16 +126,6 @@ public class UserDao {
                 ), selectUserInterestParam);
     }
 
-    public int addPointHistory(int userId, int addAmount, int subAmount){
-        String addPointHistoryQuery = "insert into point(user_id, add_amount, sub_amount) values(?,?,?)";
-        Object[] addPointHistoryParams = new Object[]{userId,addAmount,subAmount};
-        String lastInsertIdxQuery = "select last_insert_id()";
-        this.jdbcTemplate.update(addPointHistoryQuery,addPointHistoryParams);
-        int pointId = this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
-        return pointId;
-    }
-
-
     public void updateUserPoint(PostPointsReq postPointsReq){
         Object[] addUserPointParam = null;
         String addUserPointQuery = "update user set point = point + ? where user_id = ?";
