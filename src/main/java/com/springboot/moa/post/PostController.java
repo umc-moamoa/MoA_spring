@@ -109,14 +109,14 @@ public class PostController {
     // localhost:9000/posts/1/1
     @ResponseBody
     @PostMapping("/{postId}/{userId}")
-    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") int postId, @PathVariable("userId") int userId){
+    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") int postId, @PathVariable("userId") int userId) {
         try {
             int postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
-            return new BaseResponse (postInterestRes);
+            return new BaseResponse(postInterestRes);
         } catch (BaseException exception) {
-            return new BaseResponse (exception.getStatus());
-
-
+            return new BaseResponse(exception.getStatus());
+        }
+    }
     @ResponseBody
     @GetMapping("/content/{postId}")
     public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") int postId) {
