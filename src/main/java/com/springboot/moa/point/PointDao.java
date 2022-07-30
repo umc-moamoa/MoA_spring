@@ -1,4 +1,4 @@
-package com.springboot.moa.user;
+package com.springboot.moa.point;
 
 import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class UserDao {
+public class PointDao {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -126,24 +126,14 @@ public class UserDao {
                 ), selectUserInterestParam);
     }
 
-    public void updateUserPoint(int userId,int addAmount,int subAmount){
+    public void updateUserPoint(PostPointsReq postPointsReq){
         Object[] addUserPointParam = null;
         String addUserPointQuery = "update user set point = point + ? where user_id = ?";
-        if(addAmount == 0)
-            addUserPointParam = new Object[] { -(subAmount),userId};
-        else if(subAmount == 0)
-            addUserPointParam = new Object[]{ addAmount,userId};
+        if(postPointsReq.getAddAmount() == 0)
+            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
+        else if(postPointsReq.getSubAmount() == 0)
+            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
         this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
     }
-
-//    public void updateUserPoint(PostPointsReq postPointsReq){
-//        Object[] addUserPointParam = null;
-//        String addUserPointQuery = "update user set point = point + ? where user_id = ?";
-//        if(postPointsReq.getAddAmount() == 0)
-//            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
-//        else if(postPointsReq.getSubAmount() == 0)
-//            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
-//        this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
-//    }
 
 }

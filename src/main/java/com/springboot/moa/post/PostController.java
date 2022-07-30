@@ -26,12 +26,12 @@ public class PostController {
     private final PostService postService;
 
     @Autowired
-    private final UserController userController;
+    private final UserService userService;
 
-    public PostController(PostProvider postProvider, PostService postService, UserController userController) {
+    public PostController(PostProvider postProvider, PostService postService, UserService userService) {
         this.postProvider = postProvider;
         this.postService = postService;
-        this.userController = userController;
+        this.userService = userService;
 
     }
 
@@ -67,15 +67,9 @@ public class PostController {
             if (postPostsReq.getContent().length() > 500)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
 
-            if (postPostsReq.getPoint() < 0)
-                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_POINT);
-
             if (postPostsReq.getDeadline() < 0)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_DEADLINE);
 
-//            if(getUserInfoRes.getPoint()-100<0)
-//                return new BaseResponse<>(BaseResponseStatus.UPDATE_FAILED_USER_POINT);
-//
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
 
