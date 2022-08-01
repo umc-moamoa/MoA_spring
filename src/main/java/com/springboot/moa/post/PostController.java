@@ -37,7 +37,7 @@ public class PostController {
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<List<GetPostsRes>> getPosts(@RequestParam int categoryId) {
+    public BaseResponse<List<GetPostsRes>> getPosts(@RequestParam long categoryId) {
         try {
             List<GetPostsRes> getPostsRes = postProvider.retrievePosts(categoryId);
             return new BaseResponse<>(getPostsRes);
@@ -48,7 +48,7 @@ public class PostController {
 
     @ResponseBody
     @GetMapping("/{postId}")
-    public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") int postId) {
+    public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
             List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
             return new BaseResponse<>(getPostDetailRes);
@@ -103,9 +103,9 @@ public class PostController {
     // localhost:9000/posts/1/1
     @ResponseBody
     @PostMapping("/{postId}/{userId}")
-    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") int postId, @PathVariable("userId") int userId) {
+    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") long postId, @PathVariable("userId") long userId) {
         try {
-            int postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
+            long postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
             return new BaseResponse(postInterestRes);
         } catch (BaseException exception) {
             return new BaseResponse(exception.getStatus());
@@ -113,7 +113,7 @@ public class PostController {
     }
     @ResponseBody
     @GetMapping("/content/{postId}")
-    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") int postId) {
+    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") long postId) {
         try {
             List<GetPostContentRes> getPostContentRes = postProvider.retrievePostContent(postId);
             return new BaseResponse<>(getPostContentRes);

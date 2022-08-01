@@ -5,8 +5,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class PostPostsReq {
-    int userId;
-    int categoryId;
+    long userId;
+    long categoryId;
     String title;
     String content;
     int deadline;

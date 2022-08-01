@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetPostsRes {
-    int postId;
-    int userId;
+    long postId;
+    long userId;
     int point;
     String title;
     String content;
