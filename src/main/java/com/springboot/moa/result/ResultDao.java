@@ -32,4 +32,11 @@ public class ResultDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
+
+    public int selectPostPoint(int postId){
+        String selectPostPointQuery = "select point from post where post_id = ?";
+        int selectPostPointParam = postId;
+
+        return this.jdbcTemplate.queryForObject(selectPostPointQuery,int.class,selectPostPointParam);
+    }
 }
