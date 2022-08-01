@@ -24,7 +24,8 @@ public class UserDao {
                 "            COUNT(*) as postCount\n" +
                 "        FROM user as u\n" +
                 "            join post as p on u.user_id = p.user_id\n" +
-                "        WHERE u.user_id=?\n" +
+                "        WHERE u.status = 'ACTIVE' " +
+                "        and u.user_id=?\n" +
                 "        GROUP BY u.nick, u.point\n";
 
         long selectUserParam = userId;
