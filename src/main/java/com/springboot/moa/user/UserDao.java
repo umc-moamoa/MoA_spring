@@ -137,14 +137,18 @@ public class UserDao {
         this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
     }
 
-//    public void updateUserPoint(PostPointsReq postPointsReq){
-//        Object[] addUserPointParam = null;
-//        String addUserPointQuery = "update user set point = point + ? where user_id = ?";
-//        if(postPointsReq.getAddAmount() == 0)
-//            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
-//        else if(postPointsReq.getSubAmount() == 0)
-//            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
-//        this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
-//    }
+    public List<GetPointHistoryRes> selectPointHistory(long userId){
+        String selectPointHistoryQeury ="select add_amount as addAmount, sub_amount as subAmount,\n"+
+                "sum(add_amount-sub_amount) over(order by point_id) as point\n"+
+                "from point where user_id = ? order by point_id desc;";
+        long selectPointHistoryParam = userId;
+
+        return this.jdbcTemplate.query(selectPointHistoryQeury,
+                (rs, rowNum) -> new GetPointHistoryRes(
+                        rs.getInt("point"),
+                        rs.getInt("addAmount"),
+                        rs.getInt("subAmount")
+                ), selectPointHistoryParam);
+    }
 
 }
