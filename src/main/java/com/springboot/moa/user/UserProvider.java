@@ -1,10 +1,7 @@
 package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
-import com.springboot.moa.user.model.GetUserInfoRes;
-import com.springboot.moa.user.model.GetUserInterestRes;
-import com.springboot.moa.user.model.GetUserPartPostRes;
-import com.springboot.moa.user.model.GetUserPostRes;
+import com.springboot.moa.user.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +75,17 @@ public class UserProvider {
             List<GetUserInterestRes> getUserInterestRes = userDao.selectUserInterest(userId);
             return getUserInterestRes;
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetPointHistoryRes> getPointHistory(long userId) throws BaseException {
+        if(checkUserExist(userId) == 0)
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        try {
+            List<GetPointHistoryRes> getPointHistoryRes = userDao.selectPointHistory(userId);
+            return getPointHistoryRes;
+        }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

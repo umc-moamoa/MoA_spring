@@ -94,18 +94,15 @@ public class UserController {
         }
     }
 
-//    @ResponseBody
-//    @PostMapping("/point")
-//    public BaseResponse<PostPointsRes> addPointHistory(@RequestBody PostPointsReq postPointsReq) throws BaseException {
-//        if((postPointsReq.getAddAmount()==0 & postPointsReq.getSubAmount()==0)|(postPointsReq.getAddAmount()!=0&postPointsReq.getSubAmount()!=0)){
-//            return new BaseResponse<>(POINT_HISTORY_INPUT_FAILED);
-//        }
-//        try {
-//            PostPointsRes postPointsRes = userService.addPointHistory(postPointsReq.getUserId(), postPointsReq.getAddAmount(), postPointsReq.getSubAmount());
-//            return new BaseResponse<>(postPointsRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    @ResponseBody
+    @GetMapping("/point")
+    public BaseResponse<List<GetPointHistoryRes>> getPointHistory(@RequestParam long userId) throws BaseException {
+        try {
+            List<GetPointHistoryRes> getPointHistoryRes = userProvider.getPointHistory(userId);
+            return new BaseResponse<>(getPointHistoryRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 }

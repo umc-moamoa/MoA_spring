@@ -58,7 +58,6 @@ public class PostService {
             }
             return new PostPostsRes(postId);
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
