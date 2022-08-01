@@ -59,7 +59,7 @@ public class PostDao {
                 "        SELECT \n" +
                 "            pd.post_detail_id as post_detail_id,\n" +
                 "            pd.question as question,\n" +
-                "            pd.type as type\n" +
+                "            pd.format as format\n" +
                 "        FROM post_detail as pd left join post as p on pd.post_id = p.post_id\n" +
                 "where pd.post_id=? and p.status = 'ACTIVE'";
         long selectPostDetailParam = postId;
@@ -67,9 +67,9 @@ public class PostDao {
 
         return this.jdbcTemplate.query(selectPostDetailQuery,
                 (rs, rowNum) -> new GetPostDetailRes(
-                        rs.getInt("post_detail_id"),
+                        rs.getLong("post_detail_id"),
                         rs.getString("question"),
-                        rs.getInt("type")
+                        rs.getInt("format")
                 ), selectPostDetailParam);
 
     }
@@ -122,7 +122,7 @@ public class PostDao {
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
                 "        WHERE p.status='ACTIVE'\n" +
-                "        GROUP BY pd.post_id\n" +
+                "        GROUP BY pd.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) DESC" +
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsDescQuery,
@@ -144,7 +144,7 @@ public class PostDao {
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
                 "        WHERE p.status='ACTIVE'\n" +
-                "        GROUP BY pd.post_id\n" +
+                "        GROUP BY pd.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) ASC" +
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsAscQuery,
@@ -206,11 +206,11 @@ public class PostDao {
 
     public int usePoints(long postId){
         String usePointsQuery = "\n"+
-                "select mu + du as point " +
-                "from (select count(case when pd.format = 1 then 1 end )*3 as mu," +
-                "count(case when pd.format = 2 then 1 end )*5 as du "+
-                "from post_detail as pd left join post as p on pd.post_id = p.post_id"+
-                "where post_id = ? and p.status = 'ACTIVE') as cnt";
+                "select mu + du as point\n" +
+                "from (select count(case when pd.format = 1 then 1 end )*3 as mu,\n" +
+                "count(case when pd.format = 2 then 1 end )*5 as du\n"+
+                "from post_detail as pd left join post as p on pd.post_id = p.post_id\n"+
+                "where pd.post_id = ? and p.status = 'ACTIVE') as cnt";
         long usePointsParam = postId;
 
         return this.jdbcTemplate.queryForObject(usePointsQuery,
@@ -219,12 +219,12 @@ public class PostDao {
 
     public void setPostPoints(long postId){
         String setPostPointsQuery = "\n"+
-                "select mu + du as point " +
+                "select mu + du as point\n" +
                 "from" +
-                "(select count(case when pd.format = 1 then 1 end ) as mu," +
-                "count(case when pd.format = 2 then 1 end )*3 as du "+
-                "from post_detail as pd left join post as p on pd.post_id = p.post_id"+
-                "where post_id = ? and p.status = 'ACTIVE') as cnt";
+                "(select count(case when pd.format = 1 then 1 end ) as mu,\n" +
+                "count(case when pd.format = 2 then 1 end )*3 as du\n"+
+                "from post_detail as pd left join post as p on pd.post_id = p.post_id\n"+
+                "where pd.post_id = ? and p.status = 'ACTIVE') as cnt";
         long setPostPointsParam = postId;
         int point = this.jdbcTemplate.queryForObject(setPostPointsQuery,int.class,setPostPointsParam);
 
