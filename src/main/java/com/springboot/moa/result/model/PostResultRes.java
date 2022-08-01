@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostResultRes {
-    int resultId;
+    long resultId;
 
 }

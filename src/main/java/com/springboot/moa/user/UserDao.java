@@ -17,7 +17,7 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public GetUserInfoRes selectUser(int userId){
+    public GetUserInfoRes selectUser(long userId){
         String selectUserQuery = "\n" +
                 "        SELECT u.nick as nick,\n" +
                 "            u.point as point,\n" +
@@ -27,7 +27,7 @@ public class UserDao {
                 "        WHERE u.user_id=?\n" +
                 "        GROUP BY u.nick, u.point\n";
 
-        int selectUserParam = userId;
+        long selectUserParam = userId;
         return this.jdbcTemplate.queryForObject(selectUserQuery,
                 (rs,rowNum) -> new GetUserInfoRes(
                         rs.getString("nick"),
@@ -36,16 +36,16 @@ public class UserDao {
                 ), selectUserParam);
     }
 
-    public int checkUserExist(int userId){
+    public int checkUserExist(long userId){
         String checkUserExistQuery = "select exists(select user_id from user where user_id = ?)";
-        int checkUserExistParams = userId;
+        long checkUserExistParams = userId;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
                 checkUserExistParams);
 
     }
 
-    public List<GetUserPostRes> selectUserPosts(int userId){
+    public List<GetUserPostRes> selectUserPosts(long userId){
         String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
                 "p.point as point,\n" +
                 "COUNT(distinct r.user_id) as postResultCount,\n" +
@@ -56,7 +56,7 @@ public class UserDao {
                 "where p.status = 'ACTIVE' " +
                 "and p.user_id=?\n" +
                 "group by pd.post_id";
-        int selectUserPostsParam = userId;
+        long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs,rowNum) -> new GetUserPostRes(
                         rs.getString("postTitle"),
@@ -66,7 +66,7 @@ public class UserDao {
                 ), selectUserPostsParam);
     }
 
-    public List<GetUserPartPostRes> selectUserPartPosts(int userId){
+    public List<GetUserPartPostRes> selectUserPartPosts(long userId){
         String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
                 "p.point as point,\n" +
                 "COUNT(distinct pd.post_detail_id) as qCount\n" +
@@ -76,7 +76,7 @@ public class UserDao {
                 "where p.status = 'ACTIVE' " +
                 "and r.user_id=?\n" +
                 "group by pd.post_id";
-        int selectUserPostsParam = userId;
+        long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs,rowNum) -> new GetUserPartPostRes(
                         rs.getString("postTitle"),
@@ -85,28 +85,27 @@ public class UserDao {
                 ), selectUserPostsParam);
     }
 
-    public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into user(name, id, nick, pwd) VALUES (?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getName(), postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
-        System.out.println(createUserParams);
+    public long createUser(PostUserReq postUserReq){
+        String createUserQuery = "insert into user(id, nick, pwd) VALUES (?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
 
         this.jdbcTemplate.update(createUserQuery, createUserParams);
         String lastInsertIdQuery = "select last_insert_id()";
-        int userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+        long userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery,long.class);
 
         return userIdx;
     }
 
-    public int addPointHistory(int userId, int addAmount, int subAmount){
+    public long addPointHistory(long userId, int addAmount, int subAmount){
         String addPointHistoryQuery = "insert into point(user_id, add_amount, sub_amount) values(?,?,?)";
         Object[] addPointHistoryParams = new Object[]{userId,addAmount,subAmount};
         String lastInsertIdxQuery = "select last_insert_id()";
         this.jdbcTemplate.update(addPointHistoryQuery,addPointHistoryParams);
-        int pointId = this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        long pointId = this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
         return pointId;
     }
 
-    public List<GetUserInterestRes> selectUserInterest(int userId) {
+    public List<GetUserInterestRes> selectUserInterest(long userId) {
         String selectUserInterestQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
@@ -116,17 +115,17 @@ public class UserDao {
                 "GROUP BY   p.post_id";
 
 
-        int selectUserInterestParam = userId;
+        long selectUserInterestParam = userId;
         return this.jdbcTemplate.query(selectUserInterestQuery,
                 (rs, rowNum) -> new GetUserInterestRes(
-                        rs.getInt("postId"),
+                        rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getInt("numberOfQuestion")
                 ), selectUserInterestParam);
     }
 
-    public void updateUserPoint(int userId,int addAmount,int subAmount){
+    public void updateUserPoint(long userId, int addAmount, int subAmount){
         Object[] addUserPointParam = null;
         String addUserPointQuery = "update user set point = point + ? where user_id = ?";
         if(addAmount == 0)
