@@ -44,7 +44,7 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try{
-            int userId = userDao.createUser(postUserReq);
+            long userId = userDao.createUser(postUserReq);
             userDao.addPointHistory(userId,0,0);
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(jwt, userId);
@@ -54,9 +54,9 @@ public class UserService {
         }
     }
 
-    public PostPointsRes addPointHistory(int userId, int addAmount, int subAmount) throws BaseException {
+    public PostPointsRes addPointHistory(long userId, int addAmount, int subAmount) throws BaseException {
         try {
-            int pointId = userDao.addPointHistory(userId,addAmount, subAmount);
+            long pointId = userDao.addPointHistory(userId,addAmount, subAmount);
             userDao.updateUserPoint(userId,addAmount, subAmount);
             return new PostPointsRes(pointId);
         } catch (Exception exception) {

@@ -29,9 +29,9 @@ public class ResultService {
         this.userService = userService;
     }
 
-    public PostResultRes createResults(int postId, PostResultReq postResultReq) throws BaseException {
+    public PostResultRes createResults(long postId, PostResultReq postResultReq) throws BaseException {
         try {
-            int resultId = resultDao.insertResults(postId, postResultReq);
+            long resultId = resultDao.insertResults(postId, postResultReq);
             for (int i = 0; i < postResultReq.getPostDetailResults().size(); i++) {
                 PostDetailResultReq postDetailResultReq = postResultReq.getPostDetailResults().get(i);
                 resultDao.insertResultDetails(resultId, postDetailResultReq);
