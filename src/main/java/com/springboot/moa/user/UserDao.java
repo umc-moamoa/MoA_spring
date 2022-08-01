@@ -112,7 +112,8 @@ public class UserDao {
                 "           p.title as title,\n" +
                 "           count(pd.post_detail_id) as numberOfQuestion\n" +
                 "FROM       interest as i, post as p, post_detail as pd\n" +
-                "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=?\n" +
+                "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=? " +
+                "and i.status = 'ACTIVE' and p.status = 'ACTIVE'\n" +
                 "GROUP BY   p.post_id";
 
 
