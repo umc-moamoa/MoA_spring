@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class PostPointsReq {
-    int userId;
+    long userId;
     int addAmount;
     int subAmount;
 

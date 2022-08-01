@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostDetailResultReq {
-    int resultId;
+    long resultId;
     String result;
 
 
