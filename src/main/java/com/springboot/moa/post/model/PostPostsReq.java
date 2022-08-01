@@ -6,7 +6,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PostPostsReq {
     int userId;
-    int point;
     int categoryId;
     String title;
     String content;

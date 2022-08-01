@@ -35,6 +35,7 @@ public class UserDao {
                         rs.getInt("postCount")
                 ), selectUserParam);
     }
+
     public int checkUserExist(int userId){
         String checkUserExistQuery = "select exists(select user_id from user where user_id = ?)";
         int checkUserExistParams = userId;
@@ -105,7 +106,6 @@ public class UserDao {
         return pointId;
     }
 
-
     public List<GetUserInterestRes> selectUserInterest(int userId) {
         String selectUserInterestQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
@@ -126,14 +126,24 @@ public class UserDao {
                 ), selectUserInterestParam);
     }
 
-    public void updateUserPoint(PostPointsReq postPointsReq){
+    public void updateUserPoint(int userId,int addAmount,int subAmount){
         Object[] addUserPointParam = null;
         String addUserPointQuery = "update user set point = point + ? where user_id = ?";
-        if(postPointsReq.getAddAmount() == 0)
-            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
-        else if(postPointsReq.getSubAmount() == 0)
-            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
+        if(addAmount == 0)
+            addUserPointParam = new Object[] { -(subAmount),userId};
+        else if(subAmount == 0)
+            addUserPointParam = new Object[]{ addAmount,userId};
         this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
     }
+
+//    public void updateUserPoint(PostPointsReq postPointsReq){
+//        Object[] addUserPointParam = null;
+//        String addUserPointQuery = "update user set point = point + ? where user_id = ?";
+//        if(postPointsReq.getAddAmount() == 0)
+//            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
+//        else if(postPointsReq.getSubAmount() == 0)
+//            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
+//        this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
+//    }
 
 }

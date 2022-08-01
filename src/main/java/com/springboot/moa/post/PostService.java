@@ -2,10 +2,8 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
-import com.springboot.moa.post.model.PostDetailsReq;
-import com.springboot.moa.post.model.PostInterestRes;
-import com.springboot.moa.post.model.PostPostsReq;
-import com.springboot.moa.post.model.PostPostsRes;
+import com.springboot.moa.post.model.*;
+import com.springboot.moa.result.model.PostDetailResultReq;
 import com.sun.source.tree.CatchTree;
 import com.springboot.moa.user.UserProvider;
 import com.springboot.moa.user.UserService;
@@ -38,21 +36,29 @@ public class PostService {
         this.userService = userService;
     }
 
+
     public PostPostsRes createPosts(int userId, PostPostsReq postPostsReq) throws BaseException {
-//        if (userProvider.retrieveUser(userId).getPoint() - 100 < 0)
-//            throw new BaseException(UPDATE_FAILED_USER_POINT);
         try {
             int postId = postDao.insertPosts(userId, postPostsReq);
+
             for (int i = 0; i < postPostsReq.getPostDetails().size(); i++) {
-                System.out.println(postPostsReq.getPostDetails().size());
                 PostDetailsReq postDetailsReq = postPostsReq.getPostDetails().get(i);
                 int postDetailId = postDao.insertPostDetails(postId, postDetailsReq);
                 for (int j = 0; j < postDetailsReq.getPostFormat().size(); j++) {
-                    postDao.insertPostFormats(postDetailId, postDetailsReq.getPostFormat().get(j));
+                    PostFormatReq postFormatReq = postDetailsReq.getPostFormat().get(j);
+                    postDao.insertPostFormats(postDetailId, postFormatReq);
+                }
+                if(i == postPostsReq.getPostDetails().size()-1) {
+                    postDao.setPostPoints(postId);
+                    int subAmount = postDao.usePoints(postId);
+                    if (userProvider .retrieveUser(userId).getPoint() - subAmount < 0)
+                        throw new BaseException(POSTS_FAILED_UPLOAD);
+                    userService.addPointHistory(userId, 0, subAmount);
                 }
             }
             return new PostPostsRes(postId);
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -65,6 +71,5 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
 
 }

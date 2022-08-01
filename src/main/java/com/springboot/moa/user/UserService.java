@@ -54,15 +54,25 @@ public class UserService {
         }
     }
 
-    public PostPointsRes addPointHistory(PostPointsReq postPointsReq) throws BaseException {
+    public PostPointsRes addPointHistory(int userId, int addAmount, int subAmount) throws BaseException {
         try {
-            System.out.println(postPointsReq.getUserId());
-            int pointId = userDao.addPointHistory(postPointsReq.getUserId(),postPointsReq.getAddAmount(),postPointsReq.getSubAmount());
-            userDao.updateUserPoint(postPointsReq);
+            int pointId = userDao.addPointHistory(userId,addAmount, subAmount);
+            userDao.updateUserPoint(userId,addAmount, subAmount);
             return new PostPointsRes(pointId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+//    public PostPointsRes addPointHistory(PostPointsReq postPointsReq) throws BaseException {
+//        try {
+//            System.out.println(postPointsReq.getUserId());
+//            int pointId = userDao.addPointHistory(postPointsReq.getUserId(),postPointsReq.getAddAmount(),postPointsReq.getSubAmount());
+//            userDao.updateUserPoint(postPointsReq);
+//            return new PostPointsRes(pointId);
+//        } catch (Exception exception) {
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
 
 }

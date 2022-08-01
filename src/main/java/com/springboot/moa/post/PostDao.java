@@ -1,5 +1,6 @@
 package com.springboot.moa.post;
 
+import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.model.*;
 import com.springboot.moa.user.model.GetUserPartPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.List;
 
+import static com.springboot.moa.config.BaseResponseStatus.POSTS_FAILED_UPLOAD;
+
 @Repository
+
 public class PostDao {
     private JdbcTemplate jdbcTemplate;
 
@@ -80,33 +84,30 @@ public class PostDao {
     }
 
     public int insertPosts(int userId, PostPostsReq postPostsReq) {
-        String insertPostQuery = "INSERT INTO post(user_id, point, category_id,title,content,deadline ) VALUES (?, ?, ?,?,?,?)";
-        Object[] insertPostParams = new Object[]{userId, postPostsReq.getPoint(), postPostsReq.getCategoryId(),
+        String insertPostQuery = "INSERT INTO post(user_id, category_id,title,content,deadline ) VALUES (?,?,?,?,?)";
+        Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),
                 postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline()};
         this.jdbcTemplate.update(insertPostQuery,
                 insertPostParams);
-
         String lastInsertIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
     public int insertPostDetails(int postId, PostDetailsReq postDetailsReq) {
-        String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,type) VALUES (?,?,?)";
+        String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,format) VALUES (?,?,?)";
         Object[] insertPostDetailsParams = new Object[]{postId, postDetailsReq.getQuestion(), postDetailsReq.getType()};
         this.jdbcTemplate.update(insertPostDetailsQuery,
                 insertPostDetailsParams);
+
         String lastInsertIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
-    public int insertPostFormats(int detailId, String content) {
+    public int insertPostFormats(int detailId, PostFormatReq postFormatReq) {
         String insertPostFormatQuery = "INSERT INTO format(post_detail_id,content) VALUES (?,?)";
-        Object[] insertPostFormatParams = new Object[]{detailId, content};
-        System.out.println("df");
-
+        Object[] insertPostFormatParams = new Object[]{detailId, postFormatReq.getContent()};
         this.jdbcTemplate.update(insertPostFormatQuery,
                 insertPostFormatParams);
-
         String lastInsertIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
@@ -164,14 +165,6 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
-//    public int checkPostIdExist(int postId) {
-//        String checkPostIdExistQuery = "select exists(select post_id from post where post_id = ?)";
-//        int checkPostIdExistParams = postId;
-//        return this.jdbcTemplate.queryForObject(checkPostIdExistQuery,
-//                int.class,
-//                checkPostIdExistParams);
-//    }
-
     public int checkUserIdExist(int userId) {
         String checkUserIdExistQuery = "select exists(select user_id from user where user_id = ?)";
         int checkUserIdExistParams = userId;
@@ -209,6 +202,37 @@ public class PostDao {
                         rs.getInt("qCount"),
                         rs.getInt("postUserId")
                 ), selectPostContentParam);
+    }
+
+    public int usePoints(int postId){
+        String usePointsQuery = "\n"+
+                "select mu + du as point " +
+                "from (select count(case when format = 1 then 1 end )*3 as mu," +
+                "count(case when format = 2 then 1 end )*5 as du "+
+                "from post_detail "+
+                "where post_id = ?) as cnt";
+        int usePointsParam = postId;
+
+        return this.jdbcTemplate.queryForObject(usePointsQuery,
+                int.class, usePointsParam);
+    }
+
+    public void setPostPoints(int postId){
+        String setPostPointsQuery = "\n"+
+                "select mu + du as point " +
+                "from" +
+                "(select count(case when format = 1 then 1 end ) as mu," +
+                "count(case when format = 2 then 1 end )*3 as du "+
+                "from post_detail "+
+                "where post_id = ?) as cnt";
+        int setPostPointsParam = postId;
+        int point = this.jdbcTemplate.queryForObject(setPostPointsQuery,int.class,setPostPointsParam);
+
+        String updatePostPointQuery = "update post set point = ? where post_id = ?";
+        Object[] updatePostPointParam = new Object[]{point, postId};
+
+        this.jdbcTemplate.update(updatePostPointQuery,
+                updatePostPointParam);
     }
 
 }
