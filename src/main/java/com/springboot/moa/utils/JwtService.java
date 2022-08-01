@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    public String createJwt(int userId){
+    public String createJwt(long userId){
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type","jwt")

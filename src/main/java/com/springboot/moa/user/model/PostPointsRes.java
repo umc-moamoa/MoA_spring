@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class PostPointsRes {
-    int pointId;
+    long pointId;
 }

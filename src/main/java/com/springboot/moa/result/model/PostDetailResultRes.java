@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostDetailResultRes {
-    int resultDetailId;
+    long resultDetailId;
 }

@@ -12,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PostResultReq {
 
-    int postId;
-    int userId;
+    long postId;
+    long userId;
     List<PostDetailResultReq> postDetailResults;
 
     public PostResultReq(){

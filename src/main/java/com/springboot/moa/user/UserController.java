@@ -34,7 +34,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<GetUserInfoRes> getUser(@RequestParam int userId) {
+    public BaseResponse<GetUserInfoRes> getUser(@RequestParam long userId) {
         try{
             GetUserInfoRes getUserInfoRes = userProvider.retrieveUser(userId);
             return new BaseResponse<>(getUserInfoRes);
@@ -45,7 +45,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/{userId}")
-    public BaseResponse<List<GetUserPostRes>> getUserPost(@PathVariable("userId")int userId) {
+    public BaseResponse<List<GetUserPostRes>> getUserPost(@PathVariable("userId")long userId) {
         try{
             List<GetUserPostRes> getUserPostRes = userProvider.retrieveUserPosts(userId);
             return new BaseResponse<>(getUserPostRes);
@@ -56,7 +56,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/{userId}/post")
-    public BaseResponse<List<GetUserPartPostRes>> getUserPartPost(@PathVariable("userId")int userId) {
+    public BaseResponse<List<GetUserPartPostRes>> getUserPartPost(@PathVariable("userId")long userId) {
         try{
             List<GetUserPartPostRes> getUserPartPostRes = userProvider.retrieveUserPartPosts(userId);
             return new BaseResponse<>(getUserPartPostRes);
@@ -71,8 +71,6 @@ public class UserController {
         try{
             if(postUserReq.getId().length() > 20)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_ID);
-            if(postUserReq.getName().length() > 20)
-                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NAME);
             if(postUserReq.getNick().length() > 20)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NICK);
             if(postUserReq.getPwd().length() > 20)
@@ -87,7 +85,7 @@ public class UserController {
     // localhost:9000/users/1/interest
     @ResponseBody
     @GetMapping("{userId}/interest")
-    public BaseResponse<List<GetUserInterestRes>> getUserInterests(@PathVariable("userId") int userId){
+    public BaseResponse<List<GetUserInterestRes>> getUserInterests(@PathVariable("userId")long userId){
         try {
             List<GetUserInterestRes> getUserInterestRes = userProvider.retrieveUserInterest(userId);
             return new BaseResponse<>(getUserInterestRes);

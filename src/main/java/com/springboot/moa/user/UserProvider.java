@@ -26,7 +26,7 @@ public class UserProvider {
         this.userDao = userDao;
     }
 
-    public GetUserInfoRes retrieveUser(int userId) throws BaseException {
+    public GetUserInfoRes retrieveUser(long userId) throws BaseException {
         if(checkUserExist(userId) == 0)
             throw new BaseException(USERS_EMPTY_USER_ID);
         try{
@@ -37,7 +37,7 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public int checkUserExist(int userId) throws BaseException{
+    public int checkUserExist(long userId) throws BaseException{
         try{
             return userDao.checkUserExist(userId);
         } catch (Exception exception){
@@ -45,7 +45,7 @@ public class UserProvider {
         }
     }
 
-    public List<GetUserPostRes> retrieveUserPosts(int userId) throws BaseException{
+    public List<GetUserPostRes> retrieveUserPosts(long userId) throws BaseException{
         if(checkUserExist(userId) == 0)
             throw new BaseException(USERS_EMPTY_USER_ID);
         try{
@@ -58,7 +58,7 @@ public class UserProvider {
         }
     }
 
-    public List<GetUserPartPostRes> retrieveUserPartPosts(int userId) throws BaseException{
+    public List<GetUserPartPostRes> retrieveUserPartPosts(long userId) throws BaseException{
         if(checkUserExist(userId) == 0)
             throw new BaseException(USERS_EMPTY_USER_ID);
         try{
@@ -71,7 +71,7 @@ public class UserProvider {
         }
     }
 
-    public List<GetUserInterestRes> retrieveUserInterest(int userId) throws BaseException {
+    public List<GetUserInterestRes> retrieveUserInterest(long userId) throws BaseException {
         if(checkUserExist(userId) == 0)
             throw new BaseException(USERS_EMPTY_USER_ID);
         try {
