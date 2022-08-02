@@ -1,5 +1,6 @@
 package com.springboot.moa.post;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
@@ -10,6 +11,7 @@ import com.springboot.moa.user.model.GetUserInfoRes;
 import com.springboot.moa.user.model.PostPointsReq;
 import com.springboot.moa.user.model.PostPointsRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +39,7 @@ public class PostController {
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<List<GetPostsRes>> getPosts(@RequestParam int categoryId) {
+    public BaseResponse<List<GetPostsRes>> getPosts(@RequestParam long categoryId) {
         try {
             List<GetPostsRes> getPostsRes = postProvider.retrievePosts(categoryId);
             return new BaseResponse<>(getPostsRes);
@@ -48,7 +50,7 @@ public class PostController {
 
     @ResponseBody
     @GetMapping("/{postId}")
-    public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") int postId) {
+    public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
             List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
             return new BaseResponse<>(getPostDetailRes);
@@ -103,9 +105,9 @@ public class PostController {
     // localhost:9000/posts/1/1
     @ResponseBody
     @PostMapping("/{postId}/{userId}")
-    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") int postId, @PathVariable("userId") int userId) {
+    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") long postId, @PathVariable("userId") long userId) {
         try {
-            int postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
+            long postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
             return new BaseResponse(postInterestRes);
         } catch (BaseException exception) {
             return new BaseResponse(exception.getStatus());
@@ -113,11 +115,24 @@ public class PostController {
     }
     @ResponseBody
     @GetMapping("/content/{postId}")
-    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") int postId) {
+    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") long postId) {
         try {
             List<GetPostContentRes> getPostContentRes = postProvider.retrievePostContent(postId);
             return new BaseResponse<>(getPostContentRes);
         } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/{postId}/status")
+    public BaseResponse<String> deletePost(@PathVariable ("postId") long postId){
+        try{
+            postService.deletePost(postId);
+            String result = "삭제를 성공했습니다.";
+            return new BaseResponse<>(result);
+
+        }catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }

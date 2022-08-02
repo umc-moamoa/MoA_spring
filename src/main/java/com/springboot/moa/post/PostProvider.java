@@ -28,7 +28,7 @@ public class PostProvider {
         this.postDao = postDao;
     }
 
-    public List<GetPostsRes> retrievePosts(int categoryId) throws BaseException {
+    public List<GetPostsRes> retrievePosts(long categoryId) throws BaseException {
         if(checkCategoryExist(categoryId) == 0)
             throw new BaseException(POSTS_EMPTY_CATEGORY_ID);
         try{
@@ -41,7 +41,7 @@ public class PostProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public int checkCategoryExist(int categoryId) throws BaseException{
+    public int checkCategoryExist(long categoryId) throws BaseException{
         try{
             return postDao.checkCategoryExist(categoryId);
         } catch (Exception exception){
@@ -49,7 +49,7 @@ public class PostProvider {
         }
     }
 
-    public List<GetPostDetailRes> retrievePostDetail(int postId) throws BaseException {
+    public List<GetPostDetailRes> retrievePostDetail(long postId) throws BaseException {
         if (checkPostExist(postId) == 0)
             throw new BaseException(POSTS_EMPTY_POST_ID);
         try {
@@ -60,7 +60,7 @@ public class PostProvider {
         }
 
     }
-    public int checkPostExist(int postId) throws BaseException{
+    public int checkPostExist(long postId) throws BaseException{
         try {
             return postDao.checkPostDetailExist(postId);
         } catch (Exception exception) {
@@ -87,7 +87,7 @@ public class PostProvider {
     }
 
 
-    public int retrieveDuplicateInterest(int postId, int userId) throws BaseException{
+    public long retrieveDuplicateInterest(long postId, long userId) throws BaseException{
         if (checkPostExist(postId) == 0)
             throw new BaseException(POSTS_EMPTY_CATEGORY_ID);
         if(checkUserIdExist(userId) == 0)
@@ -95,7 +95,7 @@ public class PostProvider {
         if(checkDuplicateInterest(postId, userId) == 1)
             throw new BaseException(DUPLICATED_INTEREST);
         try {
-            int postInterestRes = postDao.insertInterest(postId, userId);
+            long postInterestRes = postDao.insertInterest(postId, userId);
             return postInterestRes;
         }catch (Exception exception)
         {
@@ -103,7 +103,7 @@ public class PostProvider {
         }
     }
 
-    private int checkDuplicateInterest(int postId, int userId) throws BaseException{
+    private int checkDuplicateInterest(long postId, long userId) throws BaseException{
         try {
             return postDao.checkDuplicateInterest(postId, userId);
         } catch (Exception exception) {
@@ -111,7 +111,7 @@ public class PostProvider {
         }
     }
 
-    private int checkUserIdExist(int userId) throws BaseException{
+    private int checkUserIdExist(long userId) throws BaseException{
         try {
             return postDao.checkUserIdExist(userId);
         } catch (Exception exception){
@@ -121,7 +121,7 @@ public class PostProvider {
     }
 
 
-    public List<GetPostContentRes> retrievePostContent(int postId) throws BaseException {
+    public List<GetPostContentRes> retrievePostContent(long postId) throws BaseException {
         if (checkPostExist(postId) == 0)
             throw new BaseException(POSTS_EMPTY_POST_ID);
         try {

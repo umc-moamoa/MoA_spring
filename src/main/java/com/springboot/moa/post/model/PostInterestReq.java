@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostInterestReq {
-    int postId;
-    int userId;
+    long postId;
+    long userId;
 
     public PostInterestReq(){
 

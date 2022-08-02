@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetPostDetailRes {
-    int postDetailId;
+    long postDetailId;
     String question;
     int type;
 }

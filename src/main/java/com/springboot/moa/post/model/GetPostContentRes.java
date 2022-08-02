@@ -12,5 +12,5 @@ public class GetPostContentRes {
     String title;
     String content;
     int qCount;
-    int postUserId;
+    long postUserId;
 }

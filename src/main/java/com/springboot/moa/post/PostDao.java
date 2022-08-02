@@ -22,7 +22,7 @@ public class PostDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<GetPostsRes> selectPosts(int categoryId) {
+    public List<GetPostsRes> selectPosts(long categoryId) {
         String selectPostsQuery = "\n" +
                 "        SELECT p.post_id as post_id,\n" +
                 "            p.user_id as user_id,\n" +
@@ -32,8 +32,8 @@ public class PostDao {
                 "            p.deadline as deadline " +
                 "        FROM post as p\n" +
                 "            join category as c on p.category_id = c.category_id\n" +
-                "where p.category_id=?";
-        int selectPostsParam = categoryId;
+                "where p.category_id=? and status = 'ACTIVE'";
+        long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
                         rs.getInt("post_id"),
@@ -45,71 +45,71 @@ public class PostDao {
                 ), selectPostsParam);
     }
 
-    public int checkCategoryExist(int categoryId) {
+    public int checkCategoryExist(long categoryId) {
         String checkCategoryExistQuery = "select exists(select category_id from category where category_id = ?)";
-        int checkCategoryExistParams = categoryId;
+        long checkCategoryExistParams = categoryId;
         return this.jdbcTemplate.queryForObject(checkCategoryExistQuery,
                 int.class,
                 checkCategoryExistParams);
 
     }
 
-    public List<GetPostDetailRes> selectPostDetail(int postId) {
+    public List<GetPostDetailRes> selectPostDetail(long postId) {
         String selectPostDetailQuery = "\n" +
                 "        SELECT \n" +
                 "            pd.post_detail_id as post_detail_id,\n" +
                 "            pd.question as question,\n" +
-                "            pd.type as type\n" +
-                "        FROM post_detail as pd\n" +
-                "where pd.post_id=?";
-        int selectPostDetailParam = postId;
+                "            pd.format as format\n" +
+                "        FROM post_detail as pd left join post as p on pd.post_id = p.post_id\n" +
+                "where pd.post_id=? and p.status = 'ACTIVE'";
+        long selectPostDetailParam = postId;
 
 
         return this.jdbcTemplate.query(selectPostDetailQuery,
                 (rs, rowNum) -> new GetPostDetailRes(
-                        rs.getInt("post_detail_id"),
+                        rs.getLong("post_detail_id"),
                         rs.getString("question"),
-                        rs.getInt("type")
+                        rs.getInt("format")
                 ), selectPostDetailParam);
 
     }
 
-    public int checkPostDetailExist(int postId) {
+    public int checkPostDetailExist(long postId) {
         String checkPostDetailQuery = "select exists(select post_id from post_detail where post_id = ?)";
-        int checkPostDetailParams = postId;
+        long checkPostDetailParams = postId;
         return this.jdbcTemplate.queryForObject(checkPostDetailQuery,
                 int.class,
                 checkPostDetailParams);
 
     }
 
-    public int insertPosts(int userId, PostPostsReq postPostsReq) {
+    public long insertPosts(long userId, PostPostsReq postPostsReq) {
         String insertPostQuery = "INSERT INTO post(user_id, category_id,title,content,deadline ) VALUES (?,?,?,?,?)";
         Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),
                 postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline()};
         this.jdbcTemplate.update(insertPostQuery,
                 insertPostParams);
         String lastInsertIdxQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
-    public int insertPostDetails(int postId, PostDetailsReq postDetailsReq) {
+    public long insertPostDetails(long postId, PostDetailsReq postDetailsReq) {
         String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,format) VALUES (?,?,?)";
         Object[] insertPostDetailsParams = new Object[]{postId, postDetailsReq.getQuestion(), postDetailsReq.getType()};
         this.jdbcTemplate.update(insertPostDetailsQuery,
                 insertPostDetailsParams);
 
         String lastInsertIdxQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
-    public int insertPostFormats(int detailId, PostFormatReq postFormatReq) {
+    public long insertPostFormats(long detailId, PostFormatReq postFormatReq) {
         String insertPostFormatQuery = "INSERT INTO format(post_detail_id,content) VALUES (?,?)";
         Object[] insertPostFormatParams = new Object[]{detailId, postFormatReq.getContent()};
         this.jdbcTemplate.update(insertPostFormatQuery,
                 insertPostFormatParams);
         String lastInsertIdxQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
     public List<GetParticipantsRes> selectParticipantsDesc() {
@@ -122,7 +122,7 @@ public class PostDao {
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
                 "        WHERE p.status='ACTIVE'\n" +
-                "        GROUP BY pd.post_id\n" +
+                "        GROUP BY pd.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) DESC" +
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsDescQuery,
@@ -144,7 +144,7 @@ public class PostDao {
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
                 "        WHERE p.status='ACTIVE'\n" +
-                "        GROUP BY pd.post_id\n" +
+                "        GROUP BY pd.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) ASC" +
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsAscQuery,
@@ -157,32 +157,32 @@ public class PostDao {
     }
 
 
-    public int insertInterest(int postId, int userId) {
+    public long insertInterest(long postId, long userId) {
         String insertInterestQuery = "INSERT INTO interest (post_id, user_id) VALUES (?, ?)";
         Object[] insertInterestParams = new Object[]{postId, userId};
         this.jdbcTemplate.update(insertInterestQuery, insertInterestParams);
         String lastInsertIdxQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
-    public int checkUserIdExist(int userId) {
+    public int checkUserIdExist(long userId) {
         String checkUserIdExistQuery = "select exists(select user_id from user where user_id = ?)";
-        int checkUserIdExistParams = userId;
+        long checkUserIdExistParams = userId;
         return this.jdbcTemplate.queryForObject(checkUserIdExistQuery,
                 int.class,
                 checkUserIdExistParams);
     }
 
-    public int checkDuplicateInterest(int postId, int userId) {
+    public int checkDuplicateInterest(long postId, long userId) {
         String checkDuplicateInterestQuery = "select exists(select post_id, user_id from interest where post_id = ? and user_id = ?)";
-        int checkDuplicateInterestParams1 = postId;
-        int checkDuplicateInterestParams2 = userId;
+        long checkDuplicateInterestParams1 = postId;
+        long checkDuplicateInterestParams2 = userId;
         return this.jdbcTemplate.queryForObject(checkDuplicateInterestQuery, int.class, checkDuplicateInterestParams1, checkDuplicateInterestParams2);
 
     }
 
 
-    public List<GetPostContentRes> selectPostContent(int postId) {
+    public List<GetPostContentRes> selectPostContent(long postId) {
         String selectPostContentQuery = "\n" +
                 "select p.title as title,\n" +
                 "p.content as content,\n" +
@@ -191,9 +191,9 @@ public class PostDao {
                 "from post as p\n" +
                 "left join post_detail as pd on pd.post_id = p.post_id\n" +
                 "left join result as r on r.post_id = p.post_id \n" +
-                "where p.post_id = ? \n";
+                "where p.post_id = ? and p.status = 'ACTIVE'\n";
 
-        int selectPostContentParam = postId;
+        long selectPostContentParam = postId;
 
         return this.jdbcTemplate.query(selectPostContentQuery,
                 (rs, rowNum) -> new GetPostContentRes(
@@ -204,28 +204,28 @@ public class PostDao {
                 ), selectPostContentParam);
     }
 
-    public int usePoints(int postId){
+    public int usePoints(long postId){
         String usePointsQuery = "\n"+
-                "select mu + du as point " +
-                "from (select count(case when format = 1 then 1 end )*3 as mu," +
-                "count(case when format = 2 then 1 end )*5 as du "+
-                "from post_detail "+
-                "where post_id = ?) as cnt";
-        int usePointsParam = postId;
+                "select mu + du as point\n" +
+                "from (select count(case when pd.format = 1 then 1 end )*3 as mu,\n" +
+                "count(case when pd.format = 2 then 1 end )*5 as du\n"+
+                "from post_detail as pd left join post as p on pd.post_id = p.post_id\n"+
+                "where pd.post_id = ? and p.status = 'ACTIVE') as cnt";
+        long usePointsParam = postId;
 
         return this.jdbcTemplate.queryForObject(usePointsQuery,
                 int.class, usePointsParam);
     }
 
-    public void setPostPoints(int postId){
+    public void setPostPoints(long postId){
         String setPostPointsQuery = "\n"+
-                "select mu + du as point " +
+                "select mu + du as point\n" +
                 "from" +
-                "(select count(case when format = 1 then 1 end ) as mu," +
-                "count(case when format = 2 then 1 end )*3 as du "+
-                "from post_detail "+
-                "where post_id = ?) as cnt";
-        int setPostPointsParam = postId;
+                "(select count(case when pd.format = 1 then 1 end ) as mu,\n" +
+                "count(case when pd.format = 2 then 1 end )*3 as du\n"+
+                "from post_detail as pd left join post as p on pd.post_id = p.post_id\n"+
+                "where pd.post_id = ? and p.status = 'ACTIVE') as cnt";
+        long setPostPointsParam = postId;
         int point = this.jdbcTemplate.queryForObject(setPostPointsQuery,int.class,setPostPointsParam);
 
         String updatePostPointQuery = "update post set point = ? where post_id = ?";
@@ -235,4 +235,10 @@ public class PostDao {
                 updatePostPointParam);
     }
 
+    public int deletePost(long postId){
+        String deletePostQuery = "UPDATE Post SET status='INACTIVE' WHERE post_id = ?";
+        Object[] deletePostParams = new Object[]{postId};
+        return this.jdbcTemplate.update(deletePostQuery,
+                deletePostParams);
+    }
 }

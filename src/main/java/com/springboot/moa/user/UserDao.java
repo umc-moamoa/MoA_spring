@@ -1,5 +1,6 @@
 package com.springboot.moa.user;
 
+import com.springboot.moa.config.BaseException;
 import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -137,14 +138,35 @@ public class UserDao {
         this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
     }
 
-//    public void updateUserPoint(PostPointsReq postPointsReq){
-//        Object[] addUserPointParam = null;
-//        String addUserPointQuery = "update user set point = point + ? where user_id = ?";
-//        if(postPointsReq.getAddAmount() == 0)
-//            addUserPointParam = new Object[] { -(postPointsReq.getSubAmount()),postPointsReq.getUserId()};
-//        else if(postPointsReq.getSubAmount() == 0)
-//            addUserPointParam = new Object[]{ postPointsReq.getAddAmount(),postPointsReq.getUserId()};
-//        this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
-//    }
+    public List<GetPointHistoryRes> selectPointHistory(long userId){
+        String selectPointHistoryQeury ="select add_amount as addAmount, sub_amount as subAmount,\n"+
+                "sum(add_amount-sub_amount) over(order by point_id) as point\n"+
+                "from point where user_id = ? order by point_id desc;";
+        long selectPointHistoryParam = userId;
 
+        return this.jdbcTemplate.query(selectPointHistoryQeury,
+                (rs, rowNum) -> new GetPointHistoryRes(
+                        rs.getInt("point"),
+                        rs.getInt("addAmount"),
+                        rs.getInt("subAmount")
+                ), selectPointHistoryParam);
+    }
+
+
+    public DeleteUserRes deleteUser(DeleteUserReq deleteUserReq){
+        long userId = deleteUserReq.getUserId();
+        long deleteUserParams = userId;
+        String selectUserQuery = "select nick, id, pwd, point from user where user_id = ?";
+        DeleteUserRes deleteUserRes = this.jdbcTemplate.queryForObject(selectUserQuery,
+                (rs, rowNum) -> new DeleteUserRes(
+                        rs.getString("nick"),
+                        rs.getString("id"),
+                        rs.getString("pwd"),
+                        rs.getInt("point")),
+                deleteUserParams);
+
+        String deleteUserQuery = "delete from user where user_id = ?";
+        this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
+        return deleteUserRes;
+    }
 }
