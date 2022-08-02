@@ -1,5 +1,6 @@
 package com.springboot.moa.user;
 
+import com.springboot.moa.config.BaseException;
 import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -151,4 +152,21 @@ public class UserDao {
                 ), selectPointHistoryParam);
     }
 
+
+    public DeleteUserRes deleteUser(DeleteUserReq deleteUserReq){
+        long userId = deleteUserReq.getUserId();
+        long deleteUserParams = userId;
+        String selectUserQuery = "select nick, id, pwd, point from user where user_id = ?";
+        DeleteUserRes deleteUserRes = this.jdbcTemplate.queryForObject(selectUserQuery,
+                (rs, rowNum) -> new DeleteUserRes(
+                        rs.getString("nick"),
+                        rs.getString("id"),
+                        rs.getString("pwd"),
+                        rs.getInt("point")),
+                deleteUserParams);
+
+        String deleteUserQuery = "delete from user where user_id = ?";
+        this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
+        return deleteUserRes;
+    }
 }

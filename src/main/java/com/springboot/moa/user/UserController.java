@@ -105,4 +105,15 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @DeleteMapping("/{userId}")
+    public BaseResponse<DeleteUserRes> deleteUser(@PathVariable("userId")long userId) {
+        try{
+            DeleteUserReq deleteUserReq = new DeleteUserReq(userId);
+            DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
+            return new BaseResponse<>(deleteUsersRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
