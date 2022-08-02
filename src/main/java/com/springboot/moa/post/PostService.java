@@ -37,13 +37,13 @@ public class PostService {
     }
 
 
-    public PostPostsRes createPosts(int userId, PostPostsReq postPostsReq) throws BaseException {
+    public PostPostsRes createPosts(long userId, PostPostsReq postPostsReq) throws BaseException {
         try {
-            int postId = postDao.insertPosts(userId, postPostsReq);
+            long postId = postDao.insertPosts(userId, postPostsReq);
 
             for (int i = 0; i < postPostsReq.getPostDetails().size(); i++) {
                 PostDetailsReq postDetailsReq = postPostsReq.getPostDetails().get(i);
-                int postDetailId = postDao.insertPostDetails(postId, postDetailsReq);
+                long postDetailId = postDao.insertPostDetails(postId, postDetailsReq);
                 for (int j = 0; j < postDetailsReq.getPostFormat().size(); j++) {
                     PostFormatReq postFormatReq = postDetailsReq.getPostFormat().get(j);
                     postDao.insertPostFormats(postDetailId, postFormatReq);
@@ -58,18 +58,27 @@ public class PostService {
             }
             return new PostPostsRes(postId);
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public PostInterestRes insertInterests(int postId, int userId) throws BaseException {
+    public PostInterestRes insertInterests(long postId, long userId) throws BaseException {
         try {
-            int interestId = postDao.insertInterest(postId, userId);
+            long interestId = postDao.insertInterest(postId, userId);
             return new PostInterestRes(interestId);
         }catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+    public void deletePost(long postIdx) throws BaseException {
+        try{
+            int result = postDao.deletePost(postIdx);
+            if(result == 0)
+                throw new BaseException(DELETE_FAIL_POST);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
