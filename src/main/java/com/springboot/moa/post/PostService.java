@@ -71,4 +71,14 @@ public class PostService {
         }
     }
 
+    public void deletePost(long postIdx) throws BaseException {
+        try{
+            int result = postDao.deletePost(postIdx);
+            if(result == 0)
+                throw new BaseException(DELETE_FAIL_POST);
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

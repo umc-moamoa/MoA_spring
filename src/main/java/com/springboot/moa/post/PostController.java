@@ -1,5 +1,6 @@
 package com.springboot.moa.post;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
@@ -10,6 +11,7 @@ import com.springboot.moa.user.model.GetUserInfoRes;
 import com.springboot.moa.user.model.PostPointsReq;
 import com.springboot.moa.user.model.PostPointsRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -118,6 +120,19 @@ public class PostController {
             List<GetPostContentRes> getPostContentRes = postProvider.retrievePostContent(postId);
             return new BaseResponse<>(getPostContentRes);
         } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/{postId}/status")
+    public BaseResponse<String> deletePost(@PathVariable ("postId") long postId){
+        try{
+            postService.deletePost(postId);
+            String result = "삭제를 성공했습니다.";
+            return new BaseResponse<>(result);
+
+        }catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }

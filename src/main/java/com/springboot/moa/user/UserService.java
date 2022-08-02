@@ -3,10 +3,7 @@ package com.springboot.moa.user;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.PostDao;
 import com.springboot.moa.post.PostProvider;
-import com.springboot.moa.user.model.PostPointsReq;
-import com.springboot.moa.user.model.PostPointsRes;
-import com.springboot.moa.user.model.PostUserReq;
-import com.springboot.moa.user.model.PostUserRes;
+import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import com.springboot.moa.utils.SHA256;
 import io.jsonwebtoken.Jwt;
@@ -64,15 +61,14 @@ public class UserService {
         }
     }
 
-//    public PostPointsRes addPointHistory(PostPointsReq postPointsReq) throws BaseException {
-//        try {
-//            System.out.println(postPointsReq.getUserId());
-//            int pointId = userDao.addPointHistory(postPointsReq.getUserId(),postPointsReq.getAddAmount(),postPointsReq.getSubAmount());
-//            userDao.updateUserPoint(postPointsReq);
-//            return new PostPointsRes(pointId);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
 
+    public DeleteUserRes deleteUser(DeleteUserReq deleteUserReq) throws BaseException{
+        try{
+            DeleteUserRes deleteUsersRes = userDao.deleteUser(deleteUserReq);
+            return deleteUsersRes;
+        }
+        catch(Exception exception){
+            throw new BaseException(USERS_FAILED_USER_ID);
+        }
+    }
 }

@@ -235,4 +235,10 @@ public class PostDao {
                 updatePostPointParam);
     }
 
+    public int deletePost(long postId){
+        String deletePostQuery = "UPDATE Post SET status='INACTIVE' WHERE post_id = ?";
+        Object[] deletePostParams = new Object[]{postId};
+        return this.jdbcTemplate.update(deletePostQuery,
+                deletePostParams);
+    }
 }
