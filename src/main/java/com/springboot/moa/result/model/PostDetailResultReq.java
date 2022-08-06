@@ -11,8 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostDetailResultReq {
     long resultId;
+    long postDetailId;
     String result;
-
 
     public PostDetailResultReq(){
 
