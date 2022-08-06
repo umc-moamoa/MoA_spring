@@ -43,5 +43,24 @@ public class ResultDao {
         return this.jdbcTemplate.queryForObject(selectPostPointQuery, int.class, selectPostPointParam);
     }
 
+    public List<GetResultStatisticsRes> selectResult(long postDetailId) {
+
+        String selectResultQuery = "select result from result_detail where post_detail_id = ? order by result";
+        long selectResultParams = postDetailId;
+
+        return this.jdbcTemplate.query(selectResultQuery,
+                (rs, rowNum) -> new GetResultStatisticsRes(
+                        rs.getString("result")
+                ), selectResultParams);
+    }
+
+    // postDetailId가 존재하는지 확인 (질문의 번호가 올바른가)
+    public int checkResultPostDetailId (long postDetailId){
+        String checkResultPostDetailIdQuery = "select exists(select post_detail_id from post_detail where post_detail_id = ?);";
+        long checkResultPostDetailIdParams = postDetailId;
+        return this.jdbcTemplate.queryForObject(checkResultPostDetailIdQuery,
+                int.class,
+                checkResultPostDetailIdParams);
+    }
 
 }
