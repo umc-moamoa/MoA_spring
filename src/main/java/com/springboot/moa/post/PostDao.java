@@ -241,4 +241,29 @@ public class PostDao {
         return this.jdbcTemplate.update(deletePostQuery,
                 deletePostParams);
     }
+
+    public int updateContent(long postId, String content) {
+        String updateContentQuery = "UPDATE post SET content=? WHERE post_id=?";
+        Object[] updateContentParams = new Object[]{content, postId};
+        return this.jdbcTemplate.update(updateContentQuery,
+                updateContentParams);
+    }
+
+    public int checkPostUserExist(long userId, long postId){
+        String checkUserExistQuery = "select exists(select user_id from post where user_id= ? and post_id = ?);";
+        Object[] checkUserExistParams =  new Object[]{userId, postId};
+        return this.jdbcTemplate.queryForObject(checkUserExistQuery,
+                int.class,
+                checkUserExistParams);
+
+    }
+
+    public String checkStatus(long postId) {
+        String checkStatusQuery = "select status from post where post_id = ?";
+        long checkStatusParams = postId;
+        return this.jdbcTemplate.queryForObject(checkStatusQuery,
+                String.class,
+                checkStatusParams);
+    }
+
 }
