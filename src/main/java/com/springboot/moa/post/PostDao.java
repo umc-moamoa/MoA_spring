@@ -117,7 +117,7 @@ public class PostDao {
                 "        SELECT p.point as point,\n" +
                 "            p.title as title,\n" +
                 "            p.status as status,\n" +
-                "            count(distinct post_detail_id) as numberOfQuestion\n" +
+                "            count(distinct post_detail_id) as qcount\n" +
                 "        FROM post as p\n" +
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
@@ -130,7 +130,7 @@ public class PostDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getString("status"),
-                        rs.getInt("numberOfQuestion")
+                        rs.getInt("qcount")
                 ));
     }
 
@@ -139,7 +139,7 @@ public class PostDao {
                 "        SELECT p.point as point,\n" +
                 "            p.title as title,\n" +
                 "            p.status as status,\n" +
-                "            count(distinct post_detail_id) as numberOfQuestion\n" +
+                "            count(distinct post_detail_id) as qcount\n" +
                 "        FROM post as p\n" +
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
@@ -152,7 +152,7 @@ public class PostDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getString("status"),
-                        rs.getInt("numberOfQuestion")
+                        rs.getInt("qcount")
                 ));
     }
 
