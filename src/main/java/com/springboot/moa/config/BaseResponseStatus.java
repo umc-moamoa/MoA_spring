@@ -43,6 +43,7 @@ public enum BaseResponseStatus {
     POST_INPUT_FAILED_TITLE(false, 2018, "제목의 글자 수를 확인해주세요."),
     POST_INPUT_FAILED_CONTENTS(false, 2019, "내용의 글자 수를 확인해주세요."),
     POSTS_EMPTY_POST_ID(false, 2020, "게시물 아이디 값을 확인해주세요."),
+    POST_EMPTY_POST_DETAIL_ID(false, 2021, "존재하지 않는 질문입니다."),
 
     POST_USERS_EMPTY_PASSWORD(false, 2030, "비밀번호를 입력해주세요."),
     POST_USERS_INVALID_PASSWORD(false, 2031, "비밀번호 형식을 확인해주세요."),
