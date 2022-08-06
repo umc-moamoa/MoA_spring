@@ -8,9 +8,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetParticipantsRes {
+    long postId;
     int point;
     String title;
-    String status;
     // 등록된 질문의 개수
-    int qcount;
+    int qCount;
+    String status;
 }

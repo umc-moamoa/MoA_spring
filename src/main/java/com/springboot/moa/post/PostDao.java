@@ -114,10 +114,11 @@ public class PostDao {
 
     public List<GetParticipantsRes> selectParticipantsDesc() {
         String selectParticipantsDescQuery = "\n" +
-                "        SELECT p.point as point,\n" +
+                "        SELECT p.post_id as postId,\n" +
+                "            p.point as point,\n" +
                 "            p.title as title,\n" +
-                "            p.status as status,\n" +
-                "            count(distinct post_detail_id) as qcount\n" +
+                "            count(distinct post_detail_id) as qCount,\n" +
+                "            p.status as status\n" +
                 "        FROM post as p\n" +
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
@@ -127,19 +128,21 @@ public class PostDao {
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsDescQuery,
                 (rs, rowNum) -> new GetParticipantsRes(
+                        rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
-                        rs.getString("status"),
-                        rs.getInt("qcount")
+                        rs.getInt("qCount"),
+                        rs.getString("status")
                 ));
     }
 
     public List<GetParticipantsRes> selectParticipantsAsc() {
         String selectParticipantsAscQuery = "\n" +
-                "        SELECT p.point as point,\n" +
+                "        SELECT p.post_id as postId,\n" +
+                "            p.point as point,\n" +
                 "            p.title as title,\n" +
-                "            p.status as status,\n" +
-                "            count(distinct post_detail_id) as qcount\n" +
+                "            count(distinct post_detail_id) as qCount,\n" +
+                "            p.status as status\n" +
                 "        FROM post as p\n" +
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
@@ -149,10 +152,11 @@ public class PostDao {
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsAscQuery,
                 (rs, rowNum) -> new GetParticipantsRes(
+                        rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
-                        rs.getString("status"),
-                        rs.getInt("qcount")
+                        rs.getInt("qCount"),
+                        rs.getString("status")
                 ));
     }
 
