@@ -10,6 +10,7 @@ import com.springboot.moa.user.UserService;
 import com.springboot.moa.user.model.GetUserInfoRes;
 import com.springboot.moa.user.model.PostPointsReq;
 import com.springboot.moa.user.model.PostPointsRes;
+import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.basic.BasicEditorPaneUI;
 import java.util.List;
+
+import static com.springboot.moa.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.springboot.moa.config.BaseResponseStatus.POSTS_EMPTY_POST_ID;
 
 @RestController
 @RequestMapping("/posts")
@@ -29,11 +33,14 @@ public class PostController {
 
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final JwtService jwtService;
 
-    public PostController(PostProvider postProvider, PostService postService, UserService userService) {
+    public PostController(PostProvider postProvider, PostService postService, UserService userService, JwtService jwtService) {
         this.postProvider = postProvider;
         this.postService = postService;
         this.userService = userService;
+        this.jwtService = jwtService;
 
     }
 
@@ -113,11 +120,21 @@ public class PostController {
             return new BaseResponse(exception.getStatus());
         }
     }
+
     @ResponseBody
     @GetMapping("/content/{postId}")
-    public BaseResponse<List<GetPostContentRes>> getPostContent(@PathVariable("postId") long postId) {
+    public BaseResponse<GetPostContentRes> getPostContent(@PathVariable("postId") long postId) {
         try {
-            List<GetPostContentRes> getPostContentRes = postProvider.retrievePostContent(postId);
+            GetPostContentRes getPostContentRes = postProvider.retrievePostContent(postId);
+            if(getPostContentRes == null)
+                return new BaseResponse<>(POSTS_EMPTY_POST_ID);
+            long userIdByJwt = jwtService.getUserId();
+            if(getPostContentRes.getPostUserId() == userIdByJwt) {
+                getPostContentRes.setMyPost(true);
+            } else{
+                boolean isLike = postProvider.checkUserLikePost(postId, userIdByJwt);
+                getPostContentRes.setLike(isLike);
+            }
             return new BaseResponse<>(getPostContentRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
