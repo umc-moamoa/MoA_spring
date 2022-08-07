@@ -1,5 +1,7 @@
 package com.springboot.moa.result;
 
+import com.springboot.moa.post.model.GetPostDetailRes;
+import com.springboot.moa.result.model.GetResultStatisticsRes;
 import com.springboot.moa.result.model.PostDetailResultReq;
 import com.springboot.moa.result.model.PostResultReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class ResultDao {
@@ -25,8 +28,8 @@ public class ResultDao {
     }
 
     public long insertResultDetails(long resultId, PostDetailResultReq postDetailResultReq) {
-        String insertResultDetailsQuery = "INSERT INTO result_detail (result_id, result) VALUES (?, ?)";
-        Object[] insertResultDetailsParams = new Object[]{resultId, postDetailResultReq.getResult()};
+        String insertResultDetailsQuery = "INSERT INTO result_detail (result_id, post_detail_id, result) VALUES (?, ?, ?)";
+        Object[] insertResultDetailsParams = new Object[]{resultId,  postDetailResultReq.getPostDetailId(), postDetailResultReq.getResult()};
         this.jdbcTemplate.update(insertResultDetailsQuery, insertResultDetailsParams);
         String lastInsertIdxQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
@@ -39,4 +42,25 @@ public class ResultDao {
 
         return this.jdbcTemplate.queryForObject(selectPostPointQuery, int.class, selectPostPointParam);
     }
+
+    public List<GetResultStatisticsRes> selectResult(long postDetailId) {
+
+        String selectResultQuery = "select result from result_detail where post_detail_id = ? order by result";
+        long selectResultParams = postDetailId;
+
+        return this.jdbcTemplate.query(selectResultQuery,
+                (rs, rowNum) -> new GetResultStatisticsRes(
+                        rs.getString("result")
+                ), selectResultParams);
+    }
+
+    // postDetailId가 존재하는지 확인 (질문의 번호가 올바른가)
+    public int checkResultPostDetailId (long postDetailId){
+        String checkResultPostDetailIdQuery = "select exists(select post_detail_id from post_detail where post_detail_id = ?);";
+        long checkResultPostDetailIdParams = postDetailId;
+        return this.jdbcTemplate.queryForObject(checkResultPostDetailIdQuery,
+                int.class,
+                checkResultPostDetailIdParams);
+    }
+
 }

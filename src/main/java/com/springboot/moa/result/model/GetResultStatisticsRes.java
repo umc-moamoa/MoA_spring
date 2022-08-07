@@ -4,17 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostDetailResultReq {
-    long resultId;
-    long postDetailId;
+public class  GetResultStatisticsRes {
     String result;
-
-    public PostDetailResultReq(){
-
-    }
 }

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.catalog.Catalog;
+
 import static com.springboot.moa.config.BaseResponseStatus.*;
 
 @Service
@@ -78,6 +80,26 @@ public class PostService {
                 throw new BaseException(DELETE_FAIL_POST);
         }
         catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void modifyContent(long userId, long postId, PatchPostsReq patchPostsReq) throws BaseException {
+        if (postProvider.checkUserExist(userId, postId) == 0) {
+            throw new BaseException(USERS_FAILED_POST_ID);
+        }
+        if (postProvider.checkPostExist(postId) == 0) {
+            throw new BaseException(POSTS_EMPTY_POST_ID);
+        }
+        if(postProvider.checkStatus(postId) == 0) {
+            throw new BaseException(POST_STATUS_INACTIVE);
+        }
+        try {
+            int result = postDao.updateContent(postId, patchPostsReq.getContent());
+            if (result == 0) {
+                throw new BaseException(MODIFY_FAIL_POST);
+            }
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }

@@ -111,10 +111,11 @@ public class UserDao {
         String selectUserInterestQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
-                "           count(pd.post_detail_id) as numberOfQuestion\n" +
+                "           count(pd.post_detail_id) as qCount,\n" +
+                "           p.status as status\n" +
                 "FROM       interest as i, post as p, post_detail as pd\n" +
                 "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=? " +
-                "and i.status = 'ACTIVE' and p.status = 'ACTIVE'\n" +
+                "and p.status = 'ACTIVE'\n" +
                 "GROUP BY   p.post_id";
 
 
@@ -124,7 +125,8 @@ public class UserDao {
                         rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
-                        rs.getInt("numberOfQuestion")
+                        rs.getInt("qCount"),
+                        rs.getString("status")
                 ), selectUserInterestParam);
     }
 

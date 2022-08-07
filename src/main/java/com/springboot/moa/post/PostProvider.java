@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import static com.springboot.moa.config.BaseResponseStatus.*;
@@ -132,4 +133,23 @@ public class PostProvider {
         }
     }
 
+    public int checkUserExist(long userId, long postId) throws BaseException{
+        try{
+            return postDao.checkPostUserExist(userId, postId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkStatus(long postId) throws BaseException{
+        try {
+            String result = postDao.checkStatus(postId);
+            if (result.equals("ACTIVE"))
+                return 1;
+            else
+                return 0;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
