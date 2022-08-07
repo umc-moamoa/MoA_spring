@@ -122,11 +122,11 @@ public class PostProvider {
     }
 
 
-    public List<GetPostContentRes> retrievePostContent(long postId) throws BaseException {
+    public GetPostContentRes retrievePostContent(long postId) throws BaseException {
         if (checkPostExist(postId) == 0)
             throw new BaseException(POSTS_EMPTY_POST_ID);
         try {
-            List<GetPostContentRes> getPostContentRes = postDao.selectPostContent(postId);
+            GetPostContentRes getPostContentRes = postDao.selectPostContent(postId);
             return getPostContentRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -149,6 +149,14 @@ public class PostProvider {
             else
                 return 0;
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public boolean checkUserLikePost(long postId, long userId) throws BaseException{
+        try{
+            return postDao.checkIsLiked(postId, userId);
+        } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
