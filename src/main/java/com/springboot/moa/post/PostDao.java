@@ -4,6 +4,7 @@ import com.springboot.moa.config.BaseException;
 import com.springboot.moa.post.model.*;
 import com.springboot.moa.user.model.GetUserPartPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -177,6 +178,16 @@ public class PostDao {
                 int.class,
                 checkUserIdExistParams);
     }
+    public boolean checkIsLiked(long postId, long userId) {
+        String checkInterestExistQuery = "select exists(select interest_id from interest " +
+                "where post_id = ? and user_id = ?)";
+        Object[] checkInterestExistParams = new Object[]{postId, userId};;
+        int isLike = this.jdbcTemplate.queryForObject(checkInterestExistQuery,
+                int.class,
+                checkInterestExistParams);
+        if(isLike == 0) return false;
+        else return true;
+    }
 
     public int checkDuplicateInterest(long postId, long userId) {
         String checkDuplicateInterestQuery = "select exists(select post_id, user_id from interest where post_id = ? and user_id = ?)";
@@ -186,28 +197,30 @@ public class PostDao {
 
     }
 
-
-    public List<GetPostContentRes> selectPostContent(long postId) {
-        String selectPostContentQuery = "\n" +
-                "select p.title as title,\n" +
+    public GetPostContentRes selectPostContent(long postId) {
+        String selectPostContentQuery =
+                "select p.user_id as postUserId,\n" +
+                "p.title as title,\n" +
                 "p.content as content,\n" +
                 "count(distinct pd.post_detail_id) as qCount, \n" +
-                "p.user_id as postUserId\n" +
+                "p.deadline as deadline\n" +
                 "from post as p\n" +
                 "left join post_detail as pd on pd.post_id = p.post_id\n" +
-                "left join result as r on r.post_id = p.post_id \n" +
                 "where p.post_id = ? and p.status = 'ACTIVE'\n";
 
         long selectPostContentParam = postId;
 
-        return this.jdbcTemplate.query(selectPostContentQuery,
+        return this.jdbcTemplate.queryForObject(selectPostContentQuery,
                 (rs, rowNum) -> new GetPostContentRes(
+                        rs.getLong("postUserId"),
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("qCount"),
-                        rs.getInt("postUserId")
+                        rs.getInt("deadline")
                 ), selectPostContentParam);
     }
+
+
 
     public int usePoints(long postId){
         String usePointsQuery = "\n"+

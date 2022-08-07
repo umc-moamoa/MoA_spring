@@ -4,13 +4,31 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
-@AllArgsConstructor
 
 public class GetPostContentRes {
+    long postUserId;
     String title;
     String content;
     int qCount;
-    long postUserId;
+    int deadline;
+    boolean isLike;
+    boolean isMyPost;
+
+    public GetPostContentRes(){
+
+    }
+
+    public GetPostContentRes(long postUserId, String title, String content, int qCount, int deadline) {
+        this.postUserId = postUserId;
+        this.title = title;
+        this.content = content;
+        this.qCount = qCount;
+        this.deadline = deadline;
+//        this.isLike = false;
+//        this.isMyPost = false;
+    }
 }
