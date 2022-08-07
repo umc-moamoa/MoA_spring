@@ -22,20 +22,15 @@ public class PostDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
-    long postId;
-    int point;
-    String title;
-    int qCount;
     public List<GetPostsRes> selectPosts(long categoryId) {
         String selectPostsQuery = "\n" +
-                "        SELECT p.post_id as post_id,\n" +
+                "        SELECT p.post_id as postId,\n" +
                 "        p.point as point,\n" +
                 "        p.title as title,\n" +
-                "        COUNT(distinct pd.post_detail_id) as qCount\n" +
+                "        COUNT(distinct pd.post_detail_id) as qCount,\n" +
+                "        p.status as status\n" +
                 "        FROM post as p\n" +
-                "        join category as c on p.category_id = c.category_id\n" +
-                "        left join post_detail as pd on p.post_id=pd.post_id\n" +
+                "        left join post_detail as pd on p.post_id = pd.post_id\n" +
                 "        where p.category_id=? and status = 'ACTIVE'";
         long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
@@ -43,7 +38,8 @@ public class PostDao {
                         rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
-                        rs.getInt("qCount")
+                        rs.getInt("qCount"),
+                        rs.getString("status")
                 ), selectPostsParam);
     }
 
@@ -202,7 +198,7 @@ public class PostDao {
                 "select p.user_id as postUserId,\n" +
                 "p.title as title,\n" +
                 "p.content as content,\n" +
-                "count(distinct pd.post_detail_id) as qCount, \n" +
+                "count(distinct pd.post_detail_id) as qCount,\n" +
                 "p.deadline as deadline\n" +
                 "from post as p\n" +
                 "left join post_detail as pd on pd.post_id = p.post_id\n" +
