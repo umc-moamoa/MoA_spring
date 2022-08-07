@@ -29,6 +29,7 @@ public enum BaseResponseStatus {
     USERS_USERS_FAILED_PWD(false, 2008, "비밀번호 글자 수를 확인해주세요."),
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
     USERS_FAILED_USER_ID(false, 2011, "없는 유저 아이디 값입니다."),
+    USERS_FAILED_POST_ID(false, 2060, "해당 포스트를 작성한 유저가 아닙니다."),
 
     // posts
     POSTS_EMPTY_CATEGORY_ID(false, 2012, "카테고리 아이디 값을 확인해주세요."),
@@ -43,6 +44,8 @@ public enum BaseResponseStatus {
     POST_INPUT_FAILED_TITLE(false, 2018, "제목의 글자 수를 확인해주세요."),
     POST_INPUT_FAILED_CONTENTS(false, 2019, "내용의 글자 수를 확인해주세요."),
     POSTS_EMPTY_POST_ID(false, 2020, "게시물 아이디 값을 확인해주세요."),
+    POST_EMPTY_POST_DETAIL_ID(false, 2021, "존재하지 않는 질문입니다."),
+    POST_STATUS_INACTIVE(false, 2022, "게시물이 INACTIVE 상태입니다."),
 
     POST_USERS_EMPTY_PASSWORD(false, 2030, "비밀번호를 입력해주세요."),
     POST_USERS_INVALID_PASSWORD(false, 2031, "비밀번호 형식을 확인해주세요."),
