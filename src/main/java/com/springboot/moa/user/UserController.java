@@ -69,11 +69,11 @@ public class UserController {
     @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         try{
-            if(postUserReq.getId().length() > 20)
+            if(postUserReq.getId().length() > 15 || postUserReq.getId().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_ID);
-            if(postUserReq.getNick().length() > 20)
+            if(postUserReq.getNick().length() > 15 || postUserReq.getNick().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NICK);
-            if(postUserReq.getPwd().length() > 20)
+            if(postUserReq.getPwd().length() > 15 || postUserReq.getPwd().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_PWD);
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);

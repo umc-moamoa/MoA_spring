@@ -9,9 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetPostsRes {
     long postId;
-    long userId;
     int point;
     String title;
-    String content;
-    int deadline;
+    int qCount;
 }

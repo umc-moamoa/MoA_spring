@@ -8,7 +8,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetUserPartPostRes {
-    String postTitle;
+    long postId;
     int point;
+    String title;
     int qCount;
 }

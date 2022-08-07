@@ -22,26 +22,27 @@ public class PostDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    long postId;
+    int point;
+    String title;
+    int qCount;
     public List<GetPostsRes> selectPosts(long categoryId) {
         String selectPostsQuery = "\n" +
                 "        SELECT p.post_id as post_id,\n" +
-                "            p.user_id as user_id,\n" +
-                "            p.point as point,\n" +
-                "            p.title as title,\n" +
-                "            p.content as content,\n" +
-                "            p.deadline as deadline " +
+                "        p.point as point,\n" +
+                "        p.title as title,\n" +
+                "        COUNT(distinct pd.post_detail_id) as qCount\n" +
                 "        FROM post as p\n" +
-                "            join category as c on p.category_id = c.category_id\n" +
-                "where p.category_id=? and status = 'ACTIVE'";
+                "        join category as c on p.category_id = c.category_id\n" +
+                "        left join post_detail as pd on p.post_id=pd.post_id\n" +
+                "        where p.category_id=? and status = 'ACTIVE'";
         long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
-                        rs.getInt("post_id"),
-                        rs.getInt("user_id"),
+                        rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
-                        rs.getString("content"),
-                        rs.getInt("deadline")
+                        rs.getInt("qCount")
                 ), selectPostsParam);
     }
 
