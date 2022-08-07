@@ -69,9 +69,10 @@ public class UserDao {
     }
 
     public List<GetUserPartPostRes> selectUserPartPosts(long userId){
-        String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
-                "p.point as point,\n" +
-                "COUNT(distinct pd.post_detail_id) as qCount\n" +
+        String selectUserPostsQuery = "SELECT p.post_id as postId,\n" +
+                "           p.point as point,\n" +
+                "           p.title as title,\n" +
+                "           COUNT(distinct pd.post_detail_id) as qCount\n" +
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
@@ -81,8 +82,9 @@ public class UserDao {
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs,rowNum) -> new GetUserPartPostRes(
-                        rs.getString("postTitle"),
+                        rs.getLong("postId"),
                         rs.getInt("point"),
+                        rs.getString("title"),
                         rs.getInt("qCount")
                 ), selectUserPostsParam);
     }
