@@ -72,7 +72,8 @@ public class UserDao {
         String selectUserPostsQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
-                "           COUNT(distinct pd.post_detail_id) as qCount\n" +
+                "           COUNT(distinct pd.post_detail_id) as qCount,\n" +
+                "           p.status as status\n" +
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
@@ -85,7 +86,8 @@ public class UserDao {
                         rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
-                        rs.getInt("qCount")
+                        rs.getInt("qCount"),
+                        rs.getString("status")
                 ), selectUserPostsParam);
     }
 

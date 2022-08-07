@@ -12,4 +12,5 @@ public class GetUserPartPostRes {
     int point;
     String title;
     int qCount;
+    String status;
 }
