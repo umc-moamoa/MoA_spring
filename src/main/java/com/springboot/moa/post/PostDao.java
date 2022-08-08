@@ -88,7 +88,7 @@ public class PostDao {
 
         int dDay = this.jdbcTemplate.queryForObject(calculateDdayQuery,int.class,calculateDdayParam);
 
-        String insertPostQuery = "INSERT INTO post(user_id, category_id, point, title,content,deadline ,dDay) VALUES (?,?,?,?,?,?,?)";
+        String insertPostQuery = "INSERT INTO post(user_id, category_id, point, title,content,deadline ,d_day) VALUES (?,?,?,?,?,?,?)";
         Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),postPostsReq.getAddAmount(),
                 postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline(),dDay};
         this.jdbcTemplate.update(insertPostQuery,
