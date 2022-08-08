@@ -59,6 +59,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
+            long userIdByJwt = jwtService.getUserId();
             List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
             return new BaseResponse<>(getPostDetailRes);
         } catch (BaseException exception) {
