@@ -22,9 +22,9 @@ public class UserDao {
         String selectUserQuery = "\n" +
                 "        SELECT u.nick as nick,\n" +
                 "            u.point as point,\n" +
-                "            COUNT(*) as postCount\n" +
+                "            COUNT(p.post_id) as postCount\n" +
                 "        FROM user as u\n" +
-                "            join post as p on u.user_id = p.user_id\n" +
+                "            left join post as p on u.user_id = p.user_id\n" +
                 "        WHERE u.status = 'ACTIVE' " +
                 "        and u.user_id=?\n" +
                 "        GROUP BY u.nick, u.point\n";
