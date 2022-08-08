@@ -45,10 +45,11 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/{userId}")
-    public BaseResponse<List<GetUserPostRes>> getUserPost(@PathVariable("userId")long userId) {
+    @GetMapping("/userPost")
+    public BaseResponse<List<GetUserPostRes>> getUserPost() {
         try{
-            List<GetUserPostRes> getUserPostRes = userProvider.retrieveUserPosts(userId);
+            long userIdByJwt = jwtService.getUserId();
+            List<GetUserPostRes> getUserPostRes = userProvider.retrieveUserPosts(userIdByJwt);
             return new BaseResponse<>(getUserPostRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -56,10 +57,11 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/{userId}/post")
-    public BaseResponse<List<GetUserPartPostRes>> getUserPartPost(@PathVariable("userId")long userId) {
+    @GetMapping("/partPost")
+    public BaseResponse<List<GetUserPartPostRes>> getUserPartPost() {
         try{
-            List<GetUserPartPostRes> getUserPartPostRes = userProvider.retrieveUserPartPosts(userId);
+            long userIdByJwt = jwtService.getUserId();
+            List<GetUserPartPostRes> getUserPartPostRes = userProvider.retrieveUserPartPosts(userIdByJwt);
             return new BaseResponse<>(getUserPartPostRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

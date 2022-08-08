@@ -76,9 +76,6 @@ public class PostController {
             if (postPostsReq.getContent().length() > 500)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
 
-            if (postPostsReq.getDeadline() < 0)
-                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_DEADLINE);
-
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
 
