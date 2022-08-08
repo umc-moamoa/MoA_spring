@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class PostResultReq {
 
     long postId;
@@ -18,6 +17,10 @@ public class PostResultReq {
 
     public PostResultReq(){
 
+    }
+    public PostResultReq(long postId, List<PostDetailResultReq> postDetailResults){
+        this.postId = postId;
+        this.postDetailResults = postDetailResults;
     }
 
 }

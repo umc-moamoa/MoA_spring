@@ -28,7 +28,5 @@ public class GetPostContentRes {
         this.content = content;
         this.qCount = qCount;
         this.deadline = deadline;
-//        this.isLike = false;
-//        this.isMyPost = false;
     }
 }
