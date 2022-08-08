@@ -107,12 +107,13 @@ public class PostController {
         }
     }
 
-    // localhost:9000/posts/1/1
+    // localhost:9000/posts/1
     @ResponseBody
-    @PostMapping("/{postId}/{userId}")
-    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") long postId, @PathVariable("userId") long userId) {
+    @PostMapping("/interest/{postId}")
+    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") long postId) {
         try {
-            long postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
+            long userIdByJwt = jwtService.getUserId();
+            long postInterestRes = postProvider.retrieveDuplicateInterest(postId, userIdByJwt);
             return new BaseResponse(postInterestRes);
         } catch (BaseException exception) {
             return new BaseResponse(exception.getStatus());
