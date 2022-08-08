@@ -87,10 +87,11 @@ public class UserController {
 
     // localhost:9000/users/1/interest
     @ResponseBody
-    @GetMapping("{userId}/interest")
-    public BaseResponse<List<GetUserInterestRes>> getUserInterests(@PathVariable("userId")long userId){
+    @GetMapping("/interest")
+    public BaseResponse<List<GetUserInterestRes>> getUserInterests(){
         try {
-            List<GetUserInterestRes> getUserInterestRes = userProvider.retrieveUserInterest(userId);
+            long userIdByJwt = jwtService.getUserId();
+            List<GetUserInterestRes> getUserInterestRes = userProvider.retrieveUserInterest(userIdByJwt);
             return new BaseResponse<>(getUserInterestRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
