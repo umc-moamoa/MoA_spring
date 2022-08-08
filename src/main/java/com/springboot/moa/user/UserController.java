@@ -85,7 +85,7 @@ public class UserController {
         }
     }
 
-    // localhost:9000/users/1/interest
+    // localhost:9000/users/interest
     @ResponseBody
     @GetMapping("/interest")
     public BaseResponse<List<GetUserInterestRes>> getUserInterests(){
@@ -100,9 +100,10 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/point")
-    public BaseResponse<List<GetPointHistoryRes>> getPointHistory(@RequestParam long userId) throws BaseException {
+    public BaseResponse<List<GetPointHistoryRes>> getPointHistory() throws BaseException {
         try {
-            List<GetPointHistoryRes> getPointHistoryRes = userProvider.getPointHistory(userId);
+            long userIdByJwt = jwtService.getUserId();
+            List<GetPointHistoryRes> getPointHistoryRes = userProvider.getPointHistory(userIdByJwt);
             return new BaseResponse<>(getPointHistoryRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
