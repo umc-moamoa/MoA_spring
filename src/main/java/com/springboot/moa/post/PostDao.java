@@ -108,7 +108,7 @@ public class PostDao {
     }
 
     public long insertPostFormats(long detailId, PostFormatReq postFormatReq) {
-        String insertPostFormatQuery = "INSERT INTO format(post_detail_id,item) VALUES (?,?)";
+        String insertPostFormatQuery = "INSERT INTO question_detail(post_detail_id,item) VALUES (?,?)";
         Object[] insertPostFormatParams = new Object[]{detailId, postFormatReq.getItem()};
         this.jdbcTemplate.update(insertPostFormatQuery,
                 insertPostFormatParams);
