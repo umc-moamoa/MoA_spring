@@ -205,7 +205,7 @@ public class PostDao {
                         "p.title as title,\n" +
                         "p.content as content,\n" +
                         "count(distinct pd.post_detail_id) as qCount,\n" +
-                        "p.deadline as deadline\n" +
+                        "p.dDay as dDay\n" +
                         "from post as p\n" +
                         "left join post_detail as pd on pd.post_id = p.post_id\n" +
                         "where p.post_id = ? and p.status = 'ACTIVE'\n";
@@ -218,7 +218,7 @@ public class PostDao {
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("qCount"),
-                        rs.getInt("deadline")
+                        rs.getInt("dDay")
                 ), selectPostContentParam);
     }
 
