@@ -6,6 +6,7 @@ import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.post.model.*;
 import com.springboot.moa.user.UserController;
+import com.springboot.moa.user.UserProvider;
 import com.springboot.moa.user.UserService;
 import com.springboot.moa.user.model.GetUserInfoRes;
 import com.springboot.moa.user.model.PostPointsReq;
@@ -33,13 +34,17 @@ public class PostController {
 
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private final UserProvider userProvider;
     @Autowired
     private final JwtService jwtService;
 
-    public PostController(PostProvider postProvider, PostService postService, UserService userService, JwtService jwtService) {
+    public PostController(PostProvider postProvider, PostService postService, UserService userService, UserProvider userProvider, JwtService jwtService) {
         this.postProvider = postProvider;
         this.postService = postService;
         this.userService = userService;
+        this.userProvider = userProvider;
         this.jwtService = jwtService;
 
     }
@@ -71,6 +76,9 @@ public class PostController {
     @PostMapping("")
     public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
         try {
+//            if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - postPostsReq.getSubAmount() < 0)
+//                return new BaseResponse<>(BaseResponseStatus.POSTS_FAILED_UPLOAD);
+
             if (postPostsReq.getTitle().length() > 30)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
 
@@ -78,6 +86,7 @@ public class PostController {
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
 
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
+            userService.addPointHistory(postPostsReq.getUserId(), 0, postPostsReq.getSubAmount());
             return new BaseResponse<>(postPostsRes);
 
         } catch (BaseException exception) {
