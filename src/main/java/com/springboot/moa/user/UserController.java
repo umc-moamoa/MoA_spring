@@ -34,9 +34,10 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<GetUserInfoRes> getUser(@RequestParam long userId) {
+    public BaseResponse<GetUserInfoRes> getUser() {
         try{
-            GetUserInfoRes getUserInfoRes = userProvider.retrieveUser(userId);
+            long userIdByJwt = jwtService.getUserId();
+            GetUserInfoRes getUserInfoRes = userProvider.retrieveUser(userIdByJwt);
             return new BaseResponse<>(getUserInfoRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
