@@ -59,6 +59,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
+            long userIdByJwt = jwtService.getUserId();
             List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
             return new BaseResponse<>(getPostDetailRes);
         } catch (BaseException exception) {
@@ -75,9 +76,6 @@ public class PostController {
 
             if (postPostsReq.getContent().length() > 500)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
-
-            if (postPostsReq.getDeadline() < 0)
-                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_DEADLINE);
 
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
             return new BaseResponse<>(postPostsRes);
@@ -109,12 +107,13 @@ public class PostController {
         }
     }
 
-    // localhost:9000/posts/1/1
+    // localhost:9000/posts/1
     @ResponseBody
-    @PostMapping("/{postId}/{userId}")
-    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") long postId, @PathVariable("userId") long userId) {
+    @PostMapping("/interest/{postId}")
+    public BaseResponse<PostInterestRes> postInterests(@PathVariable("postId") long postId) {
         try {
-            long postInterestRes = postProvider.retrieveDuplicateInterest(postId, userId);
+            long userIdByJwt = jwtService.getUserId();
+            long postInterestRes = postProvider.retrieveDuplicateInterest(postId, userIdByJwt);
             return new BaseResponse(postInterestRes);
         } catch (BaseException exception) {
             return new BaseResponse(exception.getStatus());
