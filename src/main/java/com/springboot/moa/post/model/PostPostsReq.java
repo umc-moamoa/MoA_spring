@@ -1,5 +1,7 @@
 package com.springboot.moa.post.model;
 import lombok.*;
+
+import java.util.Date;
 import java.util.List;
 @Getter
 @Setter
@@ -7,9 +9,11 @@ import java.util.List;
 public class PostPostsReq {
     long userId;
     long categoryId;
+    int addAmount;
+    int subAmount;
     String title;
     String content;
-    int deadline;
+    Date deadline;
     List<PostDetailsReq> postDetails;
 
     public PostPostsReq(){

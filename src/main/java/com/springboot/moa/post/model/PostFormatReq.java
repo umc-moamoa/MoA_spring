@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class PostFormatReq {
-    String content;
+    String item;
 
     public PostFormatReq(){
 

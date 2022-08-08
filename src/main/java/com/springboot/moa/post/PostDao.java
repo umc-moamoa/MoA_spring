@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Date;
 import java.util.List;
 
 import static com.springboot.moa.config.BaseResponseStatus.POSTS_FAILED_UPLOAD;
@@ -82,9 +83,14 @@ public class PostDao {
     }
 
     public long insertPosts(long userId, PostPostsReq postPostsReq) {
-        String insertPostQuery = "INSERT INTO post(user_id, category_id,title,content,deadline ) VALUES (?,?,?,?,?)";
-        Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),
-                postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline()};
+        String calculateDdayQuery = "select datediff(?,curdate())";
+        Date calculateDdayParam = postPostsReq.getDeadline();
+
+        int dDay = this.jdbcTemplate.queryForObject(calculateDdayQuery,int.class,calculateDdayParam);
+
+        String insertPostQuery = "INSERT INTO post(user_id, category_id, point, title,content,deadline ,dDay) VALUES (?,?,?,?,?,?,?)";
+        Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),postPostsReq.getAddAmount(),
+                postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline(),dDay};
         this.jdbcTemplate.update(insertPostQuery,
                 insertPostParams);
         String lastInsertIdxQuery = "select last_insert_id()";
@@ -102,8 +108,8 @@ public class PostDao {
     }
 
     public long insertPostFormats(long detailId, PostFormatReq postFormatReq) {
-        String insertPostFormatQuery = "INSERT INTO format(post_detail_id,content) VALUES (?,?)";
-        Object[] insertPostFormatParams = new Object[]{detailId, postFormatReq.getContent()};
+        String insertPostFormatQuery = "INSERT INTO format(post_detail_id,item) VALUES (?,?)";
+        Object[] insertPostFormatParams = new Object[]{detailId, postFormatReq.getItem()};
         this.jdbcTemplate.update(insertPostFormatQuery,
                 insertPostFormatParams);
         String lastInsertIdxQuery = "select last_insert_id()";
@@ -196,13 +202,13 @@ public class PostDao {
     public GetPostContentRes selectPostContent(long postId) {
         String selectPostContentQuery =
                 "select p.user_id as postUserId,\n" +
-                "p.title as title,\n" +
-                "p.content as content,\n" +
-                "count(distinct pd.post_detail_id) as qCount,\n" +
-                "p.deadline as deadline\n" +
-                "from post as p\n" +
-                "left join post_detail as pd on pd.post_id = p.post_id\n" +
-                "where p.post_id = ? and p.status = 'ACTIVE'\n";
+                        "p.title as title,\n" +
+                        "p.content as content,\n" +
+                        "count(distinct pd.post_detail_id) as qCount,\n" +
+                        "p.deadline as deadline\n" +
+                        "from post as p\n" +
+                        "left join post_detail as pd on pd.post_id = p.post_id\n" +
+                        "where p.post_id = ? and p.status = 'ACTIVE'\n";
 
         long selectPostContentParam = postId;
 
@@ -216,38 +222,6 @@ public class PostDao {
                 ), selectPostContentParam);
     }
 
-
-
-    public int usePoints(long postId){
-        String usePointsQuery = "\n"+
-                "select mu + du as point\n" +
-                "from (select count(case when pd.format = 1 then 1 end )*3 as mu,\n" +
-                "count(case when pd.format = 2 then 1 end )*5 as du\n"+
-                "from post_detail as pd left join post as p on pd.post_id = p.post_id\n"+
-                "where pd.post_id = ? and p.status = 'ACTIVE') as cnt";
-        long usePointsParam = postId;
-
-        return this.jdbcTemplate.queryForObject(usePointsQuery,
-                int.class, usePointsParam);
-    }
-
-    public void setPostPoints(long postId){
-        String setPostPointsQuery = "\n"+
-                "select mu + du as point\n" +
-                "from" +
-                "(select count(case when pd.format = 1 then 1 end ) as mu,\n" +
-                "count(case when pd.format = 2 then 1 end )*3 as du\n"+
-                "from post_detail as pd left join post as p on pd.post_id = p.post_id\n"+
-                "where pd.post_id = ? and p.status = 'ACTIVE') as cnt";
-        long setPostPointsParam = postId;
-        int point = this.jdbcTemplate.queryForObject(setPostPointsQuery,int.class,setPostPointsParam);
-
-        String updatePostPointQuery = "update post set point = ? where post_id = ?";
-        Object[] updatePostPointParam = new Object[]{point, postId};
-
-        this.jdbcTemplate.update(updatePostPointQuery,
-                updatePostPointParam);
-    }
 
     public int deletePost(long postId){
         String deletePostQuery = "UPDATE Post SET status='INACTIVE' WHERE post_id = ?";

@@ -37,7 +37,7 @@ public class ResultDao {
 
 
     public int selectPostPoint(long postId){
-        String selectPostPointQuery = "select point from post where post_id = ?";
+        String selectPostPointQuery = "select point from post where post_id = ? and status = 'ACTIVE'";
         long selectPostPointParam = postId;
 
         return this.jdbcTemplate.queryForObject(selectPostPointQuery, int.class, selectPostPointParam);

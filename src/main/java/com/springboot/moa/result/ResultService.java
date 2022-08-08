@@ -20,13 +20,11 @@ public class ResultService {
     private final ResultDao resultDao;
     private final ResultProvider resultProvider;
 
-    private final UserService userService;
 
     @Autowired
-    public ResultService(ResultDao resultDao, ResultProvider resultProvider, UserService userService) {
+    public ResultService(ResultDao resultDao, ResultProvider resultProvider) {
         this.resultDao = resultDao;
         this.resultProvider = resultProvider;
-        this.userService = userService;
     }
 
     public PostResultRes createResults(PostResultReq postResultReq) throws BaseException {
@@ -36,13 +34,10 @@ public class ResultService {
                 PostDetailResultReq postDetailResultReq = postResultReq.getPostDetailResults().get(i);
                 resultDao.insertResultDetails(resultId, postDetailResultReq);
             }
-
-            int addAmount = resultDao.selectPostPoint(postResultReq.getPostId());
-            System.out.println(addAmount);
-            userService.addPointHistory(postResultReq.getUserId(),addAmount,0);
-
-            return new PostResultRes(resultId);
+            int point = resultDao.selectPostPoint(postResultReq.getPostId());
+            return new PostResultRes(resultId,point);
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
