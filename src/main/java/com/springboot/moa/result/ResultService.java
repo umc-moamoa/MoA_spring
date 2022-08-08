@@ -29,15 +29,15 @@ public class ResultService {
         this.userService = userService;
     }
 
-    public PostResultRes createResults(long postId, PostResultReq postResultReq) throws BaseException {
+    public PostResultRes createResults(PostResultReq postResultReq) throws BaseException {
         try {
-            long resultId = resultDao.insertResults(postId, postResultReq);
+            long resultId = resultDao.insertResults(postResultReq);
             for (int i = 0; i < postResultReq.getPostDetailResults().size(); i++) {
                 PostDetailResultReq postDetailResultReq = postResultReq.getPostDetailResults().get(i);
                 resultDao.insertResultDetails(resultId, postDetailResultReq);
             }
 
-            int addAmount = resultDao.selectPostPoint(postId);
+            int addAmount = resultDao.selectPostPoint(postResultReq.getPostId());
             System.out.println(addAmount);
             userService.addPointHistory(postResultReq.getUserId(),addAmount,0);
 
