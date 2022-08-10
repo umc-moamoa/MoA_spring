@@ -31,6 +31,7 @@ public class UserProvider {
             return getUserInfoRes;
         }
         catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }

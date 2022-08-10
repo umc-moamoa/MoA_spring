@@ -50,16 +50,10 @@ public class PostService {
                     PostFormatReq postFormatReq = postDetailsReq.getPostFormat().get(j);
                     postDao.insertPostFormats(postDetailId, postFormatReq);
                 }
-                if(i == postPostsReq.getPostDetails().size()-1) {
-                    postDao.setPostPoints(postId);
-                    int subAmount = postDao.usePoints(postId);
-                    if (userProvider .retrieveUser(userId).getPoint() - subAmount < 0)
-                        throw new BaseException(POSTS_FAILED_UPLOAD);
-                    userService.addPointHistory(userId, 0, subAmount);
-                }
             }
             return new PostPostsRes(postId);
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
