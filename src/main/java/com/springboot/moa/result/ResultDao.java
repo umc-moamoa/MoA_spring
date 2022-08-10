@@ -63,4 +63,12 @@ public class ResultDao {
                 checkResultPostDetailIdParams);
     }
 
+    // 중복 답변 방지 (동일한 유저가 동일한 설문조사에 답변 달지 못하도록)
+    public int checkDuplicatedResult(long postId, long userId) {
+        String checkDuplicatedResultQuery = "select exists(select post_id, user_id from result where post_id = ? and user_id = ?)";
+        Object[] checkDuplicatedResultParams = new Object[]{postId, userId};
+        return this.jdbcTemplate.queryForObject(checkDuplicatedResultQuery,
+                int.class,
+                checkDuplicatedResultParams);
+    }
 }

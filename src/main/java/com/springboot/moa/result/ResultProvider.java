@@ -41,4 +41,12 @@ public class ResultProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public int checkDuplicatedResult(long postId, long userId) throws BaseException {
+        try {
+            return resultDao.checkDuplicatedResult(postId, userId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
