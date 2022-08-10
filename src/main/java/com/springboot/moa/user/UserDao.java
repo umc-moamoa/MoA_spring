@@ -55,7 +55,7 @@ public class UserDao {
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
-                "where p.status = 'ACTIVE' " +
+                "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and p.user_id=?\n" +
                 "group by pd.post_id";
         long selectUserPostsParam = userId;
@@ -77,7 +77,7 @@ public class UserDao {
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
-                "where p.status = 'ACTIVE' " +
+                "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and r.user_id=?\n" +
                 "group by pd.post_id";
         long selectUserPostsParam = userId;
@@ -119,7 +119,7 @@ public class UserDao {
                 "           p.status as status\n" +
                 "FROM       interest as i, post as p, post_detail as pd\n" +
                 "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=? " +
-                "and p.status = 'ACTIVE'\n" +
+                "and (p.status = 'ACTIVE' or p.status = 'CLOSED')\n" +
                 "GROUP BY   p.post_id";
 
 
