@@ -33,6 +33,13 @@ public class UserService {
 
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         String pwd;
+        // 중복 처리
+        if (userProvider.checkIdExist(postUserReq.getId()) == 1) {
+            throw new BaseException(USERS_DUPLICATED_ID);
+        }
+        if (userProvider.checkNickExist(postUserReq.getNick()) == 1) {
+            throw new BaseException(USERS_DUPLICATED_NICK);
+        }
         try{
             //암호화
             pwd = new SHA256().encrypt(postUserReq.getPwd());

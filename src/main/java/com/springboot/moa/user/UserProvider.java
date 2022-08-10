@@ -90,4 +90,21 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public int checkIdExist(String id) throws BaseException{
+        try {
+            return userDao.checkUserIdExist(id);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkNickExist(String nick) throws BaseException{
+        try {
+            return userDao.checkUserNickExist(nick);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }
