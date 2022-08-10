@@ -3,8 +3,8 @@ package com.springboot.moa.result;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
-import com.springboot.moa.post.PostProvider;
 import com.springboot.moa.result.model.*;
+import com.springboot.moa.user.UserService;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +22,15 @@ public class ResultController {
     private final ResultService resultService;
 
     @Autowired
+    private final UserService userService;
+
+    @Autowired
     private final JwtService jwtService;
 
-    public ResultController(ResultProvider resultProvider, ResultService resultService, JwtService jwtService) {
+    public ResultController(ResultProvider resultProvider, ResultService resultService, UserService userService, UserService userService1, JwtService jwtService) {
         this.resultProvider = resultProvider;
         this.resultService = resultService;
+        this.userService = userService1;
         this.jwtService = jwtService;
     }
 
@@ -57,6 +61,9 @@ public class ResultController {
                 }
             }
             PostResultRes postResultRes = resultService.createResults(postResultReq);
+            int point = postResultRes.getPoint();
+            userService.addPointHistory(postResultReq.getUserId(), point, 0);
+
             return new BaseResponse<>(postResultRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

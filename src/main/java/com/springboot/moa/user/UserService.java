@@ -57,6 +57,7 @@ public class UserService {
             userDao.updateUserPoint(userId,addAmount, subAmount);
             return new PostPointsRes(pointId);
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
