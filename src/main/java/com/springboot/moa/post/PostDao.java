@@ -265,4 +265,18 @@ public class PostDao {
                 selectUserIdParam);
     }
 
+    public int deleteInterest(long userId, long postId) {
+        String deleteInterestQuery = "delete from interest where user_id = ? and post_id = ?;";
+        Object[] deleteInterestParams = new Object[]{userId, postId};
+        return this.jdbcTemplate.update(deleteInterestQuery,
+                deleteInterestParams);
+    }
+
+    public int checkPostIdExist(long postId) {
+        String checkPostIdExistQuery = "select exists(select post_id from post where post_id= ?)";
+        long checkPostIdExistParams = postId;
+        return this.jdbcTemplate.queryForObject(checkPostIdExistQuery,
+                int.class,
+                checkPostIdExistParams);
+    }
 }
