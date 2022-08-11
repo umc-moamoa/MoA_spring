@@ -113,10 +113,11 @@ public class UserController {
     }
 
     @ResponseBody
-    @DeleteMapping("/{userId}")
-    public BaseResponse<DeleteUserRes> deleteUser(@PathVariable("userId")long userId) {
+    @DeleteMapping("")
+    public BaseResponse<DeleteUserRes> deleteUser() {
         try{
-            DeleteUserReq deleteUserReq = new DeleteUserReq(userId);
+            long userIdByJwt = jwtService.getUserId();
+            DeleteUserReq deleteUserReq = new DeleteUserReq(userIdByJwt);
             DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
             return new BaseResponse<>(deleteUsersRes);
         } catch(BaseException exception){
