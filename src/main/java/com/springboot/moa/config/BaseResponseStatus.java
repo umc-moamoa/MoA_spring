@@ -57,6 +57,7 @@ public enum BaseResponseStatus {
 
     // [POST] /interest
     DUPLICATED_INTEREST(false, 2040, "관심 게시물이 중복되었습니다."),
+    EMPTY_INTEREST(false, 2041, "관심 게시물이 존재하지 않습니다."),
   
     POINT_HISTORY_INPUT_FAILED(false, 2050,"point를 잘못 입력하였습니다"),
 
@@ -75,6 +76,7 @@ public enum BaseResponseStatus {
 
     MODIFY_FAIL_POST(false, 3020, "게시물 수정을 실패했습니다."),
     DELETE_FAIL_POST(false, 3021, "게시물 삭제를 실패했습니다."),
+    DELETE_FAIL_INTEREST(false, 3022, "관심 설문 삭제를 실패했습다."),
 
     /**
      * 4000 : Database, Server 오류

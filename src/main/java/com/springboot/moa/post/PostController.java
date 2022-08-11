@@ -8,9 +8,7 @@ import com.springboot.moa.post.model.*;
 import com.springboot.moa.user.UserController;
 import com.springboot.moa.user.UserProvider;
 import com.springboot.moa.user.UserService;
-import com.springboot.moa.user.model.GetUserInfoRes;
-import com.springboot.moa.user.model.PostPointsReq;
-import com.springboot.moa.user.model.PostPointsRes;
+import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -176,6 +174,20 @@ public class PostController {
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
             postService.modifyContent(patchPostsReq.getUserId(), postId, patchPostsReq);
             String result = "게시물 정보 수정을 완료하였습니다.";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @DeleteMapping("/interest/{postId}")
+    public BaseResponse<String> deleteUserInterest (@PathVariable("postId") long postId) {
+        try{
+            long userIdByJwt = jwtService.getUserId();
+            DeleteInterestReq deleteInterestReq = new DeleteInterestReq(userIdByJwt);
+            postService.deleteInterest(deleteInterestReq.getUserId(), postId);
+            String result = "관심있는 설문을 삭제했습니다.";
             return new BaseResponse<>(result);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
