@@ -30,10 +30,13 @@ public enum BaseResponseStatus {
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
     USERS_FAILED_USER_ID(false, 2011, "없는 유저 아이디 값입니다."),
     USERS_FAILED_POST_ID(false, 2060, "해당 포스트를 작성한 유저가 아닙니다."),
+    USERS_DUPLICATED_ID(false, 2061, "중복된 아이디입니다."),
+    USERS_DUPLICATED_NICK(false, 2062, "중복된 닉네임입니다."),
+
 
     // posts
     POSTS_EMPTY_CATEGORY_ID(false, 2012, "카테고리 아이디 값을 확인해주세요."),
-    POSTS_FAILED_UPLOAD(false,2013,"게시물 등록에 실피했습니다."),
+    POSTS_FAILED_UPLOAD(false,2013,"게시물 등록에 실패했습니다."),
     POST_INPUT_FAILED_DEADLINE(false,2014,"제출기한을 잘못 입력하였습니다"),
 
     // [POST] /users
@@ -57,6 +60,8 @@ public enum BaseResponseStatus {
   
     POINT_HISTORY_INPUT_FAILED(false, 2050,"point를 잘못 입력하였습니다"),
 
+    // [RESULT]
+    DUPLICATED_RESULT (false, 2070, "이미 답변을 등록한 설문입니다."),
   
     /**
      * 3000 : Response 오류
