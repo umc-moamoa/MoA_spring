@@ -14,11 +14,11 @@ public class UserDao {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setDataSource(DataSource dataSource){
+    public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public GetUserInfoRes selectUser(long userId){
+    public GetUserInfoRes selectUser(long userId) {
         String selectUserQuery = "\n" +
                 "        SELECT u.nick as nick,\n" +
                 "            u.point as point,\n" +
@@ -31,14 +31,14 @@ public class UserDao {
 
         long selectUserParam = userId;
         return this.jdbcTemplate.queryForObject(selectUserQuery,
-                (rs,rowNum) -> new GetUserInfoRes(
+                (rs, rowNum) -> new GetUserInfoRes(
                         rs.getString("nick"),
                         rs.getInt("point"),
                         rs.getInt("postCount")
                 ), selectUserParam);
     }
 
-    public int checkUserExist(long userId){
+    public int checkUserExist(long userId) {
         String checkUserExistQuery = "select exists(select user_id from user where user_id = ?)";
         long checkUserExistParams = userId;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
@@ -47,7 +47,7 @@ public class UserDao {
 
     }
 
-    public List<GetUserPostRes> selectUserPosts(long userId){
+    public List<GetUserPostRes> selectUserPosts(long userId) {
         String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
                 "p.point as point,\n" +
                 "COUNT(distinct r.user_id) as postResultCount,\n" +
@@ -55,12 +55,12 @@ public class UserDao {
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
-                "where p.status = 'ACTIVE' " +
+                "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and p.user_id=?\n" +
                 "group by pd.post_id";
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
-                (rs,rowNum) -> new GetUserPostRes(
+                (rs, rowNum) -> new GetUserPostRes(
                         rs.getString("postTitle"),
                         rs.getInt("point"),
                         rs.getInt("postResultCount"),
@@ -68,7 +68,7 @@ public class UserDao {
                 ), selectUserPostsParam);
     }
 
-    public List<GetUserPartPostRes> selectUserPartPosts(long userId){
+    public List<GetUserPartPostRes> selectUserPartPosts(long userId) {
         String selectUserPostsQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
@@ -77,12 +77,12 @@ public class UserDao {
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
-                "where p.status = 'ACTIVE' " +
+                "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and r.user_id=?\n" +
                 "group by pd.post_id";
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
-                (rs,rowNum) -> new GetUserPartPostRes(
+                (rs, rowNum) -> new GetUserPartPostRes(
                         rs.getLong("postId"),
                         rs.getInt("point"),
                         rs.getString("title"),
@@ -91,22 +91,22 @@ public class UserDao {
                 ), selectUserPostsParam);
     }
 
-    public long createUser(PostUserReq postUserReq){
+    public long createUser(PostUserReq postUserReq) {
         String createUserQuery = "insert into user(id, nick, pwd) VALUES (?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
 
         this.jdbcTemplate.update(createUserQuery, createUserParams);
         String lastInsertIdQuery = "select last_insert_id()";
-        long userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery,long.class);
+        long userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery, long.class);
 
         return userIdx;
     }
 
-    public long addPointHistory(long userId, int addAmount, int subAmount){
+    public long addPointHistory(long userId, int addAmount, int subAmount) {
         String addPointHistoryQuery = "insert into point(user_id, add_amount, sub_amount) values(?,?,?)";
-        Object[] addPointHistoryParams = new Object[]{userId,addAmount,subAmount};
+        Object[] addPointHistoryParams = new Object[]{userId, addAmount, subAmount};
         String lastInsertIdxQuery = "select last_insert_id()";
-        this.jdbcTemplate.update(addPointHistoryQuery,addPointHistoryParams);
+        this.jdbcTemplate.update(addPointHistoryQuery, addPointHistoryParams);
         long pointId = this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
         return pointId;
     }
@@ -119,7 +119,7 @@ public class UserDao {
                 "           p.status as status\n" +
                 "FROM       interest as i, post as p, post_detail as pd\n" +
                 "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=? " +
-                "and p.status = 'ACTIVE'\n" +
+                "and (p.status = 'ACTIVE' or p.status = 'CLOSED')\n" +
                 "GROUP BY   p.post_id";
 
 
@@ -134,19 +134,19 @@ public class UserDao {
                 ), selectUserInterestParam);
     }
 
-    public void updateUserPoint(long userId, int addAmount, int subAmount){
+    public void updateUserPoint(long userId, int addAmount, int subAmount) {
         Object[] addUserPointParam = null;
         String addUserPointQuery = "update user set point = point + ? where user_id = ?";
-        if(addAmount == 0)
-            addUserPointParam = new Object[] { -(subAmount),userId};
-        else if(subAmount == 0)
-            addUserPointParam = new Object[]{ addAmount,userId};
-        this.jdbcTemplate.update(addUserPointQuery,addUserPointParam);
+        if (addAmount == 0)
+            addUserPointParam = new Object[]{-(subAmount), userId};
+        else if (subAmount == 0)
+            addUserPointParam = new Object[]{addAmount, userId};
+        this.jdbcTemplate.update(addUserPointQuery, addUserPointParam);
     }
 
-    public List<GetPointHistoryRes> selectPointHistory(long userId){
-        String selectPointHistoryQeury ="select add_amount as addAmount, sub_amount as subAmount,\n"+
-                "sum(add_amount-sub_amount) over(order by point_id) as point\n"+
+    public List<GetPointHistoryRes> selectPointHistory(long userId) {
+        String selectPointHistoryQeury = "select add_amount as addAmount, sub_amount as subAmount,\n" +
+                "sum(add_amount-sub_amount) over(order by point_id) as point\n" +
                 "from point where user_id = ? order by point_id desc;";
         long selectPointHistoryParam = userId;
 
@@ -159,7 +159,7 @@ public class UserDao {
     }
 
 
-    public DeleteUserRes deleteUser(DeleteUserReq deleteUserReq){
+    public DeleteUserRes deleteUser(DeleteUserReq deleteUserReq) {
         long userId = deleteUserReq.getUserId();
         long deleteUserParams = userId;
         String selectUserQuery = "select nick, id, pwd, point from user where user_id = ?";
@@ -175,4 +175,23 @@ public class UserDao {
         this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
         return deleteUserRes;
     }
+
+    // id 중복 확인
+    public int checkUserIdExist(String id) {
+        String checkIdExistQuery = "select exists(select id from user where id = ?)";
+        String checkIdExistParams = id;
+        return this.jdbcTemplate.queryForObject(checkIdExistQuery,
+                int.class,
+                checkIdExistParams);
+    }
+
+    // 닉네임 중복 확인
+    public int checkUserNickExist(String nick) {
+        String checkNickExistQuery = "select exists(select nick from user where nick = ?)";
+        String checkNickExistParams = nick;
+        return this.jdbcTemplate.queryForObject(checkNickExistQuery,
+                int.class,
+                checkNickExistParams);
+    }
+
 }

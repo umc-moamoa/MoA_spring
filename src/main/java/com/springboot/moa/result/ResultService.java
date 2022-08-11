@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
 
+import static com.springboot.moa.config.BaseResponseStatus.DUPLICATED_RESULT;
+
 @Service
 public class ResultService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,6 +30,11 @@ public class ResultService {
     }
 
     public PostResultRes createResults(PostResultReq postResultReq) throws BaseException {
+        // 중복 방지
+        if(resultProvider.checkDuplicatedResult(postResultReq.getPostId(), postResultReq.getUserId()) == 1) {
+            throw new BaseException(DUPLICATED_RESULT);
+        }
+
         try {
             long resultId = resultDao.insertResults(postResultReq);
             for (int i = 0; i < postResultReq.getPostDetailResults().size(); i++) {
