@@ -2,6 +2,7 @@ package com.springboot.moa.post;
 
 import com.springboot.moa.config.BaseException;
 
+import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.post.model.*;
 import com.springboot.moa.post.model.GetParticipantsRes;
 import com.springboot.moa.post.model.GetPostContentRes;
@@ -156,6 +157,17 @@ public class PostProvider {
     public boolean checkUserLikePost(long postId, long userId) throws BaseException{
         try{
             return postDao.checkIsLiked(postId, userId);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public long retrieveUserId(long postId) throws BaseException{
+        try{
+            Long userId = postDao.getUserId(postId);
+            if(userId == null)
+                throw new BaseException(POSTS_EMPTY_POST_ID);
+            return userId;
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
