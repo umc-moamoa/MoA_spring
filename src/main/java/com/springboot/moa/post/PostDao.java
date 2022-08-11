@@ -208,7 +208,7 @@ public class PostDao {
                         "p.d_day as d_day\n" +
                         "from post as p\n" +
                         "left join post_detail as pd on pd.post_id = p.post_id\n" +
-                        "where p.post_id = ? and p.status = 'ACTIVE'\n";
+                        "where p.post_id = ? and (p.status = 'ACTIVE' or p.status = 'CLOSED')\n";
 
         long selectPostContentParam = postId;
 
@@ -224,7 +224,7 @@ public class PostDao {
 
 
     public int deletePost(long postId){
-        String deletePostQuery = "UPDATE Post SET status='INACTIVE' WHERE post_id = ?";
+        String deletePostQuery = "UPDATE post SET status='INACTIVE' WHERE post_id = ?";
         Object[] deletePostParams = new Object[]{postId};
         return this.jdbcTemplate.update(deletePostQuery,
                 deletePostParams);
@@ -247,11 +247,20 @@ public class PostDao {
     }
 
     public String checkStatus(long postId) {
-        String checkStatusQuery = "select status from post where post_id = ?";
+        String checkStatusQuery = "select status from post where post_id = ?;";
         long checkStatusParams = postId;
         return this.jdbcTemplate.queryForObject(checkStatusQuery,
                 String.class,
                 checkStatusParams);
+    }
+
+    public long getUserId(long postId){
+        String selectUserIdQuery = "select user_id from post where post_id=?" +
+                " and (p.status = 'ACTIVE' or p.status = 'CLOSED');";
+        long selectUserIdParam = postId;
+        return this.jdbcTemplate.queryForObject(selectUserIdQuery,
+                Long.class,
+                selectUserIdParam);
     }
 
 }
