@@ -24,15 +24,17 @@ public class PostDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     public List<GetPostsRes> selectPosts(long categoryId) {
-        String selectPostsQuery = "\n" +
-                "        SELECT p.post_id as postId,\n" +
-                "        p.point as point,\n" +
-                "        p.title as title,\n" +
-                "        COUNT(distinct pd.post_detail_id) as qCount,\n" +
-                "        p.status as status\n" +
-                "        FROM post as p\n" +
-                "        left join post_detail as pd on p.post_id = pd.post_id\n" +
-                "        where p.category_id=? and (status = 'ACTIVE' or status = 'CLOSED')";
+        String selectPostsQuery = "SELECT p.post_id as postId,\n" +
+                "           p.point as point,\n" +
+                "           p.title as title,\n" +
+                "           COUNT(distinct pd.post_detail_id) as qCount,\n" +
+                "           p.status as status\n" +
+                "from post as p\n" +
+                "left join post_detail as pd on p.post_id=pd.post_id\n" +
+                "left join result as r on p.post_id=r.post_id\n" +
+                "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
+                "and p.category_id=?\n" +
+                "group by pd.post_id";
         long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
