@@ -24,8 +24,6 @@ public class UserProvider {
     }
 
     public GetUserInfoRes retrieveUser(long userId) throws BaseException {
-        if(checkUserExist(userId) == 0)
-            throw new BaseException(USERS_EMPTY_USER_ID);
         try{
             GetUserInfoRes getUserInfoRes = userDao.selectUser(userId);
             return getUserInfoRes;
@@ -35,17 +33,8 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public int checkUserExist(long userId) throws BaseException{
-        try{
-            return userDao.checkUserExist(userId);
-        } catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     public List<GetUserPostRes> retrieveUserPosts(long userId) throws BaseException{
-        if(checkUserExist(userId) == 0)
-            throw new BaseException(USERS_EMPTY_USER_ID);
         try{
             List<GetUserPostRes> getUserPosts = userDao.selectUserPosts(userId);
 
@@ -57,8 +46,6 @@ public class UserProvider {
     }
 
     public List<GetUserPartPostRes> retrieveUserPartPosts(long userId) throws BaseException{
-        if(checkUserExist(userId) == 0)
-            throw new BaseException(USERS_EMPTY_USER_ID);
         try{
             List<GetUserPartPostRes> getUserPartPosts = userDao.selectUserPartPosts(userId);
 
@@ -70,8 +57,6 @@ public class UserProvider {
     }
 
     public List<GetUserInterestRes> retrieveUserInterest(long userId) throws BaseException {
-        if(checkUserExist(userId) == 0)
-            throw new BaseException(USERS_EMPTY_USER_ID);
         try {
             List<GetUserInterestRes> getUserInterestRes = userDao.selectUserInterest(userId);
             return getUserInterestRes;
@@ -81,8 +66,6 @@ public class UserProvider {
     }
 
     public List<GetPointHistoryRes> getPointHistory(long userId) throws BaseException {
-        if(checkUserExist(userId) == 0)
-            throw new BaseException(USERS_EMPTY_USER_ID);
         try {
             List<GetPointHistoryRes> getPointHistoryRes = userDao.selectPointHistory(userId);
             return getPointHistoryRes;
