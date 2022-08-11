@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.swing.plaf.basic.BasicEditorPaneUI;
 import java.util.List;
 
-import static com.springboot.moa.config.BaseResponseStatus.INVALID_USER_JWT;
-import static com.springboot.moa.config.BaseResponseStatus.POSTS_EMPTY_POST_ID;
+import static com.springboot.moa.config.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("/posts")
@@ -76,8 +75,10 @@ public class PostController {
     @PostMapping("")
     public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
         try {
-//            if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - postPostsReq.getSubAmount() < 0)
-//                return new BaseResponse<>(BaseResponseStatus.POSTS_FAILED_UPLOAD);
+            long userIdByJwt = jwtService.getUserId();
+            postPostsReq.setUserId(userIdByJwt);
+            if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - postPostsReq.getSubAmount() < 0)
+                return new BaseResponse<>(BaseResponseStatus.POSTS_FAILED_UPLOAD);
 
             if (postPostsReq.getTitle().length() > 30)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
@@ -153,6 +154,11 @@ public class PostController {
     @PatchMapping("/{postId}/status")
     public BaseResponse<String> deletePost(@PathVariable ("postId") long postId){
         try{
+            long userIdByJwt = jwtService.getUserId();
+            long postUserId = postProvider.retrieveUserId(postId);
+            if(userIdByJwt != postUserId){
+                return new BaseResponse<>(USERS_FAILED_POST_ID);
+            }
             postService.deletePost(postId);
             String result = "삭제를 성공했습니다.";
             return new BaseResponse<>(result);
