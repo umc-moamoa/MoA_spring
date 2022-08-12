@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.catalog.Catalog;
 
+import java.security.DrbgParameters;
+
 import static com.springboot.moa.config.BaseResponseStatus.*;
 
 @Service
@@ -63,6 +65,21 @@ public class PostService {
             long interestId = postDao.insertInterest(postId, userId);
             return new PostInterestRes(interestId);
         }catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public long retrieveDuplicateInterest(long postId, long userId) throws BaseException{
+        if (postProvider.checkPostExist(postId) == 0)
+            throw new BaseException(POSTS_EMPTY_POST_ID);
+
+        if(postProvider.checkDuplicateInterest(postId, userId) == 1)
+            throw new BaseException(DUPLICATED_INTEREST);
+        try {
+            long postInterestRes = postDao.insertInterest(postId, userId);
+            return postInterestRes;
+        }catch (Exception exception)
+        {
             throw new BaseException(DATABASE_ERROR);
         }
     }

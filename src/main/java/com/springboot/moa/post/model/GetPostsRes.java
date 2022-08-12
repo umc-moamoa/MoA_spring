@@ -12,5 +12,6 @@ public class GetPostsRes {
     int point;
     String title;
     int qCount;
+    int dDay;
     String status;
 }

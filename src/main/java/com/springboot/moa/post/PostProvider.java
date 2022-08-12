@@ -56,8 +56,12 @@ public class PostProvider {
             throw new BaseException(POSTS_EMPTY_POST_ID);
         try {
             List<GetPostDetailRes> getPostDetailRes = postDao.selectPostDetail(postId);
+//            for(int i =0;i<getPostDetailRes.size();i++){
+//
+//            }
             return getPostDetailRes;
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
 
@@ -66,6 +70,7 @@ public class PostProvider {
         try {
             return postDao.checkPostDetailExist(postId);
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -97,37 +102,12 @@ public class PostProvider {
     }
 
 
-    public long retrieveDuplicateInterest(long postId, long userId) throws BaseException{
-        if (checkPostExist(postId) == 0)
-            throw new BaseException(POSTS_EMPTY_CATEGORY_ID);
-        if(checkUserIdExist(userId) == 0)
-            throw new BaseException(USERS_EMPTY_USER_ID);
-        if(checkDuplicateInterest(postId, userId) == 1)
-            throw new BaseException(DUPLICATED_INTEREST);
-        try {
-            long postInterestRes = postDao.insertInterest(postId, userId);
-            return postInterestRes;
-        }catch (Exception exception)
-        {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
     public int checkDuplicateInterest(long postId, long userId) throws BaseException{
         try {
             return postDao.checkDuplicateInterest(postId, userId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
-    }
-
-    private int checkUserIdExist(long userId) throws BaseException{
-        try {
-            return postDao.checkUserIdExist(userId);
-        } catch (Exception exception){
-            throw new BaseException(DATABASE_ERROR);
-        }
-
     }
 
 

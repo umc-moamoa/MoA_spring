@@ -8,14 +8,9 @@ import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.springboot.moa.config.BaseResponseStatus.POINT_HISTORY_INPUT_FAILED;
-
-import static com.springboot.moa.config.BaseResponseStatus.USERS_EMPTY_USER_ID;
 
 
 @RestController
@@ -101,11 +96,23 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/point")
-    public BaseResponse<List<GetPointHistoryRes>> getPointHistory() throws BaseException {
+    @GetMapping("/point/recent")
+    public BaseResponse<List<GetPointHistoryRecentRes>> getPointHistoryRecent() throws BaseException {
         try {
             long userIdByJwt = jwtService.getUserId();
-            List<GetPointHistoryRes> getPointHistoryRes = userProvider.getPointHistory(userIdByJwt);
+            List<GetPointHistoryRecentRes> getPointHistoryRes = userProvider.getPointHistoryRecent(userIdByJwt);
+            return new BaseResponse<>(getPointHistoryRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/point/former")
+    public BaseResponse<List<GetPointHistoryRecentRes>> getPointHistoryFormer() throws BaseException {
+        try {
+            long userIdByJwt = jwtService.getUserId();
+            List<GetPointHistoryRecentRes> getPointHistoryRes = userProvider.getPointHistoryFormer(userIdByJwt);
             return new BaseResponse<>(getPointHistoryRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

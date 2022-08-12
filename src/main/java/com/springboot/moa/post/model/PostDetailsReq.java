@@ -8,7 +8,7 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 public class PostDetailsReq {
-    int type;
+    int format;
     String question;
     List<PostFormatReq> postFormat;
 

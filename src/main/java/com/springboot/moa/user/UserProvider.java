@@ -65,9 +65,18 @@ public class UserProvider {
         }
     }
 
-    public List<GetPointHistoryRes> getPointHistory(long userId) throws BaseException {
+    public List<GetPointHistoryRecentRes> getPointHistoryRecent(long userId) throws BaseException {
         try {
-            List<GetPointHistoryRes> getPointHistoryRes = userDao.selectPointHistory(userId);
+            List<GetPointHistoryRecentRes> getPointHistoryRes = userDao.selectPointHistoryRecent(userId);
+            return getPointHistoryRes;
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetPointHistoryRecentRes> getPointHistoryFormer(long userId) throws BaseException {
+        try {
+            List<GetPointHistoryRecentRes> getPointHistoryRes = userDao.selectPointHistoryFormer(userId);
             return getPointHistoryRes;
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

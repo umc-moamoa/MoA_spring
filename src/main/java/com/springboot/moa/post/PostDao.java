@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class PostDao {
         String selectPostsQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
+                "           p.d_day as dDay,\n" +
                 "           COUNT(distinct pd.post_detail_id) as qCount,\n" +
                 "           p.status as status\n" +
                 "from post as p\n" +
@@ -34,7 +37,7 @@ public class PostDao {
                 "left join result as r on p.post_id=r.post_id\n" +
                 "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and p.category_id=?\n" +
-                "group by pd.post_id";
+                "group by p.post_id";
         long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
@@ -42,6 +45,7 @@ public class PostDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getInt("qCount"),
+                        rs.getInt("dDay"),
                         rs.getString("status")
                 ), selectPostsParam);
     }
@@ -57,23 +61,21 @@ public class PostDao {
 
     public List<GetPostDetailRes> selectPostDetail(long postId) {
         String selectPostDetailQuery = "\n" +
-                "        SELECT \n" +
-                "            pd.post_detail_id as post_detail_id,\n" +
-                "            pd.question as question,\n" +
-                "            pd.format as format\n" +
-                "        FROM post_detail as pd left join post as p on pd.post_id = p.post_id\n" +
-                "where pd.post_id=? and p.status = 'ACTIVE'";
+                "SELECT pd.post_detail_id as post_detail_id,pd.question as question,pd.format as format, qd.item as item\n" +
+                "FROM post_detail as pd left join post as p on pd.post_id = p.post_id\n" +
+                "    left join question_detail as qd on pd.post_detail_id = qd.post_detail_id\n" +
+                "where pd.post_id=? and p.status = 'ACTIVE'\n";
+
         long selectPostDetailParam = postId;
-
-
         return this.jdbcTemplate.query(selectPostDetailQuery,
                 (rs, rowNum) -> new GetPostDetailRes(
                         rs.getLong("post_detail_id"),
                         rs.getString("question"),
-                        rs.getInt("format")
+                        rs.getInt("format"),
+                        rs.getString("item")
                 ), selectPostDetailParam);
-
     }
+
 
     public int checkPostDetailExist(long postId) {
         String checkPostDetailQuery = "select exists(select post_id from post_detail where post_id = ?)";
@@ -81,7 +83,6 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(checkPostDetailQuery,
                 int.class,
                 checkPostDetailParams);
-
     }
 
     public long insertPosts(long userId, PostPostsReq postPostsReq) {
@@ -90,8 +91,10 @@ public class PostDao {
 
         int dDay = this.jdbcTemplate.queryForObject(calculateDdayQuery,int.class,calculateDdayParam);
 
+        int point = postPostsReq.getShortCount() + postPostsReq.getLongCount()*3;
+
         String insertPostQuery = "INSERT INTO post(user_id, category_id, point, title,content,deadline ,d_day) VALUES (?,?,?,?,?,?,?)";
-        Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),postPostsReq.getAddAmount(),
+        Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),point,
                 postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline(),dDay};
         this.jdbcTemplate.update(insertPostQuery,
                 insertPostParams);
@@ -101,7 +104,7 @@ public class PostDao {
 
     public long insertPostDetails(long postId, PostDetailsReq postDetailsReq) {
         String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,format) VALUES (?,?,?)";
-        Object[] insertPostDetailsParams = new Object[]{postId, postDetailsReq.getQuestion(), postDetailsReq.getType()};
+        Object[] insertPostDetailsParams = new Object[]{postId, postDetailsReq.getQuestion(), postDetailsReq.getFormat()};
         this.jdbcTemplate.update(insertPostDetailsQuery,
                 insertPostDetailsParams);
 
@@ -124,12 +127,13 @@ public class PostDao {
                 "            p.point as point,\n" +
                 "            p.title as title,\n" +
                 "            count(distinct post_detail_id) as qCount,\n" +
+                "            p.d_day as dDay,\n" +
                 "            p.status as status\n" +
                 "        FROM post as p\n" +
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
                 "        WHERE p.status='ACTIVE'\n" +
-                "        GROUP BY pd.post_id, p.point, p.title, p.status\n" +
+                "        GROUP BY p.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) DESC" +
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsDescQuery,
@@ -138,6 +142,7 @@ public class PostDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getInt("qCount"),
+                        rs.getInt("dDay"),
                         rs.getString("status")
                 ));
     }
@@ -148,12 +153,13 @@ public class PostDao {
                 "            p.point as point,\n" +
                 "            p.title as title,\n" +
                 "            count(distinct post_detail_id) as qCount,\n" +
+                "            p.d_day as dDay,\n" +
                 "            p.status as status\n" +
                 "        FROM post as p\n" +
                 "             left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "                 left join result as r on p.post_id=r.post_id\n" +
                 "        WHERE p.status='ACTIVE'\n" +
-                "        GROUP BY pd.post_id, p.point, p.title, p.status\n" +
+                "        GROUP BY p.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) ASC" +
                 "        LIMIT 3";
         return this.jdbcTemplate.query(selectParticipantsAscQuery,
@@ -162,6 +168,7 @@ public class PostDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getInt("qCount"),
+                        rs.getInt("dDay"),
                         rs.getString("status")
                 ));
     }
