@@ -70,6 +70,14 @@ public class PostProvider {
         }
     }
 
+    public int checkPostIdExist(long postId) throws BaseException {
+        try {
+            return postDao.checkPostIdExist(postId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetParticipantsRes> retrieveParticipantAsc() throws BaseException {
         try {
             List<GetParticipantsRes> getParticipantsRes = postDao.selectParticipantsAsc();
@@ -105,7 +113,7 @@ public class PostProvider {
         }
     }
 
-    private int checkDuplicateInterest(long postId, long userId) throws BaseException{
+    public int checkDuplicateInterest(long postId, long userId) throws BaseException{
         try {
             return postDao.checkDuplicateInterest(postId, userId);
         } catch (Exception exception) {
