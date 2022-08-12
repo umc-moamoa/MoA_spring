@@ -97,4 +97,20 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void deleteInterest(long userId, long postId) throws BaseException{
+        // postId가 존재하지 않는 경우
+        if(postProvider.checkPostIdExist(postId) == 0) {
+            throw new BaseException(POSTS_EMPTY_POST_ID);
+        }
+        // postId와 userId의 쌍이 존재하지 않는 경우
+        if(postProvider.checkDuplicateInterest(postId, userId) == 0) {
+            throw new BaseException(EMPTY_INTEREST);
+        }
+        try {
+            postDao.deleteInterest(userId, postId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
