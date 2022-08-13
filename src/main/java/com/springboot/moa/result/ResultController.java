@@ -82,5 +82,15 @@ public class ResultController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/count/{postId}")
+    public BaseResponse<GetResultNumberRes> getResultNumber (@PathVariable("postId") long postId) throws BaseException {
+        try {
+            GetResultNumberRes getResultNumberRes = resultProvider.countResultByPostId(postId);
+            return new BaseResponse<>(getResultNumberRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }
