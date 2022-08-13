@@ -73,12 +73,14 @@ public class ResultController {
     // localhost:9000/results/1
     @ResponseBody
     @GetMapping("/{postDetailId}")
-    public BaseResponse<List<GetResultStatisticsRes>> getResultStatistics(@PathVariable("postDetailId") long postDetailId) throws BaseException {
+    public BaseResponse<GetResultRes> getResultStatistics(@PathVariable("postDetailId") long postDetailId) throws BaseException {
         try {
-            List<GetResultStatisticsRes> getResultStatisticsRes = resultProvider.retrieveResultStatistics(postDetailId);
-            return new BaseResponse<>(getResultStatisticsRes);
+            GetResultRes getResultRes = resultProvider.retrieveResultStatistics(postDetailId);
+            return new BaseResponse<>(getResultRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
 }
