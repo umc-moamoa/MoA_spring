@@ -93,4 +93,14 @@ public class ResultController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/repeat/{postId}")
+    public BaseResponse<GetResultPostDetailIdRes> getResultPostDetailId (@PathVariable("postId") long postId) throws BaseException {
+        try {
+            GetResultPostDetailIdRes getResultPostDetailIdRes = resultProvider.getResultPostDetailId(postId);
+            return new BaseResponse<>(getResultPostDetailIdRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
