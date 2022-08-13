@@ -1,6 +1,7 @@
 package com.springboot.moa.result;
 
 import com.springboot.moa.post.model.GetPostDetailRes;
+import com.springboot.moa.result.model.GetResultNumberRes;
 import com.springboot.moa.result.model.GetResultStatisticsRes;
 import com.springboot.moa.result.model.PostDetailResultReq;
 import com.springboot.moa.result.model.PostResultReq;
@@ -70,5 +71,72 @@ public class ResultDao {
         return this.jdbcTemplate.queryForObject(checkDuplicatedResultQuery,
                 int.class,
                 checkDuplicatedResultParams);
+    }
+
+    // 등록된 답변의 개수 출력
+    public int countResult(long postDetailId) {
+        String countResultResultQuery = "select count(result) from result_detail where post_detail_id = ?";
+        long countResultParams = postDetailId;
+        return this.jdbcTemplate.queryForObject(countResultResultQuery,
+                int.class,
+                countResultParams);
+    }
+
+    // 설문조사 문항 개수
+    public int countPostDetail(long postId) {
+        String countPostDetailQuery = "select count(post_detail_id) from post_detail where post_id = ?;";
+        long countPostDetailParams = postId;
+        return this.jdbcTemplate.queryForObject(countPostDetailQuery,
+                int.class,
+                countPostDetailParams);
+    }
+
+    // 설문조사 문항 시작 postDetailId
+    public int startPostDetailId(long postId) {
+        String startPostDetailIdQuery = "select post_detail_id from post_detail where post_id = ? group by post_id;";
+        long startPostDetailIdParams = postId;
+        return this.jdbcTemplate.queryForObject(startPostDetailIdQuery,
+                int.class,
+                startPostDetailIdParams);
+    }
+
+    // 설문조사 type 반환
+    public int checkResultType(long postDetailId) {
+        String checkResultTypeQuery = "select distinct format " +
+                "from post_detail, result_detail " +
+                "where post_detail.post_detail_id = result_detail.post_detail_id " +
+                "and result_detail.post_detail_id = ?";
+        long checkResultTypeParams = postDetailId;
+        return this.jdbcTemplate.queryForObject(checkResultTypeQuery,
+                int.class,
+                checkResultTypeParams);
+    }
+
+    public GetResultNumberRes countResultByPostId(long postId){
+        String countResultByPostIdQuery = "select count(result_id) as number from result where post_id = ?";
+        long countResultByPostIdParams = postId;
+
+        GetResultNumberRes getResultNumberRes = this.jdbcTemplate.queryForObject(countResultByPostIdQuery,
+                (rs, rowNum) -> new GetResultNumberRes(
+                        rs.getInt("number")),
+                countResultByPostIdParams);
+
+        return getResultNumberRes;
+    }
+
+    public int checkResultPostId (long postId){
+        String checkResultPostIdQuery = "select exists(select post_id from result where post_id = ?);";
+        long checkResultPostIdParams = postId;
+        return this.jdbcTemplate.queryForObject(checkResultPostIdQuery,
+                int.class,
+                checkResultPostIdParams);
+    }
+
+    public int checkPostPostId (long postId){
+        String checkPostPostIdQuery = "select exists(select post_id from post where post_id = ?);";
+        long checkPostPostIdParams = postId;
+        return this.jdbcTemplate.queryForObject(checkPostPostIdQuery,
+                int.class,
+                checkPostPostIdParams);
     }
 }
