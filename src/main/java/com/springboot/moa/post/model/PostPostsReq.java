@@ -15,11 +15,9 @@ public class PostPostsReq {
     Date deadline;
     List<PostDetailsReq> postDetails;
 
-
     public PostPostsReq(){
 
     }
-
     public PostPostsReq(long categoryId, int shorCount, int longCount, String title, String content,
                         Date deadline, List<PostDetailsReq> postDetails){
         this.categoryId = categoryId;

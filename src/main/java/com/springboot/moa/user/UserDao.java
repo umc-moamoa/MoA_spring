@@ -149,7 +149,6 @@ public class UserDao {
                 "from point where user_id = ? order by point_id desc;";
 
         long selectPointHistoryParam = userId;
-
         return this.jdbcTemplate.query(selectPointHistoryQeury,
                 (rs, rowNum) -> new GetPointHistoryRecentRes(
                         rs.getInt("point"),
@@ -165,7 +164,6 @@ public class UserDao {
                 "from point where user_id = ? order by point_id;";
 
         long selectPointHistoryParam = userId;
-
         return this.jdbcTemplate.query(selectPointHistoryQeury,
                 (rs, rowNum) -> new GetPointHistoryRecentRes(
                         rs.getInt("point"),

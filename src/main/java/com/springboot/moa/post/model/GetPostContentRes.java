@@ -17,7 +17,6 @@ public class GetPostContentRes {
     int d_day;
     boolean isLike;
     boolean isMyPost;
-
     public GetPostContentRes(){
 
     }

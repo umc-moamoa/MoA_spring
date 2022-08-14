@@ -39,6 +39,7 @@ public class PostDao {
                 "and p.category_id=?\n" +
                 "group by p.post_id";
         long selectPostsParam = categoryId;
+
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
                         rs.getLong("postId"),
@@ -67,7 +68,6 @@ public class PostDao {
                 "where pd.post_id=? and p.status = 'ACTIVE'\n";
 
         long selectPostDetailParam = postId;
-
         return this.jdbcTemplate.query(selectPostDetailQuery,
                 (rs, rowNum) -> new GetPostDetailRes(
                         rs.getLong("post_detail_id"),
@@ -89,9 +89,11 @@ public class PostDao {
     public long insertPosts(long userId, PostPostsReq postPostsReq) {
         String calculateDdayQuery = "select datediff(?,curdate())";
         Date calculateDdayParam = postPostsReq.getDeadline();
+
         int dDay = this.jdbcTemplate.queryForObject(calculateDdayQuery,int.class,calculateDdayParam);
 
         int point = postPostsReq.getShortCount() + postPostsReq.getLongCount()*3;
+
         String insertPostQuery = "INSERT INTO post(user_id, category_id, point, title,content,deadline ,d_day) VALUES (?,?,?,?,?,?,?)";
         Object[] insertPostParams = new Object[]{userId, postPostsReq.getCategoryId(),point,
                 postPostsReq.getTitle(), postPostsReq.getContent(), postPostsReq.getDeadline(),dDay};
