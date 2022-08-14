@@ -53,7 +53,6 @@ public class UserService {
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(jwt, userId);
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -64,7 +63,6 @@ public class UserService {
             userDao.updateUserPoint(userId,addAmount, subAmount);
             return new PostPointsRes(pointId);
         } catch (Exception exception) {
-            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -76,7 +74,17 @@ public class UserService {
             return deleteUsersRes;
         }
         catch(Exception exception){
-            throw new BaseException(USERS_FAILED_USER_ID);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public PatchUserNickNameRes patchUserNickName(long userId, PatchUserNickNameReq patchUserNickNameReq) throws BaseException{
+        try{
+            PatchUserNickNameRes patchUserNickNameRes = userDao.patchUserNick(userId, patchUserNickNameReq);
+            return patchUserNickNameRes;
+        }
+        catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 }
