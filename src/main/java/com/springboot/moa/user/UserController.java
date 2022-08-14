@@ -133,4 +133,17 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @ResponseBody
+    @PatchMapping("/nick")
+    public BaseResponse<PatchUserNickNameRes> ModifyUserNickName(@RequestBody PatchUserNickNameReq patchUserNickNameReq) {
+        try{
+            long userIdByJwt = jwtService.getUserId();
+            PatchUserNickNameRes patchUserNickNameRes =
+                    userService.patchUserNickName(userIdByJwt, patchUserNickNameReq);
+            return new BaseResponse<>(patchUserNickNameRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

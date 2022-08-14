@@ -73,10 +73,32 @@ public class ResultController {
     // localhost:9000/results/1
     @ResponseBody
     @GetMapping("/{postDetailId}")
-    public BaseResponse<List<GetResultStatisticsRes>> getResultStatistics(@PathVariable("postDetailId") long postDetailId) throws BaseException {
+    public BaseResponse<GetResultRes> getResultStatistics(@PathVariable("postDetailId") long postDetailId) throws BaseException {
         try {
-            List<GetResultStatisticsRes> getResultStatisticsRes = resultProvider.retrieveResultStatistics(postDetailId);
-            return new BaseResponse<>(getResultStatisticsRes);
+            GetResultRes getResultRes = resultProvider.retrieveResultStatistics(postDetailId);
+            return new BaseResponse<>(getResultRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/count/{postId}")
+    public BaseResponse<GetResultNumberRes> getResultNumber (@PathVariable("postId") long postId) throws BaseException {
+        try {
+            GetResultNumberRes getResultNumberRes = resultProvider.countResultByPostId(postId);
+            return new BaseResponse<>(getResultNumberRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/repeat/{postId}")
+    public BaseResponse<GetResultPostDetailIdRes> getResultPostDetailId (@PathVariable("postId") long postId) throws BaseException {
+        try {
+            GetResultPostDetailIdRes getResultPostDetailIdRes = resultProvider.getResultPostDetailId(postId);
+            return new BaseResponse<>(getResultPostDetailIdRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

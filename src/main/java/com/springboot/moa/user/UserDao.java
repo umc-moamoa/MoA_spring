@@ -208,4 +208,19 @@ public class UserDao {
                 checkNickExistParams);
     }
 
+    public PatchUserNickNameRes patchUserNick(long userId, PatchUserNickNameReq patchUserNickNameReq) {
+        String patchUserNickQuery = "update user set nick=? where user_id = ?";
+        String newNick = patchUserNickNameReq.getNewNickName();
+        Object[] patchUserNickParams = new Object[]{newNick, userId};
+
+        this.jdbcTemplate.update(patchUserNickQuery, patchUserNickParams);
+
+        long selectUserParam = userId;
+        String selectUserQuery = "select nick, id from user where user_id = ?";
+        return this.jdbcTemplate.queryForObject(selectUserQuery,
+                (rs, rowNum) -> new PatchUserNickNameRes(
+                        rs.getString("nick"),
+                        rs.getString("id")),
+                selectUserParam);
+    }
 }
