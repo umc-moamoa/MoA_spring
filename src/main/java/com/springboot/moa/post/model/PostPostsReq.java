@@ -8,8 +8,8 @@ import java.util.List;
 public class PostPostsReq {
     long userId;
     long categoryId;
-    int addAmount;
-    int subAmount;
+    int shortCount;
+    int longCount;
     String title;
     String content;
     Date deadline;
@@ -18,11 +18,11 @@ public class PostPostsReq {
     public PostPostsReq(){
 
     }
-    public PostPostsReq(long categoryId, int addAmount, int subAmount, String title, String content,
+    public PostPostsReq(long categoryId, int shortCount, int longCount, String title, String content,
                         Date deadline, List<PostDetailsReq> postDetails){
         this.categoryId = categoryId;
-        this.addAmount = addAmount;
-        this.subAmount = subAmount;
+        this.shortCount = shortCount;
+        this.longCount = longCount;
         this.title = title;
         this.content = content;
         this.deadline = deadline;

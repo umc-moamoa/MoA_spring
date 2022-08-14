@@ -11,4 +11,5 @@ public class GetPostDetailRes {
     long postDetailId;
     String question;
     int type;
+    String item;
 }

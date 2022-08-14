@@ -74,8 +74,11 @@ public class PostController {
     public BaseResponse<PostPostsRes> createPosts(@RequestBody PostPostsReq postPostsReq) {
         try {
             long userIdByJwt = jwtService.getUserId();
+
             postPostsReq.setUserId(userIdByJwt);
-            if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - postPostsReq.getSubAmount() < 0)
+            int subAmount = postPostsReq.getShortCount()*3 + postPostsReq.getLongCount()*5;
+
+            if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - subAmount < 0)
                 return new BaseResponse<>(BaseResponseStatus.POSTS_FAILED_UPLOAD);
 
             if (postPostsReq.getTitle().length() > 30)
@@ -85,7 +88,7 @@ public class PostController {
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
 
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
-            userService.addPointHistory(postPostsReq.getUserId(), 0, postPostsReq.getSubAmount());
+            userService.addPointHistory(postPostsReq.getUserId(), 0, subAmount);
             return new BaseResponse<>(postPostsRes);
 
         } catch (BaseException exception) {
