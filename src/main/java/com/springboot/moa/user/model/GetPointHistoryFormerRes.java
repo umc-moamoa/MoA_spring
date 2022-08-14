@@ -15,4 +15,5 @@ public class GetPointHistoryFormerRes {
     int addAmount;
     int subAmount;
     Date created;
+
 }

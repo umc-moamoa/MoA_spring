@@ -61,6 +61,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
+
             long userIdByJwt = jwtService.getUserId();
             List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
             return new BaseResponse<>(getPostDetailRes);
@@ -76,6 +77,7 @@ public class PostController {
             long userIdByJwt = jwtService.getUserId();
 
             postPostsReq.setUserId(userIdByJwt);
+
             int subAmount = postPostsReq.getShortCount()*3 + postPostsReq.getLongCount()*5;
 
             if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - subAmount < 0)
@@ -88,6 +90,7 @@ public class PostController {
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
 
             PostPostsRes postPostsRes = postService.createPosts(postPostsReq.getUserId(), postPostsReq);
+
             userService.addPointHistory(postPostsReq.getUserId(), 0, subAmount);
             return new BaseResponse<>(postPostsRes);
 

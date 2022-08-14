@@ -147,6 +147,7 @@ public class UserDao {
         String selectPointHistoryQeury = "select created, add_amount as addAmount, sub_amount as subAmount,\n" +
                 "sum(add_amount-sub_amount) over(order by point_id) as point\n" +
                 "from point where user_id = ? order by point_id desc;";
+
         long selectPointHistoryParam = userId;
 
         return this.jdbcTemplate.query(selectPointHistoryQeury,
@@ -162,6 +163,7 @@ public class UserDao {
         String selectPointHistoryQeury = "select created, add_amount as addAmount, sub_amount as subAmount,\n" +
                 "sum(add_amount-sub_amount) over(order by point_id) as point\n" +
                 "from point where user_id = ? order by point_id;";
+
         long selectPointHistoryParam = userId;
 
         return this.jdbcTemplate.query(selectPointHistoryQeury,

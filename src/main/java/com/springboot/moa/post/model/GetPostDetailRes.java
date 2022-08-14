@@ -14,4 +14,5 @@ public class GetPostDetailRes {
     String question;
     int format;
     String item;
+
 }

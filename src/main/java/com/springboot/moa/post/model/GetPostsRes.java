@@ -14,4 +14,5 @@ public class GetPostsRes {
     int qCount;
     int dDay;
     String status;
+
 }

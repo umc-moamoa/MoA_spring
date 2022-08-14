@@ -100,6 +100,7 @@ public class UserController {
     public BaseResponse<List<GetPointHistoryRecentRes>> getPointHistoryRecent() throws BaseException {
         try {
             long userIdByJwt = jwtService.getUserId();
+
             List<GetPointHistoryRecentRes> getPointHistoryRes = userProvider.getPointHistoryRecent(userIdByJwt);
             return new BaseResponse<>(getPointHistoryRes);
         } catch (BaseException exception) {
@@ -112,6 +113,7 @@ public class UserController {
     public BaseResponse<List<GetPointHistoryRecentRes>> getPointHistoryFormer() throws BaseException {
         try {
             long userIdByJwt = jwtService.getUserId();
+
             List<GetPointHistoryRecentRes> getPointHistoryRes = userProvider.getPointHistoryFormer(userIdByJwt);
             return new BaseResponse<>(getPointHistoryRes);
         } catch (BaseException exception) {
