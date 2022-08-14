@@ -43,14 +43,28 @@ public class PostService {
         try {
             long postId = postDao.insertPosts(userId, postPostsReq);
 
-            for (int i = 0; i < postPostsReq.getPostDetails().size(); i++) {
-                PostDetailsReq postDetailsReq = postPostsReq.getPostDetails().get(i);
-                long postDetailId = postDao.insertPostDetails(postId, postDetailsReq);
-                for (int j = 0; j < postDetailsReq.getPostFormat().size(); j++) {
-                    PostFormatReq postFormatReq = postDetailsReq.getPostFormat().get(j);
-                    postDao.insertPostFormats(postDetailId, postFormatReq);
+            for(int i=0;i<postPostsReq.getPostDetails().size();i++) {
+                String[] postDetailsReqs = postPostsReq.getPostDetails().get(i);
+                String format = postDetailsReqs[0];
+                String question = postDetailsReqs[1];
+                long postDetailId = postDao.insertPostDetails(postId,question,format);
+                int itemCount = postDetailsReqs.length -2;
+                if(itemCount != 0) {
+                    String[] item = new String[itemCount];
+                    for (int j = 0; j < itemCount; j++) {
+                        item[j] = postDetailsReqs[j+2];
+                        postDao.insertPostFormats(postDetailId,item[j]);
+                    }
                 }
             }
+//            for (int i = 0; i < postPostsReq.getPostDetails().size(); i++) {
+//                PostDetailsReq postDetailsReq = postPostsReq.getPostDetails().get(i);
+//                long postDetailId = postDao.insertPostDetails(postId, postDetailsReq);
+//                for (int j = 0; j < postDetailsReq.getPostFormat().size(); j++) {
+//                    PostFormatReq postFormatReq = postDetailsReq.getPostFormat().get(j);
+//                    postDao.insertPostFormats(postDetailId, postFormatReq);
+//                }
+//            }
             return new PostPostsRes(postId);
         } catch (Exception exception) {
             exception.printStackTrace();

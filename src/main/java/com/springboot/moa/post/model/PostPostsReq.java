@@ -1,6 +1,7 @@
 package com.springboot.moa.post.model;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Getter
@@ -13,13 +14,13 @@ public class PostPostsReq {
     String title;
     String content;
     Date deadline;
-    List<PostDetailsReq> postDetails;
+    List<String[]> postDetails;
 
     public PostPostsReq(){
 
     }
     public PostPostsReq(long categoryId, int shortCount, int longCount, String title, String content,
-                        Date deadline, List<PostDetailsReq> postDetails){
+                        Date deadline, List<String[]> postDetails){
         this.categoryId = categoryId;
         this.shortCount = shortCount;
         this.longCount = longCount;
