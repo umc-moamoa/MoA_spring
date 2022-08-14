@@ -1,6 +1,5 @@
 package com.springboot.moa.user;
 
-import com.springboot.moa.config.BaseException;
 import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -144,20 +143,35 @@ public class UserDao {
         this.jdbcTemplate.update(addUserPointQuery, addUserPointParam);
     }
 
-    public List<GetPointHistoryRes> selectPointHistory(long userId) {
-        String selectPointHistoryQeury = "select add_amount as addAmount, sub_amount as subAmount,\n" +
+    public List<GetPointHistoryRecentRes> selectPointHistoryRecent(long userId) {
+        String selectPointHistoryQeury = "select created, add_amount as addAmount, sub_amount as subAmount,\n" +
                 "sum(add_amount-sub_amount) over(order by point_id) as point\n" +
                 "from point where user_id = ? order by point_id desc;";
-        long selectPointHistoryParam = userId;
 
+        long selectPointHistoryParam = userId;
         return this.jdbcTemplate.query(selectPointHistoryQeury,
-                (rs, rowNum) -> new GetPointHistoryRes(
+                (rs, rowNum) -> new GetPointHistoryRecentRes(
                         rs.getInt("point"),
                         rs.getInt("addAmount"),
-                        rs.getInt("subAmount")
+                        rs.getInt("subAmount"),
+                        rs.getDate("created")
                 ), selectPointHistoryParam);
     }
 
+    public List<GetPointHistoryRecentRes> selectPointHistoryFormer(long userId) {
+        String selectPointHistoryQeury = "select created, add_amount as addAmount, sub_amount as subAmount,\n" +
+                "sum(add_amount-sub_amount) over(order by point_id) as point\n" +
+                "from point where user_id = ? order by point_id;";
+
+        long selectPointHistoryParam = userId;
+        return this.jdbcTemplate.query(selectPointHistoryQeury,
+                (rs, rowNum) -> new GetPointHistoryRecentRes(
+                        rs.getInt("point"),
+                        rs.getInt("addAmount"),
+                        rs.getInt("subAmount"),
+                        rs.getDate("created")
+                ), selectPointHistoryParam);
+    }
 
     public DeleteUserRes deleteUser(DeleteUserReq deleteUserReq) {
         long userId = deleteUserReq.getUserId();
