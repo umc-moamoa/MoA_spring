@@ -8,14 +8,9 @@ import com.springboot.moa.config.BaseResponseStatus;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.springboot.moa.config.BaseResponseStatus.POINT_HISTORY_INPUT_FAILED;
-
-import static com.springboot.moa.config.BaseResponseStatus.USERS_EMPTY_USER_ID;
 
 
 @RestController
@@ -120,6 +115,19 @@ public class UserController {
             DeleteUserReq deleteUserReq = new DeleteUserReq(userIdByJwt);
             DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
             return new BaseResponse<>(deleteUsersRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/nick")
+    public BaseResponse<PatchUserNickNameRes> ModifyUserNickName(@RequestBody PatchUserNickNameReq patchUserNickNameReq) {
+        try{
+            long userIdByJwt = jwtService.getUserId();
+            PatchUserNickNameRes patchUserNickNameRes =
+                    userService.patchUserNickName(userIdByJwt, patchUserNickNameReq);
+            return new BaseResponse<>(patchUserNickNameRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
