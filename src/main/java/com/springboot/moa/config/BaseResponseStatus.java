@@ -63,6 +63,7 @@ public enum BaseResponseStatus {
 
     // [RESULT]
     DUPLICATED_RESULT (false, 2070, "이미 답변을 등록한 설문입니다."),
+    EMPTY_RESULT(false, 2071, "답변이 존재하지 않습니다."),
   
     /**
      * 3000 : Response 오류
