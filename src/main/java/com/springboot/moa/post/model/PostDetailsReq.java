@@ -8,9 +8,9 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 public class PostDetailsReq {
-    int type;
+    String type;
     String question;
-    List<PostFormatReq> postFormat;
+    String postFormat;
 
     public PostDetailsReq(){
 

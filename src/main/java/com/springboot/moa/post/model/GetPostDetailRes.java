@@ -10,6 +10,6 @@ import lombok.Setter;
 public class GetPostDetailRes {
     long postDetailId;
     String question;
-    int type;
+    int format;
     String item;
 }
