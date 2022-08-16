@@ -99,7 +99,7 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
-    public long insertPostDetails(long postId, String question, String format) {
+    public long insertPostDetails(long postId, String question, int format) {
         String insertPostDetailsQuery = "INSERT INTO post_detail(post_id,question,format) VALUES (?,?,?)";
         Object[] insertPostDetailsParams = new Object[]{postId, question, format};
         this.jdbcTemplate.update(insertPostDetailsQuery,
