@@ -11,7 +11,6 @@ import java.util.Date;
 @AllArgsConstructor
 
 public class GetPointHistoryFormerRes {
-    int point;
     int addAmount;
     int subAmount;
     Date created;

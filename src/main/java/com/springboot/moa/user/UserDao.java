@@ -151,22 +151,21 @@ public class UserDao {
         long selectPointHistoryParam = userId;
         return this.jdbcTemplate.query(selectPointHistoryQeury,
                 (rs, rowNum) -> new GetPointHistoryRecentRes(
-                        rs.getInt("point"),
+//                        rs.getInt("point"),
                         rs.getInt("addAmount"),
                         rs.getInt("subAmount"),
                         rs.getDate("created")
                 ), selectPointHistoryParam);
     }
 
-    public List<GetPointHistoryRecentRes> selectPointHistoryFormer(long userId) {
+    public List<GetPointHistoryFormerRes> selectPointHistoryFormer(long userId) {
         String selectPointHistoryQeury = "select created, add_amount as addAmount, sub_amount as subAmount,\n" +
                 "sum(add_amount-sub_amount) over(order by point_id) as point\n" +
                 "from point where user_id = ? order by point_id;";
 
         long selectPointHistoryParam = userId;
         return this.jdbcTemplate.query(selectPointHistoryQeury,
-                (rs, rowNum) -> new GetPointHistoryRecentRes(
-                        rs.getInt("point"),
+                (rs, rowNum) -> new GetPointHistoryFormerRes(
                         rs.getInt("addAmount"),
                         rs.getInt("subAmount"),
                         rs.getDate("created")
