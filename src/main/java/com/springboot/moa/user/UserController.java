@@ -97,11 +97,11 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/point/recent")
-    public BaseResponse<List<GetPointHistoryRecentRes>> getPointHistoryRecent() throws BaseException {
-        try {
+    public BaseResponse<GetPointHistoryRes> getPointHistoryRecent() throws BaseException{
+        try{
             long userIdByJwt = jwtService.getUserId();
 
-            List<GetPointHistoryRecentRes> getPointHistoryRes = userProvider.getPointHistoryRecent(userIdByJwt);
+            GetPointHistoryRes getPointHistoryRes = userProvider.getPointHistoryRecent(userIdByJwt);
             return new BaseResponse<>(getPointHistoryRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -110,11 +110,11 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/point/former")
-    public BaseResponse<List<GetPointHistoryRecentRes>> getPointHistoryFormer() throws BaseException {
-        try {
+    public BaseResponse<GetPointHistoryRes> getPointHistoryFormer() throws BaseException{
+        try{
             long userIdByJwt = jwtService.getUserId();
 
-            List<GetPointHistoryRecentRes> getPointHistoryRes = userProvider.getPointHistoryFormer(userIdByJwt);
+            GetPointHistoryRes getPointHistoryRes = userProvider.getPointHistoryFormer(userIdByJwt);
             return new BaseResponse<>(getPointHistoryRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
