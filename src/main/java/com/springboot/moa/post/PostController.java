@@ -173,9 +173,10 @@ public class PostController {
     @PatchMapping("/{postId}")
     public BaseResponse<String> modifyPost(@PathVariable ("postId") long postId, @RequestBody PatchPostsReq patchPostsReq) {
         try{
+            long userIdByJwt = jwtService.getUserId();
             if(patchPostsReq.getContent().length() > 450)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
-            postService.modifyContent(patchPostsReq.getUserId(), postId, patchPostsReq);
+            postService.modifyContent(userIdByJwt, postId, patchPostsReq);
             String result = "게시물 정보 수정을 완료하였습니다.";
             return new BaseResponse<>(result);
         } catch(BaseException exception){
