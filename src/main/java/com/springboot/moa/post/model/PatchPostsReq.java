@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class PatchPostsReq {
-    private int userId;
     private String content;
     public PatchPostsReq(){
 

@@ -85,11 +85,11 @@ public class PostService {
     }
 
     public void modifyContent(long userId, long postId, PatchPostsReq patchPostsReq) throws BaseException {
-        if (postProvider.checkUserExist(userId, postId) == 0) {
-            throw new BaseException(USERS_FAILED_POST_ID);
-        }
         if (postProvider.checkPostExist(postId) == 0) {
             throw new BaseException(POSTS_EMPTY_POST_ID);
+        }
+        if (postProvider.checkUserExist(userId, postId) == 0) {
+            throw new BaseException(USERS_FAILED_POST_ID);
         }
         if(postProvider.checkStatus(postId) == 0) {
             throw new BaseException(POST_STATUS_INACTIVE);
