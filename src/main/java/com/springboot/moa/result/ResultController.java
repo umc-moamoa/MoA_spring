@@ -70,6 +70,7 @@ public class ResultController {
         }
     }
 
+
     // localhost:9000/results/1
     @ResponseBody
     @GetMapping("/{postDetailId}")
