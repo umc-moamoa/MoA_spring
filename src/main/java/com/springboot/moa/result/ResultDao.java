@@ -6,6 +6,7 @@ import com.springboot.moa.result.model.GetResultStatisticsRes;
 import com.springboot.moa.result.model.PostDetailResultReq;
 import com.springboot.moa.result.model.PostResultReq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -28,20 +29,23 @@ public class ResultDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
-    public long insertResultDetails(long resultId, PostDetailResultReq postDetailResultReq) {
+    public void insertResultDetails(long resultId, PostDetailResultReq postDetailResultReq) {
         String insertResultDetailsQuery = "INSERT INTO result_detail (result_id, post_detail_id, result) VALUES (?, ?, ?)";
         Object[] insertResultDetailsParams = new Object[]{resultId,  postDetailResultReq.getPostDetailId(), postDetailResultReq.getResult()};
         this.jdbcTemplate.update(insertResultDetailsQuery, insertResultDetailsParams);
         String lastInsertIdxQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
+        this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
 
     public int selectPostPoint(long postId){
         String selectPostPointQuery = "select point from post where post_id = ? and status = 'ACTIVE'";
         long selectPostPointParam = postId;
-
-        return this.jdbcTemplate.queryForObject(selectPostPointQuery, int.class, selectPostPointParam);
+        try {
+            return this.jdbcTemplate.queryForObject(selectPostPointQuery, int.class, selectPostPointParam);
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
     }
 
     public List<GetResultStatisticsRes> selectResult(long postDetailId) {
