@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.springboot.moa.config.BaseResponseStatus.*;
@@ -55,13 +56,41 @@ public class PostProvider {
         if (checkPostExist(postId) == 0)
             throw new BaseException(POSTS_EMPTY_POST_ID);
         try {
-            List<GetPostDetailRes> getPostDetailRes = postDao.selectPostDetail(postId);
+            List<GetPostDetailRes> getPostDetailRes = new ArrayList<>();
+            List<GetPostQuestionRes> getPostQuestionRes = postDao.selectPostDetail(postId);
+
+            for (int i = 0; i < getPostQuestionRes.size(); i++) {
+                GetPostDetailRes postDetailInfo = new GetPostDetailRes();
+                GetPostQuestionRes questionInfo = getPostQuestionRes.get(i);
+
+                postDetailInfo.setPostDetailId(questionInfo.getPostDetailId());
+                postDetailInfo.setQuestion(questionInfo.getQuestion());
+                postDetailInfo.setFormat(questionInfo.getFormat());
+
+                long postDetailId = questionInfo.getPostDetailId();
+
+                List<String> postItems = postDao.selectPostItems(postDetailId);
+                String[] items = new String[postItems.size()];
+                if(postItems.size()==0){
+                    items[0] = "객관식 문항이 없습니다.";
+                }
+                else {
+                    for (int j = 0; j < postItems.size(); j++) {
+                        items[j] = postItems.get(j);
+                    }
+                }
+                postDetailInfo.setItems(items);
+
+                getPostDetailRes.add(postDetailInfo);
+            }
+
             return getPostDetailRes;
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
-
     }
+
     public int checkPostExist(long postId) throws BaseException{
         try {
             return postDao.checkPostDetailExist(postId);
