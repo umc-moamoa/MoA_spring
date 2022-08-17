@@ -247,7 +247,7 @@ public class PostDao {
     }
 
     public int updateContent(long postId, String content) {
-        String updateContentQuery = "UPDATE post SET content=? WHERE post_id=?";
+        String updateContentQuery = "UPDATE post SET content=? WHERE post_id=? and status= 'active'";
         Object[] updateContentParams = new Object[]{content, postId};
         return this.jdbcTemplate.update(updateContentQuery,
                 updateContentParams);
@@ -259,7 +259,6 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
                 checkUserExistParams);
-
     }
 
     public String checkStatus(long postId) {
