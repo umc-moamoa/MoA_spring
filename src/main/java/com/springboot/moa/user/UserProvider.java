@@ -65,20 +65,30 @@ public class UserProvider {
         }
     }
 
-    public List<GetPointHistoryRecentRes> getPointHistoryRecent(long userId) throws BaseException {
+    public GetPointHistoryRes getPointHistoryRecent(long userId) throws BaseException {
         try {
-            List<GetPointHistoryRecentRes> getPointHistoryRes = userDao.selectPointHistoryRecent(userId);
+            GetPointHistoryRes getPointHistoryRes = new GetPointHistoryRes();
+            getPointHistoryRes.setPoint(userDao.selectUser(userId).getPoint());
 
+            List<GetPointHistoryRecentRes> getPointHistoryRecentRes = userDao.selectPointHistoryRecent(userId);
+            getPointHistoryRes.setPointHistoryRecent(getPointHistoryRecentRes);
+
+            getPointHistoryRes.setPointHistoryFormer(null);
             return getPointHistoryRes;
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public List<GetPointHistoryRecentRes> getPointHistoryFormer(long userId) throws BaseException {
+    public GetPointHistoryRes getPointHistoryFormer(long userId) throws BaseException {
         try {
-            List<GetPointHistoryRecentRes> getPointHistoryRes = userDao.selectPointHistoryFormer(userId);
+            GetPointHistoryRes getPointHistoryRes = new GetPointHistoryRes();
+            getPointHistoryRes.setPoint(userDao.selectUser(userId).getPoint());
 
+            List<GetPointHistoryFormerRes> getPointHistoryFormerRes = userDao.selectPointHistoryFormer(userId);
+            getPointHistoryRes.setPointHistoryFormer(getPointHistoryFormerRes);
+
+            getPointHistoryRes.setPointHistoryRecent(null);
             return getPointHistoryRes;
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
