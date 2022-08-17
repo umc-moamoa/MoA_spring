@@ -9,9 +9,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.fasterxml.jackson.databind.cfg.CoercionInputShape.Array;
 import static com.springboot.moa.config.BaseResponseStatus.POSTS_FAILED_UPLOAD;
 
 @Repository
@@ -57,21 +60,30 @@ public class PostDao {
 
     }
 
-    public List<GetPostDetailRes> selectPostDetail(long postId) {
+    public List<GetPostQuestionRes> selectPostDetail(long postId) {
         String selectPostDetailQuery = "\n" +
-                "SELECT pd.post_detail_id as post_detail_id,pd.question as question,pd.format as format, qd.item as item\n" +
+                "SELECT pd.post_detail_id as post_detail_id, pd.question as question, pd.format as format\n" +
                 "FROM post_detail as pd left join post as p on pd.post_id = p.post_id\n" +
-                "    left join question_detail as qd on pd.post_detail_id = qd.post_detail_id\n" +
-                "where pd.post_id=? and p.status = 'ACTIVE'\n";
+                "where pd.post_id=? and p.status = 'ACTIVE'";
+
 
         long selectPostDetailParam = postId;
+
         return this.jdbcTemplate.query(selectPostDetailQuery,
-                (rs, rowNum) -> new GetPostDetailRes(
+                (rs, rowNum) -> new GetPostQuestionRes(
                         rs.getLong("post_detail_id"),
                         rs.getString("question"),
-                        rs.getInt("format"),
-                        rs.getString("item")
+                        rs.getInt("format")
                 ), selectPostDetailParam);
+    }
+
+    public List<String> selectPostItems(long postDetailId){
+        String selectPostItemsQuery = "select item from question_detail where post_detail_id = ?";
+        long selectPostItemsParam = postDetailId;
+        return this.jdbcTemplate.query(selectPostItemsQuery,
+                (rs, rowNum) -> new String(
+                        rs.getString("item")
+                ),selectPostItemsParam);
     }
 
     public int checkPostDetailExist(long postId) {
