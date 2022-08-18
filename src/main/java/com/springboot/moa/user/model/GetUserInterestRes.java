@@ -15,5 +15,6 @@ public class GetUserInterestRes {
     // 등록된 질문의 개수
     int qCount;
     String status;
+    int dDay;
 }
 
