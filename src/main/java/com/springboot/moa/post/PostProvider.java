@@ -71,10 +71,7 @@ public class PostProvider {
 
                 List<String> postItems = postDao.selectPostItems(postDetailId);
                 String[] items = new String[postItems.size()];
-                if(postItems.size()==0){
-                    items[0] = "객관식 문항이 없습니다.";
-                }
-                else {
+                if(postItems.size() > 0) {
                     for (int j = 0; j < postItems.size(); j++) {
                         items[j] = postItems.get(j);
                     }
