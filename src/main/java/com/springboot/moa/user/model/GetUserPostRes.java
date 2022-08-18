@@ -12,4 +12,6 @@ public class GetUserPostRes {
     int point;
     int postResultCount;
     int qCount;
+    int dDay;
+    String status;
 }

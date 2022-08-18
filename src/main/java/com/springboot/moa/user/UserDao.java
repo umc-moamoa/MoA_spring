@@ -50,20 +50,23 @@ public class UserDao {
         String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
                 "p.point as point,\n" +
                 "COUNT(distinct r.user_id) as postResultCount,\n" +
-                "COUNT(distinct pd.post_detail_id) as qCount\n" +
+                "COUNT(distinct pd.post_detail_id) as qCount,\n" +
+                "p.d_day as dDay, p.status as status\n" +
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
                 "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and p.user_id=?\n" +
-                "group by pd.post_id";
+                "group by p.post_id";
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs, rowNum) -> new GetUserPostRes(
                         rs.getString("postTitle"),
                         rs.getInt("point"),
                         rs.getInt("postResultCount"),
-                        rs.getInt("qCount")
+                        rs.getInt("qCount"),
+                        rs.getInt("dDay"),
+                        rs.getString("status")
                 ), selectUserPostsParam);
     }
 
@@ -71,14 +74,15 @@ public class UserDao {
         String selectUserPostsQuery = "SELECT p.post_id as postId,\n" +
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
-                "           COUNT(distinct pd.post_detail_id) as qCount,\n" +
+                "           COUNT(distinct pd.post_detail_id) as qCount," +
+                "           p.d_day as dDay,\n" +
                 "           p.status as status\n" +
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
                 "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and r.user_id=?\n" +
-                "group by pd.post_id";
+                "group by p.post_id";
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs, rowNum) -> new GetUserPartPostRes(
@@ -86,6 +90,7 @@ public class UserDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getInt("qCount"),
+                        rs.getInt("dDay"),
                         rs.getString("status")
                 ), selectUserPostsParam);
     }
@@ -115,7 +120,8 @@ public class UserDao {
                 "           p.point as point,\n" +
                 "           p.title as title,\n" +
                 "           count(pd.post_detail_id) as qCount,\n" +
-                "           p.status as status\n" +
+                "           p.status as status,\n" +
+                "           p.d_day as dDay\n" +
                 "FROM       interest as i, post as p, post_detail as pd\n" +
                 "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=? " +
                 "and (p.status = 'ACTIVE' or p.status = 'CLOSED')\n" +
@@ -129,7 +135,8 @@ public class UserDao {
                         rs.getInt("point"),
                         rs.getString("title"),
                         rs.getInt("qCount"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getInt("dDay")
                 ), selectUserInterestParam);
     }
 
