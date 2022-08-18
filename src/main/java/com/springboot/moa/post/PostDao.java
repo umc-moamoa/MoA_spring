@@ -221,7 +221,8 @@ public class PostDao {
                         "p.title as title,\n" +
                         "p.content as content,\n" +
                         "count(distinct pd.post_detail_id) as qCount,\n" +
-                        "p.d_day as d_day\n" +
+                        "p.d_day as dDay,\n" +
+                        "p.status as status\n" +
                         "from post as p\n" +
                         "left join post_detail as pd on pd.post_id = p.post_id\n" +
                         "where p.post_id = ? and (p.status = 'ACTIVE' or p.status = 'CLOSED')\n";
@@ -234,14 +235,15 @@ public class PostDao {
                         rs.getString("title"),
                         rs.getString("content"),
                         rs.getInt("qCount"),
-                        rs.getInt("d_day")
+                        rs.getInt("dDay"),
+                        rs.getString("status")
                 ), selectPostContentParam);
     }
 
 
     public int deletePost(long postId){
         String deletePostQuery = "UPDATE post SET status='INACTIVE' WHERE post_id = ?";
-        Object[] deletePostParams = new Object[]{postId};
+        long deletePostParams = postId;
         return this.jdbcTemplate.update(deletePostQuery,
                 deletePostParams);
     }
@@ -270,7 +272,7 @@ public class PostDao {
     }
 
     public long getUserId(long postId){
-        String selectUserIdQuery = "select user_id from post where post_id=?" +
+        String selectUserIdQuery = "select user_id from post as p where post_id=?" +
                 " and (p.status = 'ACTIVE' or p.status = 'CLOSED');";
         long selectUserIdParam = postId;
         return this.jdbcTemplate.queryForObject(selectUserIdQuery,
