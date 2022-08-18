@@ -14,7 +14,8 @@ public class GetPostContentRes {
     String title;
     String content;
     int qCount;
-    int d_day;
+    int dDay;
+    String status;
     boolean isLike;
     boolean isMyPost;
 
@@ -22,11 +23,12 @@ public class GetPostContentRes {
 
     }
 
-    public GetPostContentRes(long postUserId, String title, String content, int qCount, int d_day) {
+    public GetPostContentRes(long postUserId, String title, String content, int qCount, int dDay, String status) {
         this.postUserId = postUserId;
         this.title = title;
         this.content = content;
         this.qCount = qCount;
-        this.d_day = d_day;
+        this.dDay = dDay;
+        this.status = status;
     }
 }
