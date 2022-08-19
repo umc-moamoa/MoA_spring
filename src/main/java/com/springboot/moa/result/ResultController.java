@@ -46,20 +46,6 @@ public class ResultController {
             long userIdByJwt = jwtService.getUserId();
             postResultReq.setUserId(userIdByJwt);
 
-            // for 문을 돌며 postResultReq에 있는 postDetailResult 객체를 받아옴
-            // postDetailResult 객체 안의 result 변수의 값을 확인
-            for (int i = 0; i < postResultReq.getPostDetailResults().size(); i++) {
-                PostDetailResultReq postDetailResultReq = postResultReq.getPostDetailResults().get(i);
-
-                // 답변이 일정 길이를 초과했을 때
-                if (postDetailResultReq.getResult().length() > 450) {
-                    return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
-                }
-                // 답변이 입력되지 않았을 때
-                if (postDetailResultReq.getResult().length() < 1) {
-                    return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_CONTENTS);
-                }
-            }
             PostResultRes postResultRes = resultService.createResults(postResultReq);
             int point = postResultRes.getPoint();
             userService.addPointHistory(postResultReq.getUserId(), point, 0);
