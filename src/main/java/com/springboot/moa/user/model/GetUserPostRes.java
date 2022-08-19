@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetUserPostRes {
+    long postId;
     String postTitle;
     int point;
     int postResultCount;

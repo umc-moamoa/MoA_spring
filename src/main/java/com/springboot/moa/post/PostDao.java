@@ -77,6 +77,14 @@ public class PostDao {
                 ), selectPostDetailParam);
     }
 
+    public String checkPostStatus(long postId){
+        String checkPostStatusQuery = "select status from post where post_id = ?";
+        long checkPostStatusParam = postId;
+
+        return this.jdbcTemplate.queryForObject(checkPostStatusQuery,
+                String.class,
+                checkPostStatusParam);
+    }
     public List<String> selectPostItems(long postDetailId){
         String selectPostItemsQuery = "select item from question_detail where post_detail_id = ?";
         long selectPostItemsParam = postDetailId;

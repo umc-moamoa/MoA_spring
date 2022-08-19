@@ -61,6 +61,13 @@ public class PostController {
     @GetMapping("/{postId}")
     public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
+            String postStatus = postProvider.checkPostStatus(postId);
+            if(postStatus.equals("CLOSED"))
+                return new BaseResponse<>(BaseResponseStatus.FAILED_CLOSED_POST);
+
+            if(postStatus.equals("INACTIVE"))
+                return new BaseResponse<>(BaseResponseStatus.FAILED_INACTIVE_POST);
+
             long userIdByJwt = jwtService.getUserId();
             List<GetPostDetailRes> getPostDetailRes = postProvider.retrievePostDetail(postId);
             return new BaseResponse<>(getPostDetailRes);
