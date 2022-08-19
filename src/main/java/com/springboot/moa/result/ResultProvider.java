@@ -1,10 +1,7 @@
 package com.springboot.moa.result;
 
 import com.springboot.moa.config.BaseException;
-import com.springboot.moa.result.model.GetResultNumberRes;
-import com.springboot.moa.result.model.GetResultPostDetailIdRes;
-import com.springboot.moa.result.model.GetResultRes;
-import com.springboot.moa.result.model.GetResultStatisticsRes;
+import com.springboot.moa.result.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,7 +38,7 @@ public class ResultProvider {
             getResultRes.setGetResultStatisticsRes(getResultStatisticsRes);
 
             if ((resultDao.checkResultType(postDetailId) == 1) || (resultDao.checkResultType(postDetailId) == 2)) {
-                double [] countAnswer = new double[10];
+                double [] countAnswer = new double[8];
                 for (int i = 0; i < getResultStatisticsRes.size(); i++) {
                     String answer = getResultStatisticsRes.get(i).getResult();
                     switch (answer) {
@@ -69,12 +66,6 @@ public class ResultProvider {
                         case "8":
                             countAnswer[7] += 1;
                             break;
-                        case "9":
-                            countAnswer[8] += 1;
-                            break;
-                        case "10":
-                            countAnswer[9] += 1;
-                            break;
                     }
                 }
 //                 변수에 저장된 결과 출력
@@ -91,8 +82,9 @@ public class ResultProvider {
                 getResultRes.setCase6(countAnswer[5]);
                 getResultRes.setCase7(countAnswer[6]);
                 getResultRes.setCase8(countAnswer[7]);
-                getResultRes.setCase9(countAnswer[8]);
-                getResultRes.setCase10(countAnswer[9]);
+
+                List<GetResultItems> getResultItems = resultDao.selectItems(postDetailId);
+                getResultRes.setGetResultItems(getResultItems);
             }
             return getResultRes;
         } catch (Exception exception) {
