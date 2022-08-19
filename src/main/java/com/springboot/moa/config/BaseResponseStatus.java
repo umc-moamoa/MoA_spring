@@ -79,6 +79,9 @@ public enum BaseResponseStatus {
     DELETE_FAIL_POST(false, 3021, "게시물 삭제를 실패했습니다."),
     DELETE_FAIL_INTEREST(false, 3022, "관심 설문 삭제를 실패했습다."),
 
+    FAILED_CLOSED_POST(false,3023,"마감된 설문조사입니다."),
+    FAILED_INACTIVE_POST(false, 3024, "삭제된 설문조사입니다."),
+
     /**
      * 4000 : Database, Server 오류
      */
