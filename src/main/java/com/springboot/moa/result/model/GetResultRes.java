@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetResultRes {
     int format;
+    String question;
 
     List<GetResultStatisticsRes> getResultStatisticsRes;
 

@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 
 import org.slf4j.Logger;
 
-import static com.springboot.moa.config.BaseResponseStatus.DUPLICATED_RESULT;
-import static com.springboot.moa.config.BaseResponseStatus.POSTS_EMPTY_POST_ID;
+import static com.springboot.moa.config.BaseResponseStatus.*;
 
 @Service
 public class ResultService {
@@ -42,8 +41,13 @@ public class ResultService {
         try {
             long resultId = resultDao.insertResults(postResultReq);
             for (int i = 0; i < postResultReq.getPostDetailResults().size(); i++) {
-                PostDetailResultReq postDetailResultReq = postResultReq.getPostDetailResults().get(i);
-                resultDao.insertResultDetails(resultId, postDetailResultReq);
+                String[] postResultsReqs = postResultReq.getPostDetailResults().get(i);
+                int postDetailId = Integer.parseInt(postResultsReqs[0]);
+                if(postResultsReqs[0].length() > 45) {
+                    throw new BaseException(POST_INPUT_FAILED_CONTENTS);
+                }
+                String result = postResultsReqs[1];
+                resultDao.insertResultDetails(resultId, postDetailId, result);
             }
             int point = resultDao.selectPostPoint(postResultReq.getPostId());
             return new PostResultRes(resultId,point);
