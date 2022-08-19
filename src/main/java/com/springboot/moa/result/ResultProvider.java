@@ -35,6 +35,7 @@ public class ResultProvider {
         try {
             GetResultRes getResultRes = new GetResultRes();
             getResultRes.setFormat(resultDao.checkResultType(postDetailId));
+            getResultRes.setQuestion(resultDao.selectQuestion(postDetailId));
 
             List<GetResultStatisticsRes> getResultStatisticsRes = resultDao.selectResult(postDetailId);
             getResultRes.setGetResultStatisticsRes(getResultStatisticsRes);

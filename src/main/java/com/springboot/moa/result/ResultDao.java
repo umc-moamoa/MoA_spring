@@ -143,4 +143,12 @@ public class ResultDao {
                 int.class,
                 checkPostPostIdParams);
     }
+
+    public String selectQuestion (long postDetailId) {
+        String selectQuestionQuery = "select question from post_detail where post_detail_id =?";
+        long selectQuestionParams = postDetailId;
+        return this.jdbcTemplate.queryForObject(selectQuestionQuery,
+                String.class,
+                selectQuestionParams);
+    }
 }
