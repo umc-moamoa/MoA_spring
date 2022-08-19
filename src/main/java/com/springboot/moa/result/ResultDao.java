@@ -147,4 +147,14 @@ public class ResultDao {
                 String.class,
                 selectQuestionParams);
     }
+
+    public List<GetResultItems> selectItems (long postDetailId) {
+        String selectItemsQuery = "select item from question_detail where post_detail_id = ?";
+        long selectItemsParams = postDetailId;
+        return this.jdbcTemplate.query(selectItemsQuery,
+                (rs, rowNum) -> new GetResultItems(
+                        rs.getString("item")
+                ), selectItemsParams);
+
+    }
 }

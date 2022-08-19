@@ -12,6 +12,7 @@ import java.util.List;
 public class GetResultRes {
     int format;
     String question;
+    List<GetResultItems> getResultItems;
 
     List<GetResultStatisticsRes> getResultStatisticsRes;
 
@@ -23,8 +24,7 @@ public class GetResultRes {
     double case6;
     double case7;
     double case8;
-    double case9;
-    double case10;
+
     public GetResultRes() {
 
     }
