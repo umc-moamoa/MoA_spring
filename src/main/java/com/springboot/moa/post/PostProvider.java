@@ -206,4 +206,12 @@ public class PostProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public String checkPostStatus(long postId) throws BaseException {
+        try{
+            return postDao.checkPostStatus(postId);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

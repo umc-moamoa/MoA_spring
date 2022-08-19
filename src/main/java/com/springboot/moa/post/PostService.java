@@ -64,15 +64,6 @@ public class PostService {
         }
     }
 
-    public PostInterestRes insertInterests(long postId, long userId) throws BaseException {
-        try {
-            long interestId = postDao.insertInterest(postId, userId);
-            return new PostInterestRes(interestId);
-        }catch(Exception exception){
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
     public void deletePost(long postIdx) throws BaseException {
         try{
             int result = postDao.deletePost(postIdx);
