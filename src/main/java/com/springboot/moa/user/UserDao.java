@@ -47,7 +47,7 @@ public class UserDao {
     }
 
     public List<GetUserPostRes> selectUserPosts(long userId) {
-        String selectUserPostsQuery = "SELECT p.title as postTitle,\n" +
+        String selectUserPostsQuery = "SELECT p.post_id as postId, p.title as postTitle,\n" +
                 "p.point as point,\n" +
                 "COUNT(distinct r.user_id) as postResultCount,\n" +
                 "COUNT(distinct pd.post_detail_id) as qCount,\n" +
@@ -61,6 +61,7 @@ public class UserDao {
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs, rowNum) -> new GetUserPostRes(
+                        rs.getLong("postId"),
                         rs.getString("postTitle"),
                         rs.getInt("point"),
                         rs.getInt("postResultCount"),
