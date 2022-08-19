@@ -41,13 +41,21 @@ public class ResultService {
         try {
             long resultId = resultDao.insertResults(postResultReq);
             for (int i = 0; i < postResultReq.getPostDetailResults().size(); i++) {
-                String[] postResultsReqs = postResultReq.getPostDetailResults().get(i);
-                int postDetailId = Integer.parseInt(postResultsReqs[0]);
-                if(postResultsReqs[0].length() > 45) {
-                    throw new BaseException(POST_INPUT_FAILED_CONTENTS);
+                String[][] postResults = postResultReq.getPostDetailResults().get(i);
+                int postDetailId = Integer.parseInt(postResults[0][0]);
+                // 체크 박스라 답변의 길이 검증할 필요 없음
+                String[] results = postResults[1];
+
+                for (int j = 0; j < postResults[1].length; j++){
+                    if (resultProvider.checkResultType(postDetailId) == 2) {
+                        String result = postResults[1][j];
+                        resultDao.insertResultDetails(resultId, postDetailId, result);
+                    }
+                    else {
+                        String result = postResults[1][0];
+                        resultDao.insertResultDetails(resultId, postDetailId, result);
+                    }
                 }
-                String result = postResultsReqs[1];
-                resultDao.insertResultDetails(resultId, postDetailId, result);
             }
             int point = resultDao.selectPostPoint(postResultReq.getPostId());
             return new PostResultRes(resultId,point);
@@ -56,7 +64,6 @@ public class ResultService {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
-
 
 
 }

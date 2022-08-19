@@ -159,4 +159,8 @@ public class ResultProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public int checkResultType(long postDetailId) throws BaseException{
+        return resultDao.checkResultType(postDetailId);
+    }
 }
