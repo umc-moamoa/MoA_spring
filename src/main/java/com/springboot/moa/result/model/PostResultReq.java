@@ -14,13 +14,12 @@ public class PostResultReq {
 
     long postId;
     long userId;
-//    List<PostDetailResultReq> postDetailResults;
-    List<String[]> postDetailResults;
+    List<String[][]> postDetailResults;
 
     public PostResultReq(){
 
     }
-    public PostResultReq(long postId, List<String[]> postDetailResults){
+    public PostResultReq(long postId, List<String[][]> postDetailResults){
         this.postId = postId;
         this.postDetailResults = postDetailResults;
     }
