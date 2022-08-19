@@ -29,9 +29,9 @@ public class ResultDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
 
-    public void insertResultDetails(long resultId, PostDetailResultReq postDetailResultReq) {
+    public void insertResultDetails(long resultId, long postDetailId, String result) {
         String insertResultDetailsQuery = "INSERT INTO result_detail (result_id, post_detail_id, result) VALUES (?, ?, ?)";
-        Object[] insertResultDetailsParams = new Object[]{resultId,  postDetailResultReq.getPostDetailId(), postDetailResultReq.getResult()};
+        Object[] insertResultDetailsParams = new Object[]{resultId, postDetailId, result};
         this.jdbcTemplate.update(insertResultDetailsQuery, insertResultDetailsParams);
         String lastInsertIdxQuery = "select last_insert_id()";
         this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
@@ -142,5 +142,13 @@ public class ResultDao {
         return this.jdbcTemplate.queryForObject(checkPostPostIdQuery,
                 int.class,
                 checkPostPostIdParams);
+    }
+
+    public String selectQuestion (long postDetailId) {
+        String selectQuestionQuery = "select question from post_detail where post_detail_id =?";
+        long selectQuestionParams = postDetailId;
+        return this.jdbcTemplate.queryForObject(selectQuestionQuery,
+                String.class,
+                selectQuestionParams);
     }
 }
