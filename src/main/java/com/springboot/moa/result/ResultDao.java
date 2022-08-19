@@ -1,10 +1,7 @@
 package com.springboot.moa.result;
 
 import com.springboot.moa.post.model.GetPostDetailRes;
-import com.springboot.moa.result.model.GetResultNumberRes;
-import com.springboot.moa.result.model.GetResultStatisticsRes;
-import com.springboot.moa.result.model.PostDetailResultReq;
-import com.springboot.moa.result.model.PostResultReq;
+import com.springboot.moa.result.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,7 +33,6 @@ public class ResultDao {
         String lastInsertIdxQuery = "select last_insert_id()";
         this.jdbcTemplate.queryForObject(lastInsertIdxQuery, long.class);
     }
-
 
     public int selectPostPoint(long postId){
         String selectPostPointQuery = "select point from post where post_id = ? and status = 'ACTIVE'";
