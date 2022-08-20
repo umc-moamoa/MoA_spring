@@ -102,10 +102,7 @@ public class ResultDao {
 
     // 설문조사 type 반환
     public int checkResultType(long postDetailId) {
-        String checkResultTypeQuery = "select distinct format " +
-                "from post_detail, result_detail " +
-                "where post_detail.post_detail_id = result_detail.post_detail_id " +
-                "and result_detail.post_detail_id = ?";
+        String checkResultTypeQuery = "select format from post_detail where post_detail_id = ?;";
         long checkResultTypeParams = postDetailId;
         return this.jdbcTemplate.queryForObject(checkResultTypeQuery,
                 int.class,
