@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.springboot.moa.config.BaseResponseStatus.*;
@@ -72,8 +73,6 @@ public class ResultProvider {
                 for (int i = 0; i < 5; i++){
                     countAnswer[i] = countAnswer[i] / getResultStatisticsRes.size() * 100;
                 }
-                // list 로 리펙토링 필요
-                // 현재 setter 로 값 받아와서 for 문 못돌림
                 getResultRes.setCase1(countAnswer[0]);
                 getResultRes.setCase2(countAnswer[1]);
                 getResultRes.setCase3(countAnswer[2]);
@@ -85,6 +84,7 @@ public class ResultProvider {
 
                 List<GetResultItems> getResultItems = resultDao.selectItems(postDetailId);
                 getResultRes.setGetResultItems(getResultItems);
+                getResultRes.setStatistics(countAnswer);
             }
             return getResultRes;
         } catch (Exception exception) {
