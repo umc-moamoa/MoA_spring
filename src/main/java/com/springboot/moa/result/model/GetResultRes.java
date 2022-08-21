@@ -16,6 +16,7 @@ public class GetResultRes {
 
     List<GetResultStatisticsRes> getResultStatisticsRes;
 
+    // android 용
     double case1;
     double case2;
     double case3;
@@ -24,6 +25,9 @@ public class GetResultRes {
     double case6;
     double case7;
     double case8;
+
+    // web 용
+    double[] statistics;
 
     public GetResultRes() {
 
