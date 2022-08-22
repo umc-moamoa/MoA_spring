@@ -148,7 +148,11 @@ public class PostController {
             long userIdByJwt = jwtService.getUserId();
             if(getPostContentRes.getPostUserId() == userIdByJwt) {
                 getPostContentRes.setMyPost(true);
+                getPostContentRes.setParticipation(true);
             } else{
+                if(postProvider.checkDuplicatedResult(postId, userIdByJwt) == 1) {
+                    getPostContentRes.setParticipation(true);
+                }
                 boolean isLike = postProvider.checkUserLikePost(postId, userIdByJwt);
                 getPostContentRes.setLike(isLike);
             }
