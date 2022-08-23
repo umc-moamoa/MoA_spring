@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.fasterxml.jackson.databind.cfg.CoercionInputShape.Array;
+import static com.springboot.moa.config.BaseResponseStatus.DATABASE_ERROR;
 import static com.springboot.moa.config.BaseResponseStatus.POSTS_FAILED_UPLOAD;
 
 @Repository
@@ -301,5 +302,14 @@ public class PostDao {
         return this.jdbcTemplate.queryForObject(checkPostIdExistQuery,
                 int.class,
                 checkPostIdExistParams);
+    }
+
+    // 중복 답변 방지 (동일한 유저가 동일한 설문조사에 답변 달지 못하도록)
+    public int checkDuplicatedResult(long postId, long userId) {
+        String checkDuplicatedResultQuery = "select exists(select post_id, user_id from result where post_id = ? and user_id = ?)";
+        Object[] checkDuplicatedResultParams = new Object[]{postId, userId};
+        return this.jdbcTemplate.queryForObject(checkDuplicatedResultQuery,
+                int.class,
+                checkDuplicatedResultParams);
     }
 }

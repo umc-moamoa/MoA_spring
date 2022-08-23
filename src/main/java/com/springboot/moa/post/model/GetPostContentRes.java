@@ -18,6 +18,7 @@ public class GetPostContentRes {
     String status;
     boolean isLike;
     boolean isMyPost;
+    boolean participation;
 
     public GetPostContentRes(){
 
