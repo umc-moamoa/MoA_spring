@@ -49,7 +49,7 @@ public class UserService {
         }
         try{
             long userId = userDao.createUser(postUserReq);
-            userDao.addPointHistory(userId,0,0);
+            userDao.addPointHistory(userId,20,0);
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(jwt, userId);
         } catch (Exception exception) {
