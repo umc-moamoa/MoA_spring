@@ -230,4 +230,10 @@ public class UserDao {
                         rs.getString("id")),
                 selectUserParam);
     }
+    public void addRefreshToken(String token, long userId){
+        String changeTokenQuery = "update user set refresh_token=? where user_id=?";
+        Object[] changeTokenParams = new Object[]{token, userId};
+
+        this.jdbcTemplate.update(changeTokenQuery, changeTokenParams);
+    }
 }
