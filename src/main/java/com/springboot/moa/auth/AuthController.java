@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static com.springboot.moa.config.BaseResponseStatus.INVALID_JWT;
+import static com.springboot.moa.config.BaseResponseStatus.LOGIN_TIME_OUT_ERROR;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -40,6 +43,24 @@ public class AuthController {
             PostLoginRes postLoginRes = authService.logIn(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/refresh")
+    public BaseResponse<String> getAccessToken(){
+        try{
+            //refresh-token 유효성 검사
+            jwtService.isValid();
+
+            //refresh-token으로 access-token 발급
+            String refreshToken = jwtService.getRefreshToken();
+            String accessToken = authProvider.retrieveAccessToken(refreshToken);
+            if(accessToken == null)
+                throw new BaseException(INVALID_JWT);
+            else return new BaseResponse<>(accessToken);
+        } catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
     }

@@ -10,5 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostLoginRes {
     private long userId;
-    private String jwt;
+    private String accessToken, refreshToken;
 }

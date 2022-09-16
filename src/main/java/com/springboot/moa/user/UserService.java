@@ -50,8 +50,10 @@ public class UserService {
         try{
             long userId = userDao.createUser(postUserReq);
             userDao.addPointHistory(userId,20,0);
-            String jwt = jwtService.createJwt(userId);
-            return new PostUserRes(jwt, userId);
+            String accessToken = jwtService.createAccessToken(userId);
+            String refreshToken = jwtService.createRefreshToken(userId);
+            userDao.addRefreshToken(refreshToken, userId);
+            return new PostUserRes(accessToken, refreshToken, userId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -78,12 +80,11 @@ public class UserService {
         }
     }
 
-    public PatchUserNickNameRes patchUserNickName(long userId, PatchUserNickNameReq patchUserNickNameReq) throws BaseException{
-        try{
+    public PatchUserNickNameRes patchUserNickName(long userId, PatchUserNickNameReq patchUserNickNameReq) throws BaseException {
+        try {
             PatchUserNickNameRes patchUserNickNameRes = userDao.patchUserNick(userId, patchUserNickNameReq);
             return patchUserNickNameRes;
-        }
-        catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
