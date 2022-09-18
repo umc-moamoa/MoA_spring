@@ -2,6 +2,8 @@
 
 package com.springboot.moa.user;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
@@ -10,7 +12,14 @@ import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
+
+import static com.springboot.moa.config.BaseResponseStatus.USERS_DUPLICATED_ID;
 
 
 @RestController
@@ -174,4 +183,49 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @PostMapping("/kakao/{accessToken}")
+    public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("accessToken") String accessToken) throws BaseException {
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            JsonElement element = JsonParser.parseString(result);
+
+            String id = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+            String pwd = element.getAsJsonObject().get("id").getAsString();
+            String nick = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
+
+            PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd);
+            if (userProvider.checkIdExist(id) == 1) {
+                return new BaseResponse<>(USERS_DUPLICATED_ID);
+            }
+            PostUserRes kakaoUserRes = userService.createUser(kakaoUserReq);
+
+            if(kakaoUserRes != null){
+                String message = "회원가입에 성공하였습니다.";
+            }
+            br.close();
+            return new BaseResponse<>(kakaoUserRes);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
 }
