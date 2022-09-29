@@ -2,6 +2,7 @@ package com.springboot.moa.user;
 
 import com.springboot.moa.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,21 +21,40 @@ public class UserDao {
     public GetUserInfoRes selectUser(long userId) {
         String selectUserQuery = "\n" +
                 "        SELECT u.nick as nick,\n" +
-                "            u.point as point,\n" +
-                "            COUNT(p.post_id) as postCount\n" +
+                "            u.point as point\n" +
                 "        FROM user as u\n" +
-                "            left join post as p on u.user_id = p.user_id\n" +
                 "        WHERE u.status = 'ACTIVE' " +
-                "        and u.user_id=?\n" +
-                "        GROUP BY u.nick, u.point\n";
+                "        and u.user_id=?";
 
         long selectUserParam = userId;
         return this.jdbcTemplate.queryForObject(selectUserQuery,
                 (rs, rowNum) -> new GetUserInfoRes(
                         rs.getString("nick"),
                         rs.getInt("point"),
-                        rs.getInt("postCount")
+                        getPostCount(userId)
                 ), selectUserParam);
+    }
+
+    public int getPostCount(long userId){
+        String getPostCountQuery = "\n" +
+                "        SELECT u.user_id as userId,\n" +
+                "            COUNT(p.post_id) as postCount\n" +
+                "        FROM user as u\n" +
+                "            left join post as p on u.user_id = p.user_id\n" +
+                "        WHERE u.status = 'ACTIVE' and p.status = 'ACTIVE' " +
+                "        and u.user_id=?\n" +
+                "        GROUP BY u.user_id\n";
+        long getPostCountParam = userId;
+        try {
+            GetPostCountRes result = this.jdbcTemplate.queryForObject(getPostCountQuery,
+                    (rs, rowNum) -> new GetPostCountRes(
+                            rs.getLong("userId"),
+                            rs.getInt("postCount")
+                    ), getPostCountParam);
+            return result.getCount();
+        } catch(EmptyResultDataAccessException e){
+            return 0;
+        }
     }
 
     public int checkUserExist(long userId) {
