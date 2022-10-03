@@ -258,12 +258,17 @@ public class PostDao {
     }
 
     public int updateContent(PatchPostsReq patchPostsReq) {
+        String calculateDdayQuery = "select datediff(?,curdate())";
+        Date calculateDdayParam = patchPostsReq.getDeadline();
+
+        int dDay = this.jdbcTemplate.queryForObject(calculateDdayQuery,int.class,calculateDdayParam);
+
         String title = patchPostsReq.getTitle();
         String content = patchPostsReq.getContent();
         Date deadline = patchPostsReq.getDeadline();
         long postId = patchPostsReq.getPostId();
-        String updateContentQuery = "UPDATE post SET title=?, content=?, deadline=?  WHERE post_id=? and status= 'ACTIVE'";
-        Object[] updateContentParams = new Object[]{title, content, deadline, postId};
+        String updateContentQuery = "UPDATE post SET title=?, content=?, deadline=?, d_day=?  WHERE post_id=? and status= 'ACTIVE'";
+        Object[] updateContentParams = new Object[]{title, content, deadline, dDay, postId};
         return this.jdbcTemplate.update(updateContentQuery,
                 updateContentParams);
     }
