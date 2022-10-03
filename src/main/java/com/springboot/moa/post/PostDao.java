@@ -257,9 +257,13 @@ public class PostDao {
                 deletePostParams);
     }
 
-    public int updateContent(long postId, String content) {
-        String updateContentQuery = "UPDATE post SET content=? WHERE post_id=? and status= 'active'";
-        Object[] updateContentParams = new Object[]{content, postId};
+    public int updateContent(PatchPostsReq patchPostsReq) {
+        String title = patchPostsReq.getTitle();
+        String content = patchPostsReq.getContent();
+        Date deadline = patchPostsReq.getDeadline();
+        long postId = patchPostsReq.getPostId();
+        String updateContentQuery = "UPDATE post SET title=?, content=?, deadline=?  WHERE post_id=? and status= 'ACTIVE'";
+        Object[] updateContentParams = new Object[]{title, content, deadline, postId};
         return this.jdbcTemplate.update(updateContentQuery,
                 updateContentParams);
     }
