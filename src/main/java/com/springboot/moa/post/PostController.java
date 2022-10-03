@@ -190,7 +190,7 @@ public class PostController {
             if (patchPostsReq.getTitle().length() > 30)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
             if(patchPostsReq.getContent().length() > 450)
-                return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
+                return new BaseResponse<>(POST_INPUT_FAILED_CONTENTS);
             postService.modifyContent(patchPostsReq);
             String result = "게시물 정보 수정을 완료하였습니다.";
             return new BaseResponse<>(result);
