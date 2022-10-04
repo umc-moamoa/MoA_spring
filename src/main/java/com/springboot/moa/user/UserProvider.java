@@ -1,12 +1,14 @@
 package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
+import com.springboot.moa.result.model.GetResultItems;
 import com.springboot.moa.user.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.springboot.moa.config.BaseResponseStatus.*;
@@ -24,34 +26,31 @@ public class UserProvider {
     }
 
     public GetUserInfoRes retrieveUser(long userId) throws BaseException {
-        try{
+        try {
             GetUserInfoRes getUserInfoRes = userDao.selectUser(userId);
             return getUserInfoRes;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public List<GetUserPostRes> retrieveUserPosts(long userId) throws BaseException{
-        try{
+    public List<GetUserPostRes> retrieveUserPosts(long userId) throws BaseException {
+        try {
             List<GetUserPostRes> getUserPosts = userDao.selectUserPosts(userId);
 
             return getUserPosts;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public List<GetUserPartPostRes> retrieveUserPartPosts(long userId) throws BaseException{
-        try{
+    public List<GetUserPartPostRes> retrieveUserPartPosts(long userId) throws BaseException {
+        try {
             List<GetUserPartPostRes> getUserPartPosts = userDao.selectUserPartPosts(userId);
 
             return getUserPartPosts;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -75,7 +74,7 @@ public class UserProvider {
 
             getPointHistoryRes.setPointHistoryFormer(null);
             return getPointHistoryRes;
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -90,11 +89,12 @@ public class UserProvider {
 
             getPointHistoryRes.setPointHistoryRecent(null);
             return getPointHistoryRes;
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public int checkIdExist(String id) throws BaseException{
+
+    public int checkIdExist(String id) throws BaseException {
         try {
             return userDao.checkUserIdExist(id);
         } catch (Exception exception) {
@@ -102,12 +102,34 @@ public class UserProvider {
         }
     }
 
-    public int checkNickExist(String nick) throws BaseException{
+    public int checkNickExist(String nick) throws BaseException {
         try {
             return userDao.checkUserNickExist(nick);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+
+    public GetUserAnswersRes retrieveUserAnswer(long userIdByJwt, long postId) throws BaseException{
+        try {
+            GetUserAnswersRes getUserAnswersRes = new GetUserAnswersRes();
+            List<GetUserResultRes> getUserResultRes = userDao.selectAnswer(userIdByJwt, postId);
+            getUserAnswersRes.setGetUserResultRes(getUserResultRes);
+            return getUserAnswersRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetUserAnswerPostIdRes> retrieveUserAnswerList(long userIdByJwt) throws BaseException{
+        try {
+            List<GetUserAnswerPostIdRes> getPostId = userDao.selectGetPostId(userIdByJwt);
+            return getPostId;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 
 }
