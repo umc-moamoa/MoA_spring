@@ -117,8 +117,8 @@ public class UserDao {
     }
 
     public long createUser(PostUserReq postUserReq) {
-        String createUserQuery = "insert into user(id, nick, pwd) VALUES (?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd()};
+        String createUserQuery = "insert into user(id, nick, pwd,social_type, social_access_token) VALUES (?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd(),postUserReq.getSocialType(), postUserReq.getSocialAccessToken()};
 
         this.jdbcTemplate.update(createUserQuery, createUserParams);
         String lastInsertIdQuery = "select last_insert_id()";
@@ -255,5 +255,23 @@ public class UserDao {
         Object[] changeTokenParams = new Object[]{token, userId};
 
         this.jdbcTemplate.update(changeTokenQuery, changeTokenParams);
+    }
+
+    public String checkSocialType(long userId) {
+        String checkSocialTypeQuery = "select social_type from user where user_id = ?";
+        long checkSocialTypeParam = userId;
+
+        return this.jdbcTemplate.queryForObject(checkSocialTypeQuery,
+                String.class,
+                checkSocialTypeParam);
+    }
+
+    public String getSocialAccessToken(long userId) {
+        String getSocialAccessTokenQuery = "select social_access_token from user where user_id = ?";
+        long getSocialAccessTokenParam = userId;
+
+        return this.jdbcTemplate.queryForObject(getSocialAccessTokenQuery,
+                String.class,
+                getSocialAccessTokenParam);
     }
 }

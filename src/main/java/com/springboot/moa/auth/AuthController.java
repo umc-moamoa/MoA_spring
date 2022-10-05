@@ -8,6 +8,8 @@ import com.springboot.moa.auth.model.PostLoginRes;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
+import com.springboot.moa.user.UserProvider;
+import com.springboot.moa.user.UserService;
 import com.springboot.moa.user.model.PostUserReq;
 import com.springboot.moa.user.model.PostUserRes;
 import com.springboot.moa.utils.JwtService;
@@ -21,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import static com.springboot.moa.config.BaseResponseStatus.INVALID_JWT;
+import static com.springboot.moa.config.BaseResponseStatus.USERS_DUPLICATED_ID;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,11 +34,17 @@ public class AuthController {
     @Autowired
     private final AuthService authService;
     @Autowired
+    private final UserProvider userProvider;
+    @Autowired
+    private final UserService userService;
+    @Autowired
     private final JwtService jwtService;
 
-    public AuthController(AuthProvider authProvider, AuthService authService, JwtService jwtService) {
+    public AuthController(AuthProvider authProvider, AuthService authService,UserProvider userProvider,UserService userService, JwtService jwtService) {
         this.authProvider = authProvider;
         this.authService = authService;
+        this.userProvider = userProvider;
+        this.userService = userService;
         this.jwtService = jwtService;
     }
 
@@ -98,9 +107,17 @@ public class AuthController {
 
             String id = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
             String pwd = element.getAsJsonObject().get("id").getAsString();
+            String nick = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
 
+            PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd,"kakao",accessToken);
+            if (userProvider.checkIdExist(id) != 1) {
+                PostUserRes kakaoUserRes = userService.createUser(kakaoUserReq);
+
+                if(kakaoUserRes != null){
+                    String message = "회원가입에 성공하였습니다.";
+                }
+            }
             PostLoginReq kakaoLoginReq = new PostLoginReq(id,pwd);
-
             PostLoginRes kakaoLoinRes = authService.logIn(kakaoLoginReq);
 
             br.close();
