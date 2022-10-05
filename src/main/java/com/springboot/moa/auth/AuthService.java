@@ -42,8 +42,10 @@ public class AuthService {
             }
             if (user.getPwd().equals(encryptPwd)) {
                 long userId = user.getUserId();
-                String jwt = jwtService.createJwt(userId);
-                return new PostLoginRes(userId, jwt);
+                String accessToken = jwtService.createAccessToken(userId);
+                String refreshToken = jwtService.createRefreshToken(userId);
+                authDao.changeRefreshToken(refreshToken, userId);
+                return new PostLoginRes(userId, accessToken, refreshToken);
             } else {
                 throw new BaseException(FAILED_TO_LOGIN);
             }
