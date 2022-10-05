@@ -256,4 +256,5 @@ public class UserDao {
 
         this.jdbcTemplate.update(changeTokenQuery, changeTokenParams);
     }
+    
 }
