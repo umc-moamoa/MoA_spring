@@ -34,4 +34,21 @@ public class AuthDao {
             return null;
         }
     }
+
+    public void changeRefreshToken(String token, long userId){
+        String changeTokenQuery = "update user set refresh_token=? where user_id=?";
+        Object[] changeTokenParams = new Object[]{token, userId};
+
+        this.jdbcTemplate.update(changeTokenQuery, changeTokenParams);
+    }
+    public long isValidToken(String refreshToken){
+        String checkValidationOfTokenQuery = "select user_id from user where refresh_token = ?";
+        String checkValidationOfTokenParam = refreshToken;
+
+        long userId = -1;
+        userId = this.jdbcTemplate.queryForObject(checkValidationOfTokenQuery,
+                long.class,
+                checkValidationOfTokenParam);
+        return userId;
+    }
 }
