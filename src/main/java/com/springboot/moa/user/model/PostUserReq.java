@@ -11,7 +11,8 @@ public class PostUserReq {
     String id;
     String nick;
     String pwd;
-
+    String socialType = "none";
+    String socialAccessToken = "none";
     public PostUserReq(){
 
     }

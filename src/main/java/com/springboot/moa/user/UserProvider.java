@@ -110,4 +110,20 @@ public class UserProvider {
         }
     }
 
+    public String checkSocialType(long userId) throws BaseException{
+        try {
+            return userDao.checkSocialType(userId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public String getSocialAccessToken(long userId) throws BaseException{
+        try {
+            return userDao.getSocialAccessToken(userId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }
