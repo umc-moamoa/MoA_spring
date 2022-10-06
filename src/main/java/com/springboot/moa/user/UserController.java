@@ -16,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 
@@ -133,13 +135,35 @@ public class UserController {
     @ResponseBody
     @DeleteMapping("")
     public BaseResponse<DeleteUserRes> deleteUser() {
-        try{
+        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+        try {
             long userIdByJwt = jwtService.getUserId();
+
+            if (userProvider.checkSocialType(userIdByJwt)!="none"){
+                URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            String accessToken = userProvider.getSocialAccessToken(userIdByJwt);
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String result = "";
+            String line = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println(result);
+        }
             DeleteUserReq deleteUserReq = new DeleteUserReq(userIdByJwt);
             DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
             return new BaseResponse<>(deleteUsersRes);
-        } catch(BaseException exception){
-            return new BaseResponse<>((exception.getStatus()));
+        } catch(BaseException | IOException exception){
+            throw new RuntimeException(exception);
         }
     }
 
@@ -182,50 +206,6 @@ public class UserController {
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
-    }
-
-    @PostMapping("/kakao/{accessToken}")
-    public BaseResponse<PostUserRes> createKakaoUser(@PathVariable("accessToken") String accessToken) throws BaseException {
-        String reqURL = "https://kapi.kakao.com/v2/user/me";
-
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            String result = "";
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            System.out.println("response body : " + result);
-
-            JsonElement element = JsonParser.parseString(result);
-
-            String id = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            String pwd = element.getAsJsonObject().get("id").getAsString();
-            String nick = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
-
-            PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd);
-            if (userProvider.checkIdExist(id) == 1) {
-                return new BaseResponse<>(USERS_DUPLICATED_ID);
-            }
-            PostUserRes kakaoUserRes = userService.createUser(kakaoUserReq);
-
-            if(kakaoUserRes != null){
-                String message = "회원가입에 성공하였습니다.";
-            }
-            br.close();
-            return new BaseResponse<>(kakaoUserRes);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-        return null;
     }
 
 }
