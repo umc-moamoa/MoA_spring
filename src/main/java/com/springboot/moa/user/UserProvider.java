@@ -126,4 +126,24 @@ public class UserProvider {
         }
     }
 
+    public GetUserAnswersRes retrieveUserAnswer(long userIdByJwt, long postId) throws BaseException{
+        try {
+            GetUserAnswersRes getUserAnswersRes = new GetUserAnswersRes();
+            List<GetUserResultRes> getUserResultRes = userDao.selectAnswer(userIdByJwt, postId);
+            getUserAnswersRes.setGetUserResultRes(getUserResultRes);
+            return getUserAnswersRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetUserAnswerPostIdRes> retrieveUserAnswerList(long userIdByJwt) throws BaseException{
+        try {
+            List<GetUserAnswerPostIdRes> getPostId = userDao.selectGetPostId(userIdByJwt);
+            return getPostId;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

@@ -274,4 +274,30 @@ public class UserDao {
                 String.class,
                 getSocialAccessTokenParam);
     }
+
+    public List<GetUserAnswerPostIdRes> selectGetPostId(long userIdByJwt) {
+        String selectPostIdQuery = "select distinct post_id as postId " +
+                "from result_detail, result " +
+                "where result.result_id = result_detail.result_id " +
+                "and user_id = ?";
+        long selectPostIdParam = userIdByJwt;
+        return this.jdbcTemplate.query(selectPostIdQuery,
+                (rs, rowNum) -> new GetUserAnswerPostIdRes(
+                        rs.getInt("postId")
+                ), selectPostIdParam);
+
+    }
+
+    public List<GetUserResultRes> selectAnswer(long userIdByJwt, long postId) {
+        String selectAnswerQuery = "select result\n" +
+                "        from result_detail, result\n" +
+                "        where  result.result_id = result_detail.result_id\n" +
+                "        and user_id = ? and post_id =?";
+        Object[] selectAnswerParam = new Object[]{userIdByJwt, postId};
+        return this.jdbcTemplate.query(selectAnswerQuery,
+                (rs, rowNum) -> new GetUserResultRes(
+                        rs.getString("result")
+                ), selectAnswerParam);
+
+    }
 }
