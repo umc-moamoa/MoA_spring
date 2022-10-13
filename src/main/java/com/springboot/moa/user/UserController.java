@@ -2,8 +2,6 @@
 
 package com.springboot.moa.user;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
@@ -16,12 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
-
-import static com.springboot.moa.config.BaseResponseStatus.USERS_DUPLICATED_ID;
 
 
 @RestController
@@ -203,6 +197,32 @@ public class UserController {
             }
             String result = "중복되지 않은 닉네임입니다.";
             return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    // 사용자가 답변한 postId 값 반환
+    @ResponseBody
+    @GetMapping("/answerList")
+    public BaseResponse<List<GetUserAnswerPostIdRes>> getAnswersList() throws BaseException {
+        try {
+            long userIdByJwt = jwtService.getUserId();
+            List<GetUserAnswerPostIdRes> getUserAnswerPostIdRes = userProvider.retrieveUserAnswerList(userIdByJwt);
+            return new BaseResponse<>(getUserAnswerPostIdRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    // 사용자가 답변한 값 반환
+    @ResponseBody
+    @GetMapping("/answer/{postId}")
+    public BaseResponse<GetUserAnswersRes> getUserAnswers(@PathVariable ("postId") Long postId) throws BaseException {
+        try {
+            long userIdByJwt = jwtService.getUserId();
+            GetUserAnswersRes getUserAnswersRes = userProvider.retrieveUserAnswer(userIdByJwt, postId);
+            return new BaseResponse<>(getUserAnswersRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
