@@ -133,26 +133,26 @@ public class UserController {
         try {
             long userIdByJwt = jwtService.getUserId();
 
-            if (userProvider.checkSocialType(userIdByJwt)!="none"){
+            if (!userProvider.checkSocialType(userIdByJwt).equals("none")) {
                 URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            String accessToken = userProvider.getSocialAccessToken(userIdByJwt);
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                String accessToken = userProvider.getSocialAccessToken(userIdByJwt);
+                conn.setRequestProperty("Authorization", "Bearer " + accessToken);
 
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+                int responseCode = conn.getResponseCode();
+                System.out.println("responseCode : " + responseCode);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-            String result = "";
-            String line = "";
+                String result = "";
+                String line = "";
 
-            while ((line = br.readLine()) != null) {
-                result += line;
+                while ((line = br.readLine()) != null) {
+                    result += line;
+                }
+                System.out.println(result);
             }
-            System.out.println(result);
-        }
             DeleteUserReq deleteUserReq = new DeleteUserReq(userIdByJwt);
             DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
             return new BaseResponse<>(deleteUsersRes);

@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -82,8 +84,8 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/kakaoLogin/{accessToken}")
-    public BaseResponse<PostLoginRes> kakaoLogin(@PathVariable("accessToken") String accessToken) throws BaseException {
+    @PostMapping("/kakaoLogin")
+    public BaseResponse<PostLoginRes> kakaoLogin(@PathParam(value = "accessToken") String accessToken) throws BaseException {
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
         try {
