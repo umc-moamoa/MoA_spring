@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
+
 import static com.springboot.moa.config.BaseResponseStatus.INVALID_JWT;
 import static com.springboot.moa.config.BaseResponseStatus.USERS_DUPLICATED_ID;
 
@@ -129,5 +131,4 @@ public class AuthController {
         }
         return null;
     }
-
 }
