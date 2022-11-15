@@ -212,4 +212,11 @@ public class PostController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @ResponseBody
+    @GetMapping("/content/{postId}/share")
+    public String getPostURL(@PathVariable("postId") long postId) {
+        String url = "https://seolmunzip.shop/content/" + postId;
+        return url;
+    }
 }
