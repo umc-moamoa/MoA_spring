@@ -62,8 +62,6 @@ public class PostController {
     public BaseResponse<List<GetPostDetailRes>> getPostDetail(@PathVariable("postId") long postId) {
         try {
             String postStatus = postProvider.checkPostStatus(postId);
-            if(postStatus.equals("CLOSED"))
-                return new BaseResponse<>(BaseResponseStatus.FAILED_CLOSED_POST);
 
             if(postStatus.equals("INACTIVE"))
                 return new BaseResponse<>(BaseResponseStatus.FAILED_INACTIVE_POST);
