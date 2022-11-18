@@ -65,7 +65,7 @@ public class PostDao {
         String selectPostDetailQuery = "\n" +
                 "SELECT pd.post_detail_id as post_detail_id, pd.question as question, pd.format as format\n" +
                 "FROM post_detail as pd left join post as p on pd.post_id = p.post_id\n" +
-                "where pd.post_id=? and p.status = 'ACTIVE'";
+                "where pd.post_id=? and (p.status = 'ACTIVE' or p.status = 'CLOSED')";
 
 
         long selectPostDetailParam = postId;
