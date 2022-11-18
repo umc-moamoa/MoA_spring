@@ -320,4 +320,23 @@ public class UserDao {
                 ), selectAnswerParam);
 
     }
+
+    // id로 userId 찾기
+    public Long getUserId(String id) {
+        String getUserIdQuery = "select user_id from user where id = ?";
+        String getUserIdParam = id;
+
+        return this.jdbcTemplate.queryForObject(getUserIdQuery,
+                Long.class,
+                getUserIdParam);
+    }
+
+
+    public void updatePwd(Long user_id, String pwd) {
+
+        String updatePwdQuery = "update user set pwd = ? where user_id = ?;";
+        Object[] updatePwdParams = new Object[]{pwd, user_id};
+
+        this.jdbcTemplate.update(updatePwdQuery, updatePwdParams);
+    }
 }
