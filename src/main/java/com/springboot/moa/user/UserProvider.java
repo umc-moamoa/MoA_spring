@@ -96,7 +96,16 @@ public class UserProvider {
     }
     public int checkIdExist(String id) throws BaseException{
         try {
+            System.out.println(userDao.checkUserIdExist(id));
             return userDao.checkUserIdExist(id);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkIdEmailExist(String id, String email) throws BaseException{
+        try {
+            return userDao.checkUserIdEmailExist(id, email);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

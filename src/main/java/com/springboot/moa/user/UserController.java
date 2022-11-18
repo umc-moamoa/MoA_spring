@@ -228,4 +228,19 @@ public class UserController {
         }
     }
 
+    // 회원 여부 확인
+    @ResponseBody
+    @GetMapping("/existence/{id}/{email}")
+    public BaseResponse<String> existenceId(@PathVariable ("id") String id, @PathVariable ("email") String email) throws BaseException{
+        try {
+            System.out.println(userProvider.checkIdExist(id));
+            if (userProvider.checkIdEmailExist(id, email) == 0) {
+                throw new BaseException(BaseResponseStatus.USERS_NONEXISTENT_ID);
+            }
+            String result = "회원정보가 일치합니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
