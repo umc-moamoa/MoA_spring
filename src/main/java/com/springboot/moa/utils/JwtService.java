@@ -4,10 +4,7 @@ import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.secret.Secret;
 import com.springboot.moa.user.UserDao;
 import com.springboot.moa.user.UserProvider;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -85,7 +82,7 @@ public class JwtService {
             claims = Jwts.parser()
                     .setSigningKey(Secret.JWT_REFRESH_SECRET_KEY)
                     .parseClaimsJws(refreshToken);
-        } catch (Exception ignored) {
+        } catch (ExpiredJwtException ignored) {
             throw new BaseException(LOGIN_TIME_OUT_ERROR);
         }
     }
