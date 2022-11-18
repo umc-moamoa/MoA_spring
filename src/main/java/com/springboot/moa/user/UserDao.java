@@ -237,6 +237,15 @@ public class UserDao {
                 checkIdExistParams);
     }
 
+    // id, email 쌍이 존재하는지 확인
+    public int checkUserIdEmailExist(String id, String email) {
+        String checkIdExistQuery = "select exists(select email from user where id = ? and email = ?)";
+        Object[] checkIdExistParams = new Object[]{id, email};
+        return this.jdbcTemplate.queryForObject(checkIdExistQuery,
+                int.class,
+                checkIdExistParams);
+    }
+
     // 닉네임 중복 확인
     public int checkUserNickExist(String nick) {
         String checkNickExistQuery = "select exists(select nick from user where nick = ?)";
