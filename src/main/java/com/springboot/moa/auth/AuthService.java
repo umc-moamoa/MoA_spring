@@ -29,7 +29,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException {
+    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
         User user = authDao.getUserInfo(postLoginReq);
         String encryptPwd;
         if(user == null){
@@ -46,6 +46,27 @@ public class AuthService {
                 String refreshToken = jwtService.createRefreshToken(userId);
                 authDao.changeRefreshToken(refreshToken, userId);
                 return new PostLoginRes(userId, accessToken, refreshToken);
+            } else {
+                throw new BaseException(FAILED_TO_LOGIN);
+            }
+        }
+    }
+
+    public String loginForAndroid(PostLoginReq postLoginReq) throws BaseException {
+        User user = authDao.getUserInfo(postLoginReq);
+        String encryptPwd;
+        if(user == null){
+            throw new BaseException(FAILED_TO_LOGIN);
+        } else {
+            try {
+                encryptPwd = new SHA256().encrypt(postLoginReq.getPwd());
+            } catch (Exception exception) {
+                throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+            }
+            if (user.getPwd().equals(encryptPwd)) {
+                long userId = user.getUserId();
+                String accessToken = jwtService.createAccessTokenForAndroid(userId);
+                return accessToken;
             } else {
                 throw new BaseException(FAILED_TO_LOGIN);
             }
