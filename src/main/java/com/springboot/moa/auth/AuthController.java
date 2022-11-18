@@ -1,6 +1,5 @@
 package com.springboot.moa.auth;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.springboot.moa.auth.model.PostLoginReq;
@@ -24,10 +23,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
 
 import static com.springboot.moa.config.BaseResponseStatus.INVALID_JWT;
-import static com.springboot.moa.config.BaseResponseStatus.USERS_DUPLICATED_ID;
 
 @RestController
 @RequestMapping("/auth")
@@ -54,15 +51,30 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/login")
-    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
+    public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq) {
         try {
-            if (postLoginReq.getId() == null)
+            if (postLoginReq.getEmail() == null)
                 return new BaseResponse<>(BaseResponseStatus.POST_USERS_EMPTY_ID);
             if (postLoginReq.getPwd() == null)
                 return new BaseResponse<>(BaseResponseStatus.POST_USERS_EMPTY_PASSWORD);
 
-            PostLoginRes postLoginRes = authService.logIn(postLoginReq);
+            PostLoginRes postLoginRes = authService.login(postLoginReq);
             return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @ResponseBody
+    @PostMapping("/android-login")
+    public BaseResponse<String> loginForAndroid(@RequestBody PostLoginReq postLoginReq) {
+        try {
+            if (postLoginReq.getEmail() == null)
+                return new BaseResponse<>(BaseResponseStatus.POST_USERS_EMPTY_ID);
+            if (postLoginReq.getPwd() == null)
+                return new BaseResponse<>(BaseResponseStatus.POST_USERS_EMPTY_PASSWORD);
+
+            String accessToken = authService.loginForAndroid(postLoginReq);
+            return new BaseResponse<>(accessToken);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -122,7 +134,7 @@ public class AuthController {
                 }
             }
             PostLoginReq kakaoLoginReq = new PostLoginReq(id,pwd);
-            PostLoginRes kakaoLoinRes = authService.logIn(kakaoLoginReq);
+            PostLoginRes kakaoLoinRes = authService.login(kakaoLoginReq);
 
             br.close();
             return new BaseResponse<>(kakaoLoinRes);
