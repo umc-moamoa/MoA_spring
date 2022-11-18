@@ -151,7 +151,6 @@ public class UserController {
                 while ((line = br.readLine()) != null) {
                     result += line;
                 }
-                System.out.println(result);
             }
             DeleteUserReq deleteUserReq = new DeleteUserReq(userIdByJwt);
             DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
@@ -233,7 +232,6 @@ public class UserController {
     @GetMapping("/existence/{id}/{email}")
     public BaseResponse<String> existenceId(@PathVariable ("id") String id, @PathVariable ("email") String email) throws BaseException{
         try {
-            System.out.println(userProvider.checkIdExist(id));
             if (userProvider.checkIdEmailExist(id, email) == 0) {
                 throw new BaseException(BaseResponseStatus.USERS_NONEXISTENT_ID);
             }
@@ -241,6 +239,20 @@ public class UserController {
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    // 비밀번호 변경
+    @ResponseBody
+    @PostMapping("/pwd")
+    public BaseResponse<PostUserRes> updatePwd (@RequestBody UpdatePwdReq updatePwdReq) {
+        try{
+            if(updatePwdReq.getPwd().length() > 15 || updatePwdReq.getPwd().length() < 7)
+                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_PWD);
+            PostUserRes postUserRes = userService.updatePwd(updatePwdReq);
+            return new BaseResponse<>(postUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 }
