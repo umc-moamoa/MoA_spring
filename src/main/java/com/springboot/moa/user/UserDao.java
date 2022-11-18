@@ -309,13 +309,15 @@ public class UserDao {
     }
 
     public List<GetUserResultRes> selectAnswer(long userIdByJwt, long postId) {
-        String selectAnswerQuery = "select result\n" +
-                "        from result_detail, result\n" +
-                "        where  result.result_id = result_detail.result_id\n" +
-                "        and user_id = ? and post_id =?";
+        String selectAnswerQuery = "select format, result\n" +
+                "from result_detail, result, post_detail\n" +
+                "where  result.result_id = result_detail.result_id and\n" +
+                "       result_detail.post_detail_id = post_detail.post_detail_id\n" +
+                "  and user_id = ? and result.post_id =?;";
         Object[] selectAnswerParam = new Object[]{userIdByJwt, postId};
         return this.jdbcTemplate.query(selectAnswerQuery,
                 (rs, rowNum) -> new GetUserResultRes(
+                        rs.getInt("format"),
                         rs.getString("result")
                 ), selectAnswerParam);
 
