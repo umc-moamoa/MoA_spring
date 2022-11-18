@@ -20,7 +20,7 @@ public class AuthDao {
 
     public User getUserInfo(PostLoginReq postLoginReq){
         String getPwdQuery = "select user_id, pwd from user where id=? and status = 'ACTIVE'";
-        String getPwdParams = postLoginReq.getId();
+        String getPwdParams = postLoginReq.getEmail();
 
         try{
         return this.jdbcTemplate.queryForObject(getPwdQuery,
