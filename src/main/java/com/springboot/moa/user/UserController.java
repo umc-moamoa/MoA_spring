@@ -72,15 +72,15 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserSignUpReq postUserSignUpReq) {
         try{
-            if(postUserReq.getId().length() > 15 || postUserReq.getId().length() < 7)
+            if(postUserSignUpReq.getId().length() > 15 || postUserSignUpReq.getId().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_ID);
-            if(postUserReq.getNick().length() > 15 || postUserReq.getNick().length() < 7)
+            if(postUserSignUpReq.getNick().length() > 15 || postUserSignUpReq.getNick().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NICK);
-            if(postUserReq.getPwd().length() > 15 || postUserReq.getPwd().length() < 7)
+            if(postUserSignUpReq.getPwd().length() > 15 || postUserSignUpReq.getPwd().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_PWD);
-            PostUserRes postUserRes = userService.createUser(postUserReq);
+            PostUserRes postUserRes = userService.createUser(postUserSignUpReq);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

@@ -113,9 +113,9 @@ public class AuthController {
             String pwd = element.getAsJsonObject().get("id").getAsString();
             String nick = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
 
-            PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd,"kakao",accessToken);
+            PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd, "kakao",accessToken);
             if (userProvider.checkIdExist(id) != 1) {
-                PostUserRes kakaoUserRes = userService.createUser(kakaoUserReq);
+                PostUserRes kakaoUserRes = userService.createKakaoUser(kakaoUserReq);
 
                 if(kakaoUserRes != null){
                     String message = "회원가입에 성공하였습니다.";
