@@ -116,7 +116,18 @@ public class UserDao {
                 ), selectUserPostsParam);
     }
 
-    public long createUser(PostUserReq postUserReq) {
+    public long createUser(PostUserSignUpReq postUserSignUpReq) {
+        String createUserQuery = "insert into user(id, nick, pwd,social_type, social_access_token, email) VALUES (?,?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserSignUpReq.getId(), postUserSignUpReq.getNick(), postUserSignUpReq.getPwd(),postUserSignUpReq.getSocialType(), postUserSignUpReq.getSocialAccessToken(), postUserSignUpReq.getEmail()};
+
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
+        String lastInsertIdQuery = "select last_insert_id()";
+        long userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery, long.class);
+
+        return userIdx;
+    }
+
+    public long createKakaoUser(PostUserReq postUserReq) {
         String createUserQuery = "insert into user(id, nick, pwd,social_type, social_access_token) VALUES (?,?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd(),postUserReq.getSocialType(), postUserReq.getSocialAccessToken()};
 
@@ -226,6 +237,15 @@ public class UserDao {
                 checkIdExistParams);
     }
 
+    // id, email 쌍이 존재하는지 확인
+    public int checkUserIdEmailExist(String id, String email) {
+        String checkIdExistQuery = "select exists(select email from user where id = ? and email = ?)";
+        Object[] checkIdExistParams = new Object[]{id, email};
+        return this.jdbcTemplate.queryForObject(checkIdExistQuery,
+                int.class,
+                checkIdExistParams);
+    }
+
     // 닉네임 중복 확인
     public int checkUserNickExist(String nick) {
         String checkNickExistQuery = "select exists(select nick from user where nick = ?)";
@@ -289,15 +309,36 @@ public class UserDao {
     }
 
     public List<GetUserResultRes> selectAnswer(long userIdByJwt, long postId) {
-        String selectAnswerQuery = "select result\n" +
-                "        from result_detail, result\n" +
-                "        where  result.result_id = result_detail.result_id\n" +
-                "        and user_id = ? and post_id =?";
+        String selectAnswerQuery = "select format, result\n" +
+                "from result_detail, result, post_detail\n" +
+                "where  result.result_id = result_detail.result_id and\n" +
+                "       result_detail.post_detail_id = post_detail.post_detail_id\n" +
+                "  and user_id = ? and result.post_id =?;";
         Object[] selectAnswerParam = new Object[]{userIdByJwt, postId};
         return this.jdbcTemplate.query(selectAnswerQuery,
                 (rs, rowNum) -> new GetUserResultRes(
+                        rs.getInt("format"),
                         rs.getString("result")
                 ), selectAnswerParam);
 
+    }
+
+    // id로 userId 찾기
+    public Long getUserId(String id) {
+        String getUserIdQuery = "select user_id from user where id = ?";
+        String getUserIdParam = id;
+
+        return this.jdbcTemplate.queryForObject(getUserIdQuery,
+                Long.class,
+                getUserIdParam);
+    }
+
+
+    public void updatePwd(Long user_id, String pwd) {
+
+        String updatePwdQuery = "update user set pwd = ? where user_id = ?;";
+        Object[] updatePwdParams = new Object[]{pwd, user_id};
+
+        this.jdbcTemplate.update(updatePwdQuery, updatePwdParams);
     }
 }

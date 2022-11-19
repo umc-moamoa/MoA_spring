@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetUserResultRes {
-    int format;
-    String result;
+public class UpdatePwdReq {
+    String id;
+    String pwd;
+    public UpdatePwdReq(){
+
+    }
 }
