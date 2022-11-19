@@ -72,15 +72,15 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
+    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserSignUpReq postUserSignUpReq) {
         try{
-            if(postUserReq.getId().length() > 15 || postUserReq.getId().length() < 7)
+            if(postUserSignUpReq.getId().length() > 15 || postUserSignUpReq.getId().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_ID);
-            if(postUserReq.getNick().length() > 15 || postUserReq.getNick().length() < 7)
+            if(postUserSignUpReq.getNick().length() > 15 || postUserSignUpReq.getNick().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_NICK);
-            if(postUserReq.getPwd().length() > 15 || postUserReq.getPwd().length() < 7)
+            if(postUserSignUpReq.getPwd().length() > 15 || postUserSignUpReq.getPwd().length() < 7)
                 return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_PWD);
-            PostUserRes postUserRes = userService.createUser(postUserReq);
+            PostUserRes postUserRes = userService.createUser(postUserSignUpReq);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -151,7 +151,6 @@ public class UserController {
                 while ((line = br.readLine()) != null) {
                     result += line;
                 }
-                System.out.println(result);
             }
             DeleteUserReq deleteUserReq = new DeleteUserReq(userIdByJwt);
             DeleteUserRes deleteUsersRes = userService.deleteUser(deleteUserReq);
@@ -228,4 +227,32 @@ public class UserController {
         }
     }
 
+    // 회원 여부 확인
+    @ResponseBody
+    @GetMapping("/existence/{id}/{email}")
+    public BaseResponse<String> existenceId(@PathVariable ("id") String id, @PathVariable ("email") String email) throws BaseException{
+        try {
+            if (userProvider.checkIdEmailExist(id, email) == 0) {
+                throw new BaseException(BaseResponseStatus.USERS_NONEXISTENT_ID);
+            }
+            String result = "회원정보가 일치합니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    // 비밀번호 변경
+    @ResponseBody
+    @PostMapping("/pwd")
+    public BaseResponse<PostUserRes> updatePwd (@RequestBody UpdatePwdReq updatePwdReq) {
+        try{
+            if(updatePwdReq.getPwd().length() > 15 || updatePwdReq.getPwd().length() < 7)
+                return new BaseResponse<>(BaseResponseStatus.USERS_USERS_FAILED_PWD);
+            PostUserRes postUserRes = userService.updatePwd(updatePwdReq);
+            return new BaseResponse<>(postUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

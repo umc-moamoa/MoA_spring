@@ -102,6 +102,14 @@ public class UserProvider {
         }
     }
 
+    public int checkIdEmailExist(String id, String email) throws BaseException{
+        try {
+            return userDao.checkUserIdEmailExist(id, email);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public int checkNickExist(String nick) throws BaseException{
         try {
             return userDao.checkUserNickExist(nick);

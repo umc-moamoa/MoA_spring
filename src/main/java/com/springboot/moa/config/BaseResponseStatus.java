@@ -33,6 +33,7 @@ public enum BaseResponseStatus {
     USERS_DUPLICATED_ID(false, 2061, "중복된 아이디입니다."),
     USERS_DUPLICATED_NICK(false, 2062, "중복된 닉네임입니다."),
     USERS_FAILED_EMAIL_CERTIFICATION(false, 2063, "이메일 인증 실패하였습니다."),
+    USERS_NONEXISTENT_ID(false, 2064, "존재하지 않는 회원입니다."),
 
 
     // posts
