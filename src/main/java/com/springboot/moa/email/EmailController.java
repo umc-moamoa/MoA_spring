@@ -34,7 +34,7 @@ public class EmailController {
 
     @ResponseBody
     @GetMapping(value = "/send")
-    public BaseResponse<String> sendmail(@RequestBody User user) throws MessagingException {
+    public BaseResponse<String> sendmail(@RequestParam String email) throws MessagingException {
         String authNum = certified_key();
         StringBuffer emailcontent = new StringBuffer();
         emailcontent.append("<!DOCTYPE html>");
@@ -50,7 +50,7 @@ public class EmailController {
                         "		<span style=\"color: #02b875\">메일인증</span> 안내입니다."																																				+
                         "	</h1>\n"																																																+
                         "	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">"																													+
-                        user.getEmail()																																															+
+                        email																																															+
                         "		님 안녕하세요.<br />"																																													+
                         "		Seolmunzip에 가입해 주셔서 진심으로 감사드립니다.<br />"																																						+
                         "		아래 <b style=\"color: #02b875\">'인증번호'</b> 를 입력하여 이메일 인증을 해주세요.<br />"																													+
@@ -66,7 +66,7 @@ public class EmailController {
         );
         emailcontent.append("</body>");
         emailcontent.append("</html>");
-        emailService.sendMail(user.getEmail(), "[Seolmunzip 이메일 인증]", emailcontent.toString());
+        emailService.sendMail(email, "[Seolmunzip 이메일 인증]", emailcontent.toString());
         return new BaseResponse<>(authNum);
     }
 
