@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UpdatePwdReq {
-    String id;
+    String email;
     String pwd;
     public UpdatePwdReq(){
 
