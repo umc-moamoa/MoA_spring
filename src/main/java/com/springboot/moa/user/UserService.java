@@ -31,24 +31,24 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public PostUserRes createUser(PostUserSignUpReq postUserSignUpReq) throws BaseException {
+    public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         String pwd;
         // 중복 처리
-        if (userProvider.checkIdExist(postUserSignUpReq.getId()) == 1) {
+        if (userProvider.checkIdExist(postUserReq.getId()) == 1) {
             throw new BaseException(USERS_DUPLICATED_ID);
         }
-        if (userProvider.checkNickExist(postUserSignUpReq.getNick()) == 1) {
+        if (userProvider.checkNickExist(postUserReq.getNick()) == 1) {
             throw new BaseException(USERS_DUPLICATED_NICK);
         }
         try{
             //암호화
-            pwd = new SHA256().encrypt(postUserSignUpReq.getPwd());
-            postUserSignUpReq.setPwd(pwd);
+            pwd = new SHA256().encrypt(postUserReq.getPwd());
+            postUserReq.setPwd(pwd);
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try{
-            long userId = userDao.createUser(postUserSignUpReq);
+            long userId = userDao.createUser(postUserReq);
             userDao.addPointHistory(userId,20,0);
             String accessToken = jwtService.createAccessToken(userId);
             String refreshToken = jwtService.createRefreshToken(userId);
@@ -76,7 +76,7 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try{
-            long userId = userDao.createKakaoUser(postUserReq);
+            long userId = userDao.createUser(postUserReq);
             userDao.addPointHistory(userId,20,0);
             String accessToken = jwtService.createAccessToken(userId);
             String refreshToken = jwtService.createRefreshToken(userId);
