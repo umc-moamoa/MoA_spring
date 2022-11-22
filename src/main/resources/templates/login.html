@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+    <link rel="icon" href="../static/image/logo.png">
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <div class="flex-container">
+        <div id="wrapper">
+            <!-- header -->
+            <div class="header">
+                <!-- 로그인, 회원가입, 마이페이지 -->
+                <div id="userMenu">
+                    <ul class="list_menu">
+                        <li class="menu menu_login">
+                            <a class="link link_login" href="login.html">로그인</a>
+                            <a class="link link_logout" href="main.html" onclick="logout();">로그아웃</a>
+                        </li>
+                        <li class="menu menu_join">
+                            <a onclick="login_alert7();" class="link link_join" href="#">회원가입</a>
+                        </li>
+                        <li class="menu menu_mypage"> 
+                            <a onclick="login_alert1();" class="link link_mypage" href="#">마이페이지</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 로고 -->
+                <div id="headerLogo" class="layout-wrapper">
+                    <h1 class="logo">
+                        <a class="link_main" href="main.html">
+                            <img src="../static/image/zipLogo.png"  alt="로고" />
+                        </a>
+                    </h1>
+                </div>
+
+                <!-- 메뉴바 -->
+                <div class="gnb_main">
+                    <ul class="gnb">
+                        <li class="menu1">
+                            <a href="formList.html" class="link all" >전체 설문 보기</a>
+                        <li class="menu2">
+                            <a href="makeForm.html" onclick="login_alert2();"  class="link new">새 설문 만들기</a>
+                        </li>
+                        <li class="menu3">
+                            <a href="mySurvey.html" onclick="login_alert3();" class="link best">내가 만든 설문</a>
+                        </li>
+                        <li class="menu4">
+                            <a href="interestedSurvey.html" onclick="login_alert4();" class="link bargain">관심 있는 설문조사</a>
+                        </li>
+                        <li class="menu5">
+                            <a href="participatedSurvey.html" onclick="login_alert5();" class="link event">참여한 설문조사</a>
+                        </li>
+                        <li class="menu6">
+                            <a href="point.html" onclick="login_alert6();" class="link bargain">포인트 내역</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- container -->
+            <div class="container">
+                <div id="main">
+                    <form>
+                        <div class="flex-container2">
+                            <div id="subTitle">
+                                <p class="subTitle">로그인</p>
+                            </div>
+                            <div id="loginBox">
+                                <div class="box">
+                                    
+                                    <input type="text" class="inputId" id="id" maxlength="10"
+                                    placeholder="아이디"
+                                    onfocus="this.placeholder = ''" 
+                                    onblur="this.placeholder = '아이디'">
+                                    <p class="alert validId1"></p>
+                                    <span class="email">@</span>
+                                   
+                                    <!-- <input type="text" class="inputEmail" id="email" maxlength="30"
+                                    placeholder="이메일"
+                                    onfocus="this.placeholder = ''" 
+                                    onblur="this.placeholder = '이메일'"> -->
+                                    <!--
+                                    <input type="text" class="inputEmail" id="email" maxlength="30"
+                                    placeholder="이메일"
+                                    onfocus="this.placeholder = ''" 
+                                    onblur="this.placeholder = '이메일'">
+                                    -->
+                                    <!--
+                                    <select id="Stype" onchange="selectEmail()">
+                                        <option value="1" selected>이메일 선택</option>
+                                        <option value="2">naver.com</option>
+                                        <option value="3">google.com</option>
+                                        <option value="4">daum.net</option>
+                                    </select>
+                                    -->
+                                    <p class="alert validId1"></p>
+                                </div>
+                                <div class="box">
+                                    <input type="password" class="inputPW" id="pswd1" maxlength="30"
+                                    placeholder="비밀번호"
+                                    onfocus="this.placeholder = ''" 
+                                    onblur="this.placeholder = '비밀번호'"
+                                    autocomplete="on">
+                                    <p class="alert validpwd2"></p>
+                                </div>
+                                <div>
+                                    <p class="alert valid one"></p>
+                                    <p class="alert valid two"></p>
+                                </div>
+                            </div>
+                            <div><button type="button" id="login_btn" onclick="login_check();">로그인</button></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="findinfo">
+                    <span>아직 회원이 아니신가요?</span>
+                    <a href="signUp.html" class="signUPTxt">회원가입</a>
+                    <a href="findPwd.html" class="signUPTxt">비밀번호찾기</a>
+                </div>
+                <div class="socialLoginTxt">    
+                    <p class="socialLoginTxt2">간편 로그인</p>
+                </div>
+                <div class="socialLogin">
+                    <a onclick="kakao_login();" class="social-item bg1"><i class="fa fa-kakao"><img class="iconImg1" src="../static/image/kakao_icon.png"></i></a>
+                    <!-- <a href="#" class="social-item bg2"><i class="fa fa-naver"><img class="iconImg2" src="../image/naver_icon.png"></i></a>
+                    <a href="#" class="social-item bg3"><i class="fa fa-facebook"><img class="iconImg3" src="../image/facebook_icon.png"></i></a> -->
+                </div> 
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <table>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-4 col-md-3 item">
+                            <td>
+                                <p id="footer_MoA">MoA</p>
+                                <a href="#">개인정보처리방침</a>&nbsp;<a href="#">이용약관</a>&nbsp;<a href="#">제휴문의</a>
+                                <p id="from">UMC / 컴공선배</p>
+                            </td>
+                        </div>
+                        <div class="col-sm-4 col-md-3 item">
+                            <td>
+                                <ul>
+                                    <p id="info">
+                                    서비스명: MoA / 대표: 김은혜 / tel: 010-2020-1030
+                                    <br>개인정보 보호 책임자: 김은혜 / Email: kimehhk@gmail.com</p>
+                                    <p>COPYRIGHT (C) ALL RIGHTS RESERVED</p>
+                                </ul>
+                            </td>
+                        </div>
+                    </div>
+                </table>
+            </div>
+        </footer>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="../static/js/login.js"></script>
+    <script src="../static/js/check.js"></script>
+    <script src="../static/js/socialLogin.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+</body>
+</html>
