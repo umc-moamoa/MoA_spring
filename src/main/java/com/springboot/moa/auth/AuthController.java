@@ -127,7 +127,7 @@ public class AuthController {
 
             PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd, "kakao",accessToken);
             if (userProvider.checkIdExist(id) != 1) {
-                PostUserRes kakaoUserRes = userService.createKakaoUser(kakaoUserReq);
+                PostUserRes kakaoUserRes = userService.createUser(kakaoUserReq);
 
                 if(kakaoUserRes != null){
                     String message = "회원가입에 성공하였습니다.";

@@ -116,18 +116,7 @@ public class UserDao {
                 ), selectUserPostsParam);
     }
 
-    public long createUser(PostUserSignUpReq postUserSignUpReq) {
-        String createUserQuery = "insert into user(id, nick, pwd,social_type, social_access_token, email) VALUES (?,?,?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserSignUpReq.getId(), postUserSignUpReq.getNick(), postUserSignUpReq.getPwd(),postUserSignUpReq.getSocialType(), postUserSignUpReq.getSocialAccessToken(), postUserSignUpReq.getEmail()};
-
-        this.jdbcTemplate.update(createUserQuery, createUserParams);
-        String lastInsertIdQuery = "select last_insert_id()";
-        long userIdx = this.jdbcTemplate.queryForObject(lastInsertIdQuery, long.class);
-
-        return userIdx;
-    }
-
-    public long createKakaoUser(PostUserReq postUserReq) {
+    public long createUser(PostUserReq postUserReq) {
         String createUserQuery = "insert into user(id, nick, pwd,social_type, social_access_token) VALUES (?,?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd(),postUserReq.getSocialType(), postUserReq.getSocialAccessToken()};
 
