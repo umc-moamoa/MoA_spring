@@ -128,7 +128,7 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try{
-            String id = updatePwdReq.getId();
+            String id = updatePwdReq.getEmail();
             Long userId = userDao.getUserId(id);
             String accessToken = jwtService.createAccessToken(userId);
             String refreshToken = jwtService.createRefreshToken(userId);
@@ -136,7 +136,7 @@ public class UserService {
             userDao.updatePwd(userId, pwd);
             return new PostUserRes(accessToken, refreshToken, userId);
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(USERS_NONEXISTENT_ID);
         }
     }
 }
