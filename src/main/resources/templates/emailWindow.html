@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/emailWindow.css">
+    <title>이메일 인증</title>
+</head>
+<body>
+    <!-- container -->
+    <div class="container">
+        <div id="main">
+            <form>
+                <div class="flex-container2">
+                    <div id="subTitle">
+                        <p class="subTitle">이메일 인증</p>
+                    </div>
+                    <div id="signupBox">
+                        <div class="box">
+                            <input type="text" class="inputEmail" id="email" maxlength="30"
+                            placeholder="이메일을 입력해주세요."
+                            onfocus="this.placeholder = ''" 
+                            onblur="this.placeholder = '이메일을 입력해주세요.'">
+                            <button type="button" id="idBtn1" onclick="send_email();">이메일인증</button>
+                            <p class="alert validId1"></p>
+                        </div>
+                        <div class="box">
+                            <input type="text" class="inputNum" id="num" maxlength="30"
+                            placeholder="인증번호를 입력해주세요."
+                            onfocus="this.placeholder = ''" 
+                            onblur="this.placeholder = '인증번호를 입력해주세요.'">
+                            <button type="button" id="idBtn2" onclick="email_num();">인증확인</button>
+                            <p class="alert validId2"></p>
+                        </div>
+                    </div>
+                    <div><button type="button" id="singup_btn" onclick="email_OK();">인증 확인</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="../static/js/emailWindow.js"></script>
+</body>
+</html>

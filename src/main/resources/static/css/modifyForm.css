@@ -1,0 +1,270 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR';
+}
+html, body {
+    height: 100%;
+    width: 100%;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+a {
+    text-decoration: none;
+}
+ul,li{
+    list-style: none;
+}
+
+.header {    
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin: 0 auto;
+}
+
+#backTop {
+    position: absolute;
+    z-index: -100;
+}
+
+/* 로그인, 회원가입, 마이페이지 */
+#userMenu {
+    width: 100%;
+    margin: 0 auto;
+}
+#userMenu .list_menu {
+    float: right;
+}
+#userMenu * {
+    font-weight: 400;
+    font-size: 12px;
+    color: #414141;
+}
+ul {
+    display: block;
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+}
+
+#userMenu .menu {
+    position: relative;
+    float: left;
+    z-index: 400;
+    margin-right: 15px;
+}
+
+#userMenu:after{
+    content: "";
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 15px;
+    font-size: 0;
+    text-indent: -9999px;
+}
+
+#userMenu .link:hover{
+    color: #4E7FF2;
+}
+
+/* 로고 헤더 */
+#headerLogo .logo img {
+    display: block;
+    width: 140px;
+    margin: 0 auto;
+}
+
+/* gnb */
+.gnb_main {
+    width: 100%;
+    margin: 30px auto; 
+    margin-bottom: 0;
+    border-right: none;
+    border-left: none;
+    box-shadow: 0 1px 5px 0 rgb(32 33 36 / 20%);
+}
+.gnb{
+    text-align: center;
+    padding: 8px 0;
+    margin: 0;
+}
+.gnb li {
+    display: inline;
+    margin: 0 15px;
+}
+.gnb a {
+    display: inline-block;
+
+    width: 140px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #909090;
+    margin: 0;
+}
+
+.link:hover {
+    color: #4E7FF2;
+    font-weight: 700;
+}
+
+/* container */
+#wrapper .container {
+    width: 970px;
+    margin: 70px auto;
+    margin-bottom: 100px;
+    padding: 0 70px;
+}
+
+#fcontainer {
+    width: 970px;
+    margin: 30px auto;
+    padding: 0 65px;
+}
+
+/*서브 제목*/
+#subTitle .subTitle{
+    position: relative;
+
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 40px;
+    color: #414141;
+}
+
+/* main */
+#main {
+    box-sizing: border-box;
+    padding: 30px 30px 0 30px;
+
+    height: auto;
+    background: #FFFFFF;
+    border: 1px solid #909090;
+    border-bottom: 0;
+}
+
+.flex-container2 {
+    display: flex;
+    flex-direction: column;
+}
+
+#inputTitle {
+    display: inline-block;
+    border: none;
+    outline: none; /* 입력 시 테두리 지움*/
+    
+    font-weight: 600;
+    font-size: 20px;
+    color: #414141;
+}
+
+#inputExplain {
+    border: none;
+    outline: none;
+    display: block;
+    width: 400px;
+
+    font-weight: 400;
+    font-size: 15px;
+    color: #909090;
+    line-height: 30px;
+}
+
+#inputDate {
+    display: inline-block;
+    width: 120px;
+    border: 1px solid #909090;
+    border-radius: 2.5px;
+    padding: 3px;
+    margin-top: 10px;
+    padding-left: 8px;
+
+    font-size: 13px;
+    font-weight: 500;
+    color: #414141;
+}
+
+.deadline {
+    display: inline-block;
+    /* font-weight: 600; */
+    font-size: 14px;
+    color: #414141;
+    margin-left: 10px;
+}
+
+
+/*footer*/
+footer {
+    background-color: white;
+    color: #909090;
+
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#wrapper {
+    min-height: 100vh;
+    position: relative;
+}
+
+table {
+    width: 100%;
+}
+
+footer a {
+    color: #909090;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+#footer_MoA {
+    font-family: 'Montserrat';
+    font-size: 25px;
+    margin: 0;
+    font-weight: 600;
+}
+#from {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+footer ul {
+    padding-inline-start: 100px;
+}
+footer td:nth-child(2) {
+    text-align: right;
+    font-size: 10px;
+}
+footer td p {
+    font-size: 10px;
+}
+#info {
+    padding: 20px 0;
+}
+
+#submit_btn {
+    background: linear-gradient(91.36deg, #4E7FF2 -24.31%, #9CC2FF 130.3%);
+    box-shadow: 0px -10px 40px rgba(156, 194, 255, 0.3);
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 600;
+
+    width: 830px;
+    padding: 12px 0;
+    cursor: pointer;
+    margin: 20px 0 0 -31px;
+}
+
+.swal-wide {
+    font-size: 12px !important;
+    height: 200px !important;
+}
