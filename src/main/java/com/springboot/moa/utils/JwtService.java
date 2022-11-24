@@ -29,14 +29,14 @@ public class JwtService {
                 .compact();
     }
 
-    //안드로이드 용 access-token 유효기간 : 2주
+    //안드로이드 용 access-token 유효기간 : 4주
     public String createAccessTokenForAndroid(long userId){
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type","jwt")
                 .claim("userId",userId)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*30)))
+                .setExpiration(new Date(System.currentTimeMillis()+1*(1000L *60*60*24*30)))
                 .signWith(SignatureAlgorithm.HS256, Secret.JWT_ACCESS_SECRET_KEY)
                 .compact();
     }
