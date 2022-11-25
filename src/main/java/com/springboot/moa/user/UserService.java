@@ -1,17 +1,13 @@
 package com.springboot.moa.user;
 
 import com.springboot.moa.config.BaseException;
-import com.springboot.moa.post.PostDao;
-import com.springboot.moa.post.PostProvider;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import com.springboot.moa.utils.SHA256;
-import io.jsonwebtoken.Jwt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import static com.springboot.moa.config.BaseResponseStatus.*;
 
@@ -34,7 +30,7 @@ public class UserService {
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         String pwd;
         // 중복 처리
-        if (userProvider.checkIdExist(postUserReq.getId()) == 1) {
+        if (userProvider.checkIdExist(postUserReq.getEmail()) == 1) {
             throw new BaseException(USERS_DUPLICATED_ID);
         }
         if (userProvider.checkNickExist(postUserReq.getNick()) == 1) {
@@ -62,7 +58,7 @@ public class UserService {
     public PostUserRes createKakaoUser(PostUserReq postUserReq) throws BaseException {
         String pwd;
         // 중복 처리
-        if (userProvider.checkIdExist(postUserReq.getId()) == 1) {
+        if (userProvider.checkIdExist(postUserReq.getEmail()) == 1) {
             throw new BaseException(USERS_DUPLICATED_ID);
         }
         if (userProvider.checkNickExist(postUserReq.getNick()) == 1) {
