@@ -118,7 +118,7 @@ public class UserDao {
 
     public long createUser(PostUserReq postUserReq) {
         String createUserQuery = "insert into user(id, nick, pwd,social_type, social_access_token) VALUES (?,?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getId(), postUserReq.getNick(), postUserReq.getPwd(),postUserReq.getSocialType(), postUserReq.getSocialAccessToken()};
+        Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getNick(), postUserReq.getPwd(),postUserReq.getSocialType(), postUserReq.getSocialAccessToken()};
 
         this.jdbcTemplate.update(createUserQuery, createUserParams);
         String lastInsertIdQuery = "select last_insert_id()";
