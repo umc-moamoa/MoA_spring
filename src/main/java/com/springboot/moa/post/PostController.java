@@ -63,7 +63,7 @@ public class PostController {
         try {
             String postStatus = postProvider.checkPostStatus(postId);
 
-            if(postStatus.equals("INACTIVE"))
+            if (postStatus.equals("INACTIVE"))
                 return new BaseResponse<>(BaseResponseStatus.FAILED_INACTIVE_POST);
 
             long userIdByJwt = jwtService.getUserId();
@@ -81,9 +81,9 @@ public class PostController {
             long userIdByJwt = jwtService.getUserId();
 
             postPostsReq.setUserId(userIdByJwt);
-            int subAmount = postPostsReq.getShortCount()*3 + postPostsReq.getLongCount()*5;
+            int subAmount = postPostsReq.getShortCount() * 3 + postPostsReq.getLongCount() * 5;
 
-            if(userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - subAmount < 0)
+            if (userProvider.retrieveUser(postPostsReq.getUserId()).getPoint() - subAmount < 0)
                 return new BaseResponse<>(BaseResponseStatus.POSTS_FAILED_UPLOAD);
 
             if (postPostsReq.getTitle().length() > 30)
@@ -141,14 +141,14 @@ public class PostController {
     public BaseResponse<GetPostContentRes> getPostContent(@PathVariable("postId") long postId) {
         try {
             GetPostContentRes getPostContentRes = postProvider.retrievePostContent(postId);
-            if(getPostContentRes == null)
+            if (getPostContentRes == null)
                 return new BaseResponse<>(POSTS_EMPTY_POST_ID);
             long userIdByJwt = jwtService.getUserId();
-            if(getPostContentRes.getPostUserId() == userIdByJwt) {
+            if (getPostContentRes.getPostUserId() == userIdByJwt) {
                 getPostContentRes.setMyPost(true);
                 getPostContentRes.setParticipation(true);
-            } else{
-                if(postProvider.checkDuplicatedResult(postId, userIdByJwt) == 1) {
+            } else {
+                if (postProvider.checkDuplicatedResult(postId, userIdByJwt) == 1) {
                     getPostContentRes.setParticipation(true);
                 }
                 boolean isLike = postProvider.checkUserLikePost(postId, userIdByJwt);
@@ -162,18 +162,18 @@ public class PostController {
 
     @ResponseBody
     @PatchMapping("/{postId}/status")
-    public BaseResponse<String> deletePost(@PathVariable ("postId") long postId){
-        try{
+    public BaseResponse<String> deletePost(@PathVariable("postId") long postId) {
+        try {
             long userIdByJwt = jwtService.getUserId();
             long postUserId = postProvider.retrieveUserId(postId);
-            if(userIdByJwt != postUserId){
+            if (userIdByJwt != postUserId) {
                 return new BaseResponse<>(USERS_FAILED_POST_ID);
             }
             postService.deletePost(postId);
             String result = "삭제를 성공했습니다.";
             return new BaseResponse<>(result);
 
-        }catch(BaseException exception){
+        } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
@@ -181,40 +181,42 @@ public class PostController {
     @ResponseBody
     @PatchMapping("")
     public BaseResponse<String> modifyPost(@RequestBody PatchPostsReq patchPostsReq) {
-        try{
+        try {
             long userIdByJwt = jwtService.getUserId();
-            if(userIdByJwt != patchPostsReq.getPostUserId())
+            if (userIdByJwt != patchPostsReq.getPostUserId())
                 return new BaseResponse<>(USERS_FAILED_POST_ID);
             if (patchPostsReq.getTitle().length() > 30)
                 return new BaseResponse<>(BaseResponseStatus.POST_INPUT_FAILED_TITLE);
-            if(patchPostsReq.getContent().length() > 450)
+            if (patchPostsReq.getContent().length() > 450)
                 return new BaseResponse<>(POST_INPUT_FAILED_CONTENTS);
             postService.modifyContent(patchPostsReq);
             String result = "게시물 정보 수정을 완료하였습니다.";
             return new BaseResponse<>(result);
-        } catch(BaseException exception){
+        } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
 
     @ResponseBody
     @DeleteMapping("/interest/{postId}")
-    public BaseResponse<String> deleteUserInterest (@PathVariable("postId") long postId) {
-        try{
+    public BaseResponse<String> deleteUserInterest(@PathVariable("postId") long postId) {
+        try {
             long userIdByJwt = jwtService.getUserId();
             DeleteInterestReq deleteInterestReq = new DeleteInterestReq(userIdByJwt);
             postService.deleteInterest(deleteInterestReq.getUserId(), postId);
             String result = "관심있는 설문을 삭제했습니다.";
             return new BaseResponse<>(result);
-        } catch(BaseException exception){
+        } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
 
     @ResponseBody
     @GetMapping("/content/{postId}/share")
-    public String getPostURL(@PathVariable("postId") long postId) {
-        String url = "https://seolmunzip.shop/content/" + postId;
-        return url;
+    public BaseResponse<GetPostUrlShareRes> getPostURL(@PathVariable("postId") long postId) {
+        GetPostUrlShareRes getPostUrlShareRes = new GetPostUrlShareRes();
+        String url = "https://seolmunzip.shop/posts/content/" + postId;
+        getPostUrlShareRes.setUrl(url);
+        return new BaseResponse<>(getPostUrlShareRes);
     }
 }
