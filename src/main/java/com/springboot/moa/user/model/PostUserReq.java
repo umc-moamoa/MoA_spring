@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostUserReq {
-    String id;
+    String email;
     String nick;
     String pwd;
     String socialType = "none";
