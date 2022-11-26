@@ -10,7 +10,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetUserAnswersRes {
-    List<GetUserResultRes> getUserResultRes;
+    int format;
+    String[] result;
     public GetUserAnswersRes() {
 
     }

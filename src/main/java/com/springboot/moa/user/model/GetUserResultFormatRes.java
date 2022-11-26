@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetUserResultRes {
+public class GetUserResultFormatRes {
     int format;
-    String result;
+    int postDetailId;
 }
