@@ -7,7 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.springboot.moa.config.BaseResponseStatus.*;
 
@@ -134,13 +137,34 @@ public class UserProvider {
         }
     }
 
-    public GetUserAnswersRes retrieveUserAnswer(long userIdByJwt, long postId) throws BaseException{
+    public List<GetUserAnswersRes> retrieveUserAnswer(long userIdByJwt, long postId) throws BaseException{
         try {
-            GetUserAnswersRes getUserAnswersRes = new GetUserAnswersRes();
-            List<GetUserResultRes> getUserResultRes = userDao.selectAnswer(userIdByJwt, postId);
-            getUserAnswersRes.setGetUserResultRes(getUserResultRes);
+            List<GetUserResultFormatRes> getUserResultFormatRes = userDao.selectUserAnswer(userIdByJwt,postId);
+            List<GetUserAnswersRes> getUserAnswersRes = new ArrayList<>();
+
+            for(int i = 0; i < getUserResultFormatRes.size();i++){
+                GetUserAnswersRes userAnswerRes = new GetUserAnswersRes();
+                GetUserResultFormatRes userResultRes = getUserResultFormatRes.get(i);
+
+                int format = userResultRes.getFormat();
+                int postDetailId = userResultRes.getPostDetailId();
+
+                List<String> answerReuslt = userDao.selectUserResult(userIdByJwt, postDetailId);
+                String[] result = new String[answerReuslt.size()];
+
+                for (int j = 0; j < answerReuslt.size(); j++) {
+                    result[j] = answerReuslt.get(j);
+                }
+
+                userAnswerRes.setFormat(format);
+                userAnswerRes.setResult(result);
+
+                getUserAnswersRes.add(userAnswerRes);
+            }
+
             return getUserAnswersRes;
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
