@@ -37,9 +37,10 @@ public class PostDao {
                 "from post as p\n" +
                 "left join post_detail as pd on p.post_id=pd.post_id\n" +
                 "left join result as r on p.post_id=r.post_id\n" +
-                "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
+                "where p.status = 'ACTIVE'" +
                 "and p.category_id=?\n" +
-                "group by pd.post_id";
+                "group by pd.post_id\n" +
+                "order by p.created desc";
         long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
