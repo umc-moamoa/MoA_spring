@@ -5,6 +5,7 @@ package com.springboot.moa.user;
 import com.springboot.moa.config.BaseException;
 import com.springboot.moa.config.BaseResponse;
 import com.springboot.moa.config.BaseResponseStatus;
+import com.springboot.moa.post.model.GetPostDetailRes;
 import com.springboot.moa.user.model.*;
 import com.springboot.moa.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -215,10 +216,10 @@ public class UserController {
     // 사용자가 답변한 값 반환
     @ResponseBody
     @GetMapping("/answer/{postId}")
-    public BaseResponse<GetUserAnswersRes> getUserAnswers(@PathVariable ("postId") Long postId) throws BaseException {
+    public BaseResponse<List<GetUserAnswersRes>> getUserAnswers(@PathVariable ("postId") Long postId) throws BaseException {
         try {
             long userIdByJwt = jwtService.getUserId();
-            GetUserAnswersRes getUserAnswersRes = userProvider.retrieveUserAnswer(userIdByJwt, postId);
+            List<GetUserAnswersRes> getUserAnswersRes = userProvider.retrieveUserAnswer(userIdByJwt, postId);
             return new BaseResponse<>(getUserAnswersRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

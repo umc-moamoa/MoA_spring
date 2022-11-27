@@ -297,19 +297,31 @@ public class UserDao {
 
     }
 
-    public List<GetUserResultRes> selectAnswer(long userIdByJwt, long postId) {
-        String selectAnswerQuery = "select format, result\n" +
-                "from result_detail, result, post_detail\n" +
-                "where  result.result_id = result_detail.result_id and\n" +
-                "       result_detail.post_detail_id = post_detail.post_detail_id\n" +
-                "  and user_id = ? and result.post_id =?;";
-        Object[] selectAnswerParam = new Object[]{userIdByJwt, postId};
-        return this.jdbcTemplate.query(selectAnswerQuery,
-                (rs, rowNum) -> new GetUserResultRes(
-                        rs.getInt("format"),
-                        rs.getString("result")
-                ), selectAnswerParam);
+    public List<GetUserResultFormatRes> selectUserAnswer(long userIdByJwt, long postId) {
+        String selectAnswerQuery = "select format, pd.post_detail_id as postDetailId\n" +
+                "from result as r left join post_detail as pd on r.post_id = pd.post_id\n" +
+                "where user_id = ? and r.post_id =?";
 
+        Object[] selectAnswerParams = new Object[]{userIdByJwt, postId};
+        return this.jdbcTemplate.query(selectAnswerQuery,
+                (rs, rowNum) -> new GetUserResultFormatRes(
+                        rs.getInt("format"),
+                        rs.getInt("postDetailId")
+                ), selectAnswerParams);
+
+    }
+
+    public List<String> selectUserResult(long userIdByJwt, long postDetailId) {
+        String selectUserResultQuery = "select result\n" +
+                "from result as r left join result_detail as rd on r.result_id = rd.result_id\n" +
+                "left join post_detail as pd on rd.post_detail_id = pd.post_detail_id\n" +
+                "where user_id = ? and  pd.post_detail_id = ?";
+        Object[] selectUserResultParams = new Object[]{userIdByJwt, postDetailId};
+
+        return this.jdbcTemplate.query(selectUserResultQuery,
+                (rs, rowNum) -> new String(
+                        rs.getString("result")
+                ), selectUserResultParams);
     }
 
     // id로 userId 찾기
