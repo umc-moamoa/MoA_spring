@@ -42,7 +42,7 @@ public enum BaseResponseStatus {
     POST_INPUT_FAILED_DEADLINE(false,2014,"제출기한을 잘못 입력하였습니다"),
 
     // [POST] /users
-    POST_USERS_EMPTY_ID(false, 2015, "아이디를 입력해주세요."),
+    POST_USERS_EMPTY_ID(false, 2015, "아이디를 입력해주세요"),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 

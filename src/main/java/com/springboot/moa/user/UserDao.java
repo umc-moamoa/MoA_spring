@@ -77,7 +77,8 @@ public class UserDao {
                 "left join result as r on p.post_id=r.post_id\n" +
                 "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and p.user_id=?\n" +
-                "group by p.post_id";
+                "group by p.post_id\n" +
+                "order by p.deadline";
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs, rowNum) -> new GetUserPostRes(
@@ -103,7 +104,8 @@ public class UserDao {
                 "left join result as r on p.post_id=r.post_id\n" +
                 "where (p.status = 'ACTIVE' or p.status = 'CLOSED')" +
                 "and r.user_id=?\n" +
-                "group by p.post_id";
+                "group by p.post_id\n" +
+                "order by p.deadline";
         long selectUserPostsParam = userId;
         return this.jdbcTemplate.query(selectUserPostsQuery,
                 (rs, rowNum) -> new GetUserPartPostRes(
@@ -146,7 +148,8 @@ public class UserDao {
                 "FROM       interest as i, post as p, post_detail as pd\n" +
                 "WHERE      i.post_id = p.post_id and p.post_id = pd.post_id and i.user_id=? " +
                 "and (p.status = 'ACTIVE' or p.status = 'CLOSED')\n" +
-                "GROUP BY   p.post_id";
+                "GROUP BY   p.post_id\n" +
+                "order by p.deadline";
 
 
         long selectUserInterestParam = userId;

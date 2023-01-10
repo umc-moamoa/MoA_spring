@@ -40,7 +40,7 @@ public class PostDao {
                 "where p.status = 'ACTIVE'" +
                 "and p.category_id=?\n" +
                 "group by pd.post_id\n" +
-                "order by p.created desc";
+                "order by p.deadline";
         long selectPostsParam = categoryId;
         return this.jdbcTemplate.query(selectPostsQuery,
                 (rs, rowNum) -> new GetPostsRes(
