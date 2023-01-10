@@ -70,7 +70,7 @@ public class ResultProvider {
                     }
                 }
 //                 변수에 저장된 결과 출력
-                for (int i = 0; i < 5; i++){
+                for (int i = 0; i < 8; i++){
                     countAnswer[i] = countAnswer[i] / getResultStatisticsRes.size() * 100;
                 }
                 getResultRes.setCase1(countAnswer[0]);
