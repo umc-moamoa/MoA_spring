@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
-    <link rel="stylesheet" href="../static/css/signUp.css">
-    <link rel="icon" href="../static/image/logo.png">
+    <link rel="stylesheet" href="/css/signUp.css">
+    <link rel="icon" href="/image/logo.png">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
@@ -37,7 +37,7 @@
                 <div id="headerLogo" class="layout-wrapper">
                     <h1 class="logo">
                         <a class="link_main" href="main.html">
-                            <img src="../static/image/zipLogo.png"  alt="로고" />
+                            <img src="/image/zipLogo.png"  alt="로고" />
                         </a>
                     </h1>
                 </div>
@@ -85,23 +85,17 @@
                                     placeholder="사용하실 이메일을 입력해주세요."
                                     onfocus="this.placeholder = ''" 
                                     onblur="this.placeholder = '사용하실 이메일을 입력해주세요.'">
-                                    
-                                    <!--
-                                    <input type="text" class="inputEmail" id="id" maxlength="20"
-                                    placeholder="이메일을 입력해주세요."
-                                    onfocus="this.placeholder = ''" 
-                                    onblur="this.placeholder = '이메일을 입력해주세요.'">
-                                    <span class="email">@</span>
-                                    <select id="Stype" onchange="selectEmail()">
-                                        <option value="1" selected>이메일 선택</option>
-                                        <option value="2">naver.com</option>
-                                        <option value="3">google.com</option>
-                                        <option value="4">daum.net</option>
-                                    </select>
-                                -->
-                                    <button type="button" id="idBtn1" onclick="windowOpen();">이메일인증</button>
+                                    <button type="button" id="idBtn1" onclick="send_email();">이메일인증</button>
                                     <p class="alert validId1"></p>
-                                
+                                </div>
+                                <div class="box">
+                                    
+                                    <input type="text" class="inputNum" id="num" maxlength="30"
+                                    placeholder="이메일 인증번호를 입력해주세요."
+                                    onfocus="this.placeholder = ''" 
+                                    onblur="this.placeholder = '이메일 인증번호를 입력해주세요.'">
+                                    <button type="button" id="idBtn3" onclick="email_num();">인증확인</button>
+                                    <p class="alert validId5"></p>
                                 </div>
                                 
                                 <div class="box">
@@ -163,8 +157,8 @@
             </div>
         </footer>
     </div>
-    <script src="../static/js/signUp.js"></script>
+    <script src="/js/signUp.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="../static/js/check.js"></script>
+    <script src="/js/check.js"></script>
 </body>
 </html>

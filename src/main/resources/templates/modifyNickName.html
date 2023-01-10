@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>결과</title>
-    <link rel="stylesheet" href="/css/result.css" />
+    <title>폼 수정</title>
+    <link rel="stylesheet" href="/css/modifyForm.css" />
     <link rel="icon" href="/image/logo.png">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -73,13 +73,24 @@
             <!-- container -->
             <div class="container">
 
+                <!-- 서브 제목 -->
+                <div id="subTitle">
+                    <p class="subTitle">닉네임 변경</p>
+                </div>
+
                 <div id="main">
                     <div class="flex-container2">
 
                         <!-- 메인 -->
                         <div>
-                            <div class="flex-sTitle"></div>
-                            <div class="sub-container"></div>
+                            <div id="surveyStart">
+                                <input name="title" type="text" id="inputTitle" maxlength="30"
+                                placeholder="닉네임을 다시 적어주세요." 
+                                onfocus="this.placeholder = ''" 
+                                onblur="this.placeholder = '닉네임을 다시 적어주세요.'">
+
+                                <div><button type="button" id="submit_btn" onclick="modifyContent()">닉네임 변경</button></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,8 +125,7 @@
         </footer>
     </div>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <script src="/js/result.js"></script>
+    <script src="/js/modifyNickName.js"></script>
     <script src="/js/check.js"></script>
 </body>
 </html>
