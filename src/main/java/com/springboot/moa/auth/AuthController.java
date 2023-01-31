@@ -98,7 +98,7 @@ public class AuthController {
         }
     }
 
-
+    @ResponseBody
     @PostMapping("/kakaoLogin")
     public BaseResponse<PostLoginRes> kakaoLogin(@PathParam(value = "accessToken") String accessToken) throws BaseException {
         String reqURL = "https://kapi.kakao.com/v2/user/me";
