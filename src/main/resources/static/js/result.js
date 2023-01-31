@@ -122,6 +122,6 @@ function titleTemplate(data){
 }
 
 function countTemplate(data){
-  var count = `<div id="peopleNum"><img src="../static/image/Group 599.png">&nbsp;${data.result.count}명 응답</div>`
+  var count = `<div id="peopleNum"><img src="../image/Group 599.png">&nbsp;${data.result.count}명 응답</div>`
   $postDetail.insertAdjacentHTML('beforeend', count);
 }

@@ -78,7 +78,7 @@ function InterestListTemplate(data) {
     const InterestItem1 = `
         <div id="main1">
             <div class="one-container1">
-                <a id="title1" href="../templates/detailPage.html?${postId}">${data.title}</a>
+                <a id="title1" href="../detailPage.html?${postId}">${data.title}</a>
             </div>
             <div class="two-container1">
                 <span id="count1">${data.qcount}개 항목&nbsp;&nbsp;</span>
@@ -92,7 +92,7 @@ function InterestListTemplate(data) {
     const InterestItem2 = `
         <div id="main1">
             <div class="one-container1">
-                <a id="title1" href="../templates/detailPage.html?${postId}">${data.title}</a>
+                <a id="title1" href="../detailPage.html?${postId}">${data.title}</a>
             </div>
             <div class="two-container1">
                 <span id="count1">${data.qcount}개 항목&nbsp;&nbsp;</span>
@@ -106,7 +106,7 @@ function InterestListTemplate(data) {
     const InterestItem3 = `
         <div id="main1">
             <div class="one-container1">
-                <a id="title1" href="../templates/detailPage.html?${postId}">${data.title}</a>
+                <a id="title1" href="../detailPage.html?${postId}">${data.title}</a>
             </div>
             <div class="two-container1">
                 <span id="count1">${data.qcount}개 항목&nbsp;&nbsp; ㅣ</span>

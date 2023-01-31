@@ -9,7 +9,7 @@ var checkboxes = new Array();
 var postLength = 0;
 
 function gotoParticipatedSurvey() {
-    var link="../templates/participatedSurvey.html";
+    var link="../participatedSurvey.html";
     location.href=link;
 }
 
@@ -48,6 +48,7 @@ const fetchSuryeyIn = () => {
     )
         .then((response) => response.json())
         .then((webResult) => {
+            console.log(webResult);
             console.log(webResult.code);
             if(webResult.code == 1000) {
                 postLength = webResult.result.length;
@@ -75,7 +76,6 @@ const fetchSuryeyIn = () => {
                         }
                     })
             }
-           
         })
         .catch((error) => console.log("error", error));
 
@@ -99,12 +99,8 @@ function SurveyInTemplate(data) {
         var q1Span = document.createElement("span");
         q1Span.className = 'Q1';
         q1Span.textContent = count + ".   " + `${data.question}`;
-        // var reqSpan = document.createElement("span");
-        // reqSpan.className = 'required';
-        // reqSpan.textContent = "필수";
 
         questionDiv.appendChild(q1Span);
-        // questionDiv.appendChild(reqSpan);
         questions.appendChild(questionDiv);
 
         // 답 - 라디오 버튼
@@ -121,7 +117,7 @@ function SurveyInTemplate(data) {
             pi[0] = Number(postDetailId);
             semipostDetailResults[count-1][0] = pi;
             inputDiv.name = postDetailId;
-            inputDiv.value = j;
+            inputDiv.value = j+1;
 
             var inputTextDiv = document.createElement("span");
             inputTextDiv.className = 'radioBtn';
@@ -139,12 +135,8 @@ function SurveyInTemplate(data) {
         var q1Span = document.createElement("span");
         q1Span.className = 'Q1';
         q1Span.textContent = count + ".   " + `${data.question}`;
-        // var reqSpan = document.createElement("span");
-        // reqSpan.className = 'required';
-        // reqSpan.textContent = "필수";
 
         questionDiv.appendChild(q1Span);
-        // questionDiv.appendChild(reqSpan);
         questions.appendChild(questionDiv);
 
         // 답 - 체크박스 버튼
@@ -163,7 +155,7 @@ function SurveyInTemplate(data) {
             pi[0] = Number(postDetailId);
             semipostDetailResults[count-1][0] = pi;
             inputDiv.name = postDetailId;
-            inputDiv.value = j;
+            inputDiv.value = j+1;
 
             var inputTextDiv = document.createElement("span");
             inputTextDiv.className = 'checkBoxBtn';
@@ -176,7 +168,6 @@ function SurveyInTemplate(data) {
         }
     }
     // 단답형 
-    //         <span class="required">필수</span> 빈 줄에 있던 거 주석
     else if(data.format == 3) {
         postDetailId = `${data.postDetailId}`;
         var pi = new Array();
@@ -232,7 +223,6 @@ function sendPost() {
             var j=0;
             selectedElements.forEach((el) => {
                 checkboxes[i][j++] = el.value;
-               
             });
             semipostDetailResults[i][1] = checkboxes[i];
             console.log(semipostDetailResults[i][1]);

@@ -202,6 +202,22 @@ footer td p {
     margin-bottom: 15px;
     padding-bottom: 7px;
 }
+
+#idBtn1 {
+    display: inline-block;
+    position: absolute; 
+    width: 70px;
+    border: none;
+
+    color: #919191;
+    margin-left: 15px;
+    font-weight: 450;
+    background-color: #FFFFFF;
+    text-align: center;
+    font-size: 11px;
+
+    cursor: pointer;
+}
 .email{
     margin-left: 5px;
     margin-right: 5px;
@@ -289,6 +305,7 @@ input::-ms-input-placeholder{color: #909090;}
     margin: 30px;
     font-size: 11px;
     color: #919191;
+    padding-right: 65px;
 }
 .signUPTxt {
     color: #919191;
