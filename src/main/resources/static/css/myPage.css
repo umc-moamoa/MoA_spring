@@ -316,3 +316,11 @@ footer td p {
     margin-left: 320px;
     cursor: pointer;
 }
+
+#modifyBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+    color: #909090;
+}

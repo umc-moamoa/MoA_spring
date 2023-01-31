@@ -7,6 +7,8 @@ var postDetailId;
 var formats = new Array(); // 여기에 format 넣음. 
 var checkboxes = new Array();
 var postLength = 0;
+var resultList = new Array();
+var cnt = 0;
 
 const rpostId = location.href.split('?')[1];
 console.log(rpostId);
@@ -44,9 +46,11 @@ const fetchSuryeyIn = () => {
     )
         .then((response) => response.json())
         .then((webResult) => {
+            console.log(webResult);
             console.log(webResult.code);
             if(webResult.code == 1000) {
                 webResult.result.map(item => SurveyInTemplate(item));
+                fetchAnswer();
             }
             if(webResult.code == 2002) {
                 fetchTokenCheck();
@@ -60,6 +64,7 @@ const fetchSuryeyIn = () => {
                             console.log(webResult.code);
                             if(webResult.code == 1000) {
                                 webResult.result.map(item => SurveyInTemplate(item));
+                                fetchAnswer();
                             }
                         })
             }
@@ -88,12 +93,8 @@ function SurveyInTemplate(data) {
         var q1Span = document.createElement("span");
         q1Span.className = 'Q1';
         q1Span.textContent = count + ".   " + `${data.question}`;
-        // var reqSpan = document.createElement("span");
-        // reqSpan.className = 'required';
-        // reqSpan.textContent = "필수";
 
         questionDiv.appendChild(q1Span);
-        // questionDiv.appendChild(reqSpan);
         questions.appendChild(questionDiv);
 
         // 답 - 라디오 버튼
@@ -111,12 +112,10 @@ function SurveyInTemplate(data) {
             semipostDetailResults[count-1][0] = pi;
             inputDiv.name = postDetailId;
             inputDiv.value = j;
-
-            //checked 임의 테스트
-            // if(inputDiv.value == 0) {
-            //     inputDiv.checked = true;
-            // }
             
+            inputDiv.id = count * 10 + j + 1;
+            console.log(inputDiv.id);
+
             var inputTextDiv = document.createElement("span");
             inputTextDiv.className = 'radioBtn';
             inputTextDiv.textContent = data.items[j];
@@ -127,10 +126,6 @@ function SurveyInTemplate(data) {
             questionDiv.appendChild(rBtnDiv);
         }
 
-        if(inputDiv.value == 0) {
-            inputDiv.setAttribute('checked',true);
-            // inputDiv.checked = true;
-        }
     }
     // 객관식 - 체크박스 버튼
     else if(data.format == 2) {
@@ -138,12 +133,8 @@ function SurveyInTemplate(data) {
         var q1Span = document.createElement("span");
         q1Span.className = 'Q1';
         q1Span.textContent = count + ".   " + `${data.question}`;
-        // var reqSpan = document.createElement("span");
-        // reqSpan.className = 'required';
-        // reqSpan.textContent = "필수";
 
         questionDiv.appendChild(q1Span);
-        // questionDiv.appendChild(reqSpan);
         questions.appendChild(questionDiv);
 
         // 답 - 체크박스 버튼
@@ -163,6 +154,8 @@ function SurveyInTemplate(data) {
             semipostDetailResults[count-1][0] = pi;
             inputDiv.name = postDetailId;
             inputDiv.value = j;
+            inputDiv.id = count * 10 + j + 1;
+            console.log(inputDiv.id);
 
             var inputTextDiv = document.createElement("span");
             inputTextDiv.className = 'checkBoxBtn';
@@ -175,7 +168,6 @@ function SurveyInTemplate(data) {
         }
     }
     // 단답형 
-    //         <span class="required">필수</span> 빈 줄에 있던 거 주석
     else if(data.format == 3) {
         postDetailId = `${data.postDetailId}`;
         var pi = new Array();
@@ -184,10 +176,8 @@ function SurveyInTemplate(data) {
         var SurveyQ = `<div class="question">
         <span class="Q1">${count + ".   " + data.question}</span>
 
-        <input type="text" class="Qtype3" maxlength="30"
-        placeholder="자유롭게 적어주세요."
-        onfocus="this.placeholder = ''" 
-        onblur="this.placeholder = '자유롭게 적어주세요.'"></textarea>
+        <input type="text" class="Qtype3" maxlength="30" id="${count * 10}"
+        ></input>
         </div>`
         $SurveyQuestion.insertAdjacentHTML('beforeend',SurveyQ);
     }
@@ -201,10 +191,8 @@ function SurveyInTemplate(data) {
         var SurveyQ = `<div class="question">
         <span class="Q1">${count + ".   " + data.question}</span>
 
-        <textarea class="Qtype4" cols="108" rows="10" 
-        placeholder=" 자유롭게 적어주세요."
-        onfocus="this.placeholder = ''" 
-        onblur="this.placeholder = ' 자유롭게 적어주세요.'"></textarea>
+        <textarea class="Qtype4" cols="108" rows="10" id="${count * 10}"
+        ></textarea>
         </div>`
         $SurveyQuestion.insertAdjacentHTML('beforeend',SurveyQ);
     }
@@ -227,16 +215,45 @@ const fetchAnswer = () => {
             console.log(webResult);
             if(webResult.code == 2002) {
                 fetchTokenCheck();
-                fetchAnswer();
+                fetchAnswer(); // 여기 다시
             }
-            webResult.result.getUserResultRes.map(item => console.log(item));
+            console.log(webResult.result);
+            webResult.result.map(item => answerTemplate2(item));
         })
         .catch((error) => console.log("error", error));
 
 }
 
-fetchAnswer();
+function answerTemplate2(data) {
+    cnt += 10;
 
-function answerTemplate(data) {
+    if(data.format == 1) {
+        var questions = document.getElementById(`${parseInt(cnt) + parseInt(data.result)}`);
+        console.log(parseInt(cnt) + parseInt(data.result));
+        questions.checked = true
+        console.log(questions);
+        console.log(questions.checked);
+    } else if (data.format == 2) {
+        for(i=0;i<data.result.length;i++){
+            console.log(data.result[i]);
+            var questions = document.getElementById(`${parseInt(cnt) + parseInt(data.result[i])}`);
+            questions.checked = true
+            console.log(questions);
+            console.log(questions.checked);
+        } 
+    } else if (data.format == 3) {
+        var questions = document.getElementById(`${parseInt(cnt)}`);
+        questions.value = data.result;
+        console.log(questions);
+        console.log(questions.value);
+    } else if (data.format == 4) {
+        var questions = document.getElementById(`${parseInt(cnt)}`);
+        questions.value = data.result;
+        console.log(questions);
+        console.log(questions.value);
+    }
+}
 
+function gotoDetail() {
+    history.back();
 }

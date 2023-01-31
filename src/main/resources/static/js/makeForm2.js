@@ -19,12 +19,12 @@ var item1, item2;
 var i;
 
 function gotoMysurvey() {
-    var link="../templates/mySurvey.html";
+    var link="../mySurvey.html";
     location.href=link;
 }
 
 function gotoMain() {
-    var link="../templates/main.html";
+    var link="../main.html";
     location.href=link;
 }
 

@@ -4,10 +4,11 @@
 
 // 로그인 버튼 클릭시 실행 함수
 function login_check() {
-    var id = document.getElementById("id");
+    var email = document.getElementById("email");
+    //var email = document.getElementById("id");
     var pwd1 = document.getElementById("pswd1");
 
-    if(id.value == ""){ 
+    if(email.value == ""){ 
         $(".validId1").css("display","block");
         $(".validId1").css("color","#FC4B3D");
         $(".validId1").text("아이디를 입력하세요.");
@@ -36,13 +37,14 @@ function id_find(){
 // 비밀번호 찾기
 function pw_find(){
     //window.open("팝업될 문서 경로", "팝업될 문서 이름", "옵션");
-    window.open("", "비밀번호 찾기", "width=600, height=200, left=200, top=100");
+    window.open("findPwd.html", "비밀번호 찾기", 'top=200, left=600, width=450, height=400, status=no, menubar=no, toolbar=no, resizable=no');
 }
 
 // post 데이터 보내기 함수
 function save(){
     const data = {
-        id: document.getElementById("id").value,
+        email: document.getElementById("email").value,
+        //email: document.getElementById("id").value,
         pwd: document.getElementById("pswd1").value
     }
     fetch(`http://seolmunzip.shop:9000/auth/login`, {
@@ -63,7 +65,10 @@ function save(){
             console.log(response2.isSuccess);
         } else if(response2.code == 4000) {
             console.log(response2.message);
-        } else{
+        }else if(response2.code == 2015) {
+            console.log(response2.message);
+        }
+        else{
             localStorage.removeItem('x-access-token');
             localStorage.removeItem('x-refresh-token');
             console.log(response2);
@@ -75,44 +80,4 @@ function save(){
         }
         })
     .catch((error) => console.log("error", error))
-}
-
-function selectEmail() {
-    category = selectedValue();
-    if ( category == 1 ) {
-        $('#SurveyList1').show();
-        $('#SurveyList2').hide();
-        $('#SurveyList3').hide();
-        $('#SurveyList4').hide();
-    }
-    else if ( category == 2 ) {
-        count2++;
-        if(count2 == 1) {
-            fetchSurvey(); //최초 1회만 데이터 추가됨. 1->2->1->2 중복 추가 방지
-        }
-        $('#SurveyList1').hide();
-        $('#SurveyList2').show();
-        $('#SurveyList3').hide();
-        $('#SurveyList4').hide();
-    }
-    else if ( category == 3 ) {
-        count3++;
-        if(count3 == 1) {
-            fetchSurvey(); //최초 1회만 데이터 추가됨. 1->2->1->2 중복 추가 방지
-        }
-        $('#SurveyList1').hide();
-        $('#SurveyList2').hide();
-        $('#SurveyList3').show();
-        $('#SurveyList4').hide();
-    }
-    else if ( category == 4 ) {
-        count4++;
-        if(count4 == 1) {
-            fetchSurvey(); //최초 1회만 데이터 추가됨. 1->2->1->2 중복 추가 방지
-        }
-        $('#SurveyList1').hide();
-        $('#SurveyList2').hide();
-        $('#SurveyList3').hide();
-        $('#SurveyList4').show();
-    }
 }

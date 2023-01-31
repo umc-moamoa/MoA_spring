@@ -116,7 +116,7 @@ function addQuestion() {
         
         };
         var ximage = document.createElement("img");
-        ximage.setAttribute('src', '../static/image/Group 16.png');
+        ximage.setAttribute('src', '../image/Group 16.png');
         ximage.setAttribute('width', '50%');
     
         div3.appendChild(input2);
@@ -218,7 +218,7 @@ function addQuestion() {
         
     };
     var ximage = document.createElement("img");
-    ximage.setAttribute('src', '../static/image/Group 16.png');
+    ximage.setAttribute('src', '../image/Group 16.png');
     ximage.setAttribute('width', '50%');
 
     div3.appendChild(input2);
@@ -254,7 +254,7 @@ function addQuestion() {
         
     };
     var ximage = document.createElement("img");
-    ximage.setAttribute('src', '../static/image/Group 16.png');
+    ximage.setAttribute('src', '../image/Group 16.png');
     ximage.setAttribute('width', '50%');
 
     div3.appendChild(input2);
@@ -291,7 +291,7 @@ function addQuestion() {
         
     };
     var ximage = document.createElement("img");
-    ximage.setAttribute('src', '../static/image/Group 16.png');
+    ximage.setAttribute('src', '../image/Group 16.png');
     ximage.setAttribute('width', '50%');
 
     div3.appendChild(input2);
@@ -322,7 +322,7 @@ function addQuestion() {
     };
 
     var timage = document.createElement("img");
-    timage.setAttribute('src', '../static/image/Trash can.png');
+    timage.setAttribute('src', '../image/Trash can.png');
     timage.setAttribute('width', '50%');
 
     div1.appendChild(div4);

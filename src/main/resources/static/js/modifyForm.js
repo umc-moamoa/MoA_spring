@@ -9,7 +9,7 @@ var updateContent;
 var updateDeadline;
 
 function gotoDetail() {
-    var link=`../templates/detailPage.html?${postId}`;
+    var link=`../detailPage.html?${postId}`;
     location.href=link;
 }
 
