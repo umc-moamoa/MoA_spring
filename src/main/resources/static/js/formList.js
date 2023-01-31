@@ -38,7 +38,7 @@ function SurveyListTemplate (data) {
 
     const SurveyItem1 = `<div id="main1">
                             <div class="one-container1">
-                                <a id="title1" href="../templates/detailPage.html?${sendPostId}">  ${data.title}  </a>
+                                <a id="title1" href="../detailPage.html?${sendPostId}">  ${data.title}  </a>
                             </div>
                             <div class="two-container1">
                                 <span id="count1">${data.qcount}개 항목&nbsp;&nbsp;</span>
@@ -51,7 +51,7 @@ function SurveyListTemplate (data) {
     `;
     const SurveyItem2 = `<div id="main1">
                             <div class="one-container1">
-                                <a id="title1" href="../templates/detailPage.html?${sendPostId}"}>  ${data.title}  </a>
+                                <a id="title1" href="../detailPage.html?${sendPostId}"}>  ${data.title}  </a>
                             </div>
                             <div class="two-container1">
                                 <span id="count1">${data.qcount}개 항목&nbsp;&nbsp;</span>
@@ -64,7 +64,7 @@ function SurveyListTemplate (data) {
     `;
     const SurveyItem3 = `<div id="main1">
                             <div class="one-container1">
-                                <a id="title1" href="../templates/detailPage.html?${sendPostId}"}>  ${data.title}  </a>
+                                <a id="title1" href="../detailPage.html?${sendPostId}"}>  ${data.title}  </a>
                             </div>
                             <div class="two-container1">
                                 <span id="count1">${data.qcount}개 항목&nbsp;&nbsp;</span>

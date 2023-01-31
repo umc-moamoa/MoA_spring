@@ -80,7 +80,7 @@ function SurveyListTemplate (data) {
     const SurveyItem1 = `
     <div id="main1">
         <div class="one-container1">
-            <a id="title1" href="../templates/result.html?${receivedPostId}">${data.postTitle}</a>
+            <a id="title1" href="../result.html?${receivedPostId}">${data.postTitle}</a>
         </div>
         <div class="two-container1">
             <div class="box">
@@ -107,7 +107,7 @@ function SurveyListTemplate (data) {
     const SurveyItem2 = `
     <div id="main1">
         <div class="one-container1">
-            <a id="title1" href="../templates/result.html?${receivedPostId}">${data.postTitle}</a>
+            <a id="title1" href="../result.html?${receivedPostId}">${data.postTitle}</a>
         </div>
         <div class="two-container1">
             <div class="box">
@@ -134,7 +134,7 @@ function SurveyListTemplate (data) {
     const SurveyItem3 = `
     <div id="main1">
         <div class="one-container1">
-            <a id="title1" href="../templates/result.html?${receivedPostId}">${data.postTitle}</a>
+            <a id="title1" href="../result.html?${receivedPostId}">${data.postTitle}</a>
         </div>
         <div class="two-container1">
             <div class="box">
@@ -179,7 +179,7 @@ function modify_alert(postId) {
         cancelButtonText: '아니요'
     }).then((result) => {
         if (result.isConfirmed) {
-            var link=`../templates/modifyForm.html?${postId}`;
+            var link=`../modifyForm.html?${postId}`;
             location.href=link;
         }
     })
@@ -230,7 +230,7 @@ function deletePost(postId) {
                 confirmButtonText: '예'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var link="../templates/mySurvey.html";
+                    var link="../mySurvey.html";
                     location.href=link;
                 }
             })
