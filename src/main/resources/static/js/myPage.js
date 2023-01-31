@@ -163,7 +163,7 @@ function modify_alert() {
     }).then((result) => {
         if (result.isConfirmed) {
             var link=`../modifyNickName.html`;
-            location.href=link;종
+            location.href=link;
         }
     })
 }
