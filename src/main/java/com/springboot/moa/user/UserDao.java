@@ -327,6 +327,16 @@ public class UserDao {
                 ), selectUserResultParams);
     }
 
+    public String selectQuestionItem(long postDetailId, int row) {
+        String selectQuestionItemQuery = "select item from question_detail\n" +
+                "         where post_detail_id = ? LIMIT ?,1";
+        Object[] selectQuestionItemParam = new Object[]{postDetailId, row};
+
+        return this.jdbcTemplate.queryForObject(selectQuestionItemQuery,
+                String.class,
+                selectQuestionItemParam);
+    }
+
     // id로 userId 찾기
     public Long getUserId(String id) {
         String getUserIdQuery = "select user_id from user where id = ?";
