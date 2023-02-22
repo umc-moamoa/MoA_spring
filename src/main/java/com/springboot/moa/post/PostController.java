@@ -215,6 +215,7 @@ public class PostController {
     @GetMapping("/content/{postId}/share")
     public BaseResponse<GetPostUrlShareRes> getPostURL(@PathVariable("postId") long postId) {
         GetPostUrlShareRes getPostUrlShareRes = new GetPostUrlShareRes();
+
         String url = "http://seolmunzip.shop/posts/content/" + postId;
         getPostUrlShareRes.setUrl(url);
         return new BaseResponse<>(getPostUrlShareRes);
