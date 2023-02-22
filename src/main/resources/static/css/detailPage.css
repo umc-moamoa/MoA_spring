@@ -1,0 +1,291 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR';
+}
+html, body {
+    height: 100%;
+    width: 100%;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+a {
+    text-decoration: none;
+}
+ul, li{
+    list-style: none;
+}
+
+.header {    
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin: 0 auto;
+}
+
+/* 로그인, 회원가입, 마이페이지 */
+#userMenu {
+    width: 100%;
+    margin: 0 auto;
+}
+#userMenu .list_menu {
+    float: right;
+}
+#userMenu * {
+    font-weight: 400;
+    font-size: 12px;
+    color: #414141;
+}
+ul {
+    display: block;
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+}
+
+#userMenu .menu {
+    position: relative;
+    float: left;
+    z-index: 400;
+    margin-right: 15px;
+}
+#userMenu .link:hover{
+    color: #4E7FF2;
+}
+#userMenu:after{
+    content: "";
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 15px;
+    font-size: 0;
+    text-indent: -9999px;
+}
+
+/* 로고 헤더 */
+#headerLogo .logo img {
+    display: block;
+    width: 140px;
+    margin: 0 auto;
+}
+
+/* gnb */
+.gnb_main {
+    width: 100%;
+    margin: 30px auto; 
+    margin-bottom: 0;
+    border-right: none;
+    border-left: none;
+    box-shadow: 0 1px 5px 0 rgb(32 33 36 / 20%);
+}
+.gnb{
+    text-align: center;
+    padding: 8px 0;
+    margin: 0;
+}
+.gnb li {
+    display: inline;
+    margin: 0 15px;
+}
+.gnb a {
+    display: inline-block;
+
+    width: 140px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #909090;
+    margin: 0;
+}
+.link:hover {
+    color: #4E7FF2;
+    font-weight: 700;
+}
+
+/* container */
+#wrapper .container {
+    width: 970px;
+    margin: 70px auto;
+    margin-bottom: 100px;
+    padding: 0 70px;
+}
+
+footer .container {
+    width: 970px;
+    margin: 30px auto;
+    padding: 0 65px;
+}
+
+/*footer*/
+footer {
+    background-color: white;
+    color: #909090;
+
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#wrapper {
+    min-height: 100vh;
+    position: relative;
+    height: 700px;
+}
+table {
+    width: 100%;
+}
+footer a {
+    color: #909090;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+#footer_MoA {
+    font-family: 'Montserrat';
+    font-size: 25px;
+    margin: 0;
+    font-weight: 600;
+}
+#from {
+    font-size: 12px;
+    font-weight: 500;
+}
+footer ul {
+    padding-inline-start: 100px;
+}
+footer td:nth-child(2) {
+    text-align: right;
+    font-size: 10px;
+}
+footer td p {
+    font-size: 10px;
+}
+#info {
+    padding: 20px 0;
+}
+
+/*main*/
+#detailMain {
+    box-sizing: border-box;
+    padding: 30px 30px 0 30px;
+    margin: 0 80px;
+
+    height: auto;
+    background: #FFFFFF;
+    border: 1px solid #909090;
+    border-bottom: 0;
+}
+
+.flex-container1 {
+    display: flex;
+    justify-content : space-between;
+    align-items: flex-end;
+}
+
+#detailTitle {
+    font-size: 20px;
+    color: #414141;
+    font-weight: bold;
+}
+
+#date {
+    opacity: 0.5;
+    font-size: 12px;
+}
+
+#heart {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 65px;
+}
+
+
+#share {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 65px;
+}
+
+#deleteBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 50px;
+    font-size: 12px;
+    color: #909090;
+}
+
+#modifyBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 50px;
+    font-size: 12px;
+    color: #909090;
+}
+
+.flex-container2 {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.flex-item2 {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6C6C6C;
+}
+
+#deadline {
+    color: #4E7FF2;
+}
+
+#mainBottom {
+    padding-top: 25px;
+    padding-bottom: 20px;
+    font-size: 14px;
+}
+
+/* 파란 버튼 */
+#joinBtn {
+    background: linear-gradient(91.36deg, #4E7FF2 -24.31%, #9CC2FF 130.3%);
+    box-shadow: 0px -10px 40px rgba(156, 194, 255, 0.3);
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 600;
+
+    width: 670px;
+    padding: 12px 0;
+    cursor: pointer;
+    margin: 20px 0 0 -31px;
+}
+
+/* 회색 버튼 추가 */
+#joinBtn_gray {
+    background: linear-gradient(91.36deg, #909090 -24.31%, #C6C6C6 130.3%);
+    box-shadow: 0px -10px 80px #C6C6C6;
+    border: none;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 600;
+
+    width: 670px;
+    padding: 12px 0;
+    cursor: pointer;
+    margin: 20px 0 0 -31px;
+}
+
+.swal-wide {
+    font-size: 12px !important;
+    height: 200px !important;
+}

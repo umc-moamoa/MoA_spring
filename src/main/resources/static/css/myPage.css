@@ -1,0 +1,326 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR';
+}
+html, body {
+    height: 100%;
+    width: 100%;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+a {
+    text-decoration: none;
+}
+ul,li{
+    list-style: none;
+}
+
+.header {    
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin: 0 auto;
+}
+
+/* 로그인, 회원가입, 마이페이지 */
+#userMenu {
+    width: 100%;
+    margin: 0 auto;
+}
+#userMenu .list_menu {
+    float: right;
+}
+#userMenu * {
+    font-weight: 400;
+    font-size: 12px;
+    color: #414141;
+}
+ul {
+    display: block;
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+}
+
+#userMenu .menu {
+    position: relative;
+    float: left;
+    z-index: 400;
+    margin-right: 15px;
+}
+
+#userMenu:after{
+    content: "";
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 15px;
+    font-size: 0;
+    text-indent: -9999px;
+}
+#userMenu .link:hover{
+    color: #4E7FF2;
+}
+/* 로고 헤더 */
+#headerLogo .logo img {
+    display: block;
+    width: 140px;
+    margin: 0 auto;
+}
+
+/* gnb */
+.gnb_main {
+    width: 100%;
+    margin: 30px auto; 
+    margin-bottom: 0;
+    border-right: none;
+    border-left: none;
+    box-shadow: 0 1px 5px 0 rgb(32 33 36 / 20%);
+}
+.gnb{
+    text-align: center;
+    padding: 8px 0;
+    margin: 0;
+}
+.gnb li {
+    display: inline;
+    margin: 0 15px;
+}
+.gnb a {
+    display: inline-block;
+
+    width: 140px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #909090;
+    margin: 0;
+}
+.link:hover {
+    color: #4E7FF2;
+    font-weight: 700;
+}
+
+/* container */
+#wrapper .container {
+    width: 970px;
+    margin: 70px auto;
+    margin-bottom: 100px;
+    padding: 0 70px;
+}
+
+footer .container {
+    width: 970px;
+    margin: 30px auto;
+    padding: 0 65px;
+}
+
+/*서브 제목*/
+#subTitle .subTitle{
+    position: relative;
+    margin-left: 135px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 40px;
+    color: #414141;
+}
+
+/* main */
+#main {
+    box-sizing: border-box;
+    padding: 30px 30px 0 30px;
+    margin: 0 135px;
+
+    height: auto;
+    background: #FFFFFF;
+    border: 1px solid #909090;
+}
+
+.flex-container2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-nickname {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    padding-bottom: 15px;
+    padding-left: 8px;
+
+    font-weight: 600;
+    font-size: 23px;
+    color: #414141;
+}
+
+#님 {
+    font-weight: 400;
+    font-size: 15px;
+    color: #414141;
+}
+
+#icon_bottom_line {
+    border-bottom: 1px solid #C6C6C6;
+    padding-bottom: 15px;
+}
+
+.flex-container-icon{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-container-icon-sub1{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.category1{
+    font-weight: 400;
+    margin-left: 22px;
+    font-size: 16px;
+    text-align: center;
+    color: #414141;
+}
+.category2 {
+    font-weight: 600;
+    margin-left: 25px;
+    font-size: 16px;
+    color: #414141;
+}
+
+.state{
+    font-weight: 600;
+    font-size: 18px;
+    color: #414141;
+}
+
+button {
+    background-color: #FFFFFF;
+    border: none;
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 23px;
+    text-align: center;
+    text-decoration-line: underline;
+    color: #909090;
+
+}
+
+/*footer*/
+footer {
+    background-color: white;
+    color: #909090;
+
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#wrapper {
+    min-height: 100vh;
+    position: relative;
+}
+
+table {
+    width: 100%;
+}
+
+footer a {
+    color: #909090;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+#footer_MoA {
+    font-family: 'Montserrat';
+    font-size: 25px;
+    margin: 0;
+    font-weight: 600;
+}
+#from {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+footer ul {
+    padding-inline-start: 100px;
+}
+footer td:nth-child(2) {
+    text-align: right;
+    font-size: 10px;
+}
+footer td p {
+    font-size: 10px;
+}
+#info {
+    padding: 20px 0;
+}
+
+.swal-wide {
+    font-size: 12px !important;
+    height: 200px !important;
+}
+
+/* 포인트 안내 팝업창 */
+#pointExplanation {
+    box-sizing: border-box;
+    background-color: white;
+    position: absolute;
+    top: 360px;
+    margin-left: 130px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 14px;
+    border: 1.5px solid #909090;
+    border-radius: 3px;
+    box-shadow: 0px 0px 100px rgba(184, 171, 252, 0.1);
+    display: none;
+    padding: 7px;
+}
+
+#point-btn img {
+    width: 15px;
+    position: absolute;
+    margin-top: -7px;
+    margin-left: 5px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+#pointTitle {
+    position: absolute;
+    top: 9px;
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 17px;
+}
+
+#close-btn {
+    z-index: 100;
+    margin-left: 320px;
+    cursor: pointer;
+}
+
+#modifyBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+    color: #909090;
+}
