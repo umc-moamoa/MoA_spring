@@ -137,12 +137,12 @@ public class UserProvider {
         }
     }
 
-    public List<GetUserAnswersRes> retrieveUserAnswer(long userIdByJwt, long postId) throws BaseException{
+    public List<GetUserAnswersRes> retrieveUserAnswer(long userIdByJwt, long postId) throws BaseException {
         try {
-            List<GetUserResultFormatRes> getUserResultFormatRes = userDao.selectUserAnswer(userIdByJwt,postId);
+            List<GetUserResultFormatRes> getUserResultFormatRes = userDao.selectUserAnswer(userIdByJwt, postId);
             List<GetUserAnswersRes> getUserAnswersRes = new ArrayList<>();
 
-            for(int i = 0; i < getUserResultFormatRes.size();i++) {
+            for (int i = 0; i < getUserResultFormatRes.size(); i++) {
                 GetUserAnswersRes userAnswerRes = new GetUserAnswersRes();
                 GetUserResultFormatRes userResultRes = getUserResultFormatRes.get(i);
 
@@ -151,19 +151,21 @@ public class UserProvider {
 
                 List<String> answerReuslt = userDao.selectUserResult(userIdByJwt, postDetailId);
                 String[] result = new String[answerReuslt.size()];
-                // 단문형/장문형이라면 result 그대로
-                if (format == 3 || format == 4) {
-                    for (int j = 0; j < answerReuslt.size(); j++) {
-                        result[j] = answerReuslt.get(j);
-                    }
-                } else {
+                String[] result2 = new String[answerReuslt.size()];
+
+                for (int j = 0; j < answerReuslt.size(); j++) {
+                    result[j] = answerReuslt.get(j);
+                }
+
+                if(format == 1 || format == 2) {
                     for (int j = 0; j < answerReuslt.size(); j++) {
                         int row = Integer.parseInt(answerReuslt.get(j)) - 1;
-                        result[j] = userDao.selectQuestionItem(postDetailId, row);
+                        result2[j] = userDao.selectQuestionItem(postDetailId, row);
                     }
                 }
                 userAnswerRes.setFormat(format);
                 userAnswerRes.setResult(result);
+                userAnswerRes.setResult2(result2);
 
                 getUserAnswersRes.add(userAnswerRes);
 
