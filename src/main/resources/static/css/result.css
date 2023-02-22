@@ -1,0 +1,290 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR';
+}
+html, body {
+    height: 100%;
+    width: 100%;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+a {
+    text-decoration: none;
+}
+ul,li{
+    list-style: none;
+}
+
+.header {    
+    position: relative;
+    width: 100%;
+    height: 180px;
+    margin: 0 auto;
+}
+
+#backTop {
+    position: absolute;
+    z-index: -100;
+}
+
+/* 로그인, 회원가입, 마이페이지 */
+#userMenu {
+    width: 100%;
+    margin: 0 auto;
+}
+#userMenu .list_menu {
+    float: right;
+}
+#userMenu * {
+    font-weight: 400;
+    font-size: 12px;
+    color: #414141;
+}
+ul {
+    display: block;
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+}
+
+#userMenu .menu {
+    position: relative;
+    float: left;
+    z-index: 400;
+    margin-right: 15px;
+}
+
+#userMenu:after{
+    content: "";
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: 15px;
+    font-size: 0;
+    text-indent: -9999px;
+}
+
+#userMenu .link:hover{
+    color: #4E7FF2;
+}
+
+/* 로고 헤더 */
+#headerLogo .logo img {
+    display: block;
+    width: 140px;
+    margin: 0 auto;
+    /* margin-left: 80px; */
+}
+
+/* gnb */
+.gnb_main {
+    width: 100%;
+    margin: 30px auto; 
+    margin-bottom: 0;
+    border-right: none;
+    border-left: none;
+    box-shadow: 0 1px 5px 0 rgb(32 33 36 / 20%);
+}
+.gnb{
+    text-align: center;
+    padding: 8px 0;
+    margin: 0;
+}
+.gnb li {
+    display: inline;
+    margin: 0 15px;
+}
+.gnb a {
+    display: inline-block;
+
+    width: 140px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #909090;
+    margin: 0;
+}
+
+.link:hover {
+    color: #4E7FF2;
+    font-weight: 700;
+}
+
+/* container */
+#wrapper .container {
+    width: 970px;
+    margin: 70px auto;
+    margin-bottom: 100px;
+    padding: 0 70px;
+}
+
+#fcontainer {
+    width: 970px;
+    margin: 30px auto;
+    padding: 0 65px;
+}
+
+/*서브 제목*/
+#subTitle .subTitle{
+    position: relative;
+    margin-left: 135px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 40px;
+    color: #414141;
+}
+
+/* main */
+#main {
+    box-sizing: border-box;
+    padding: 30px;
+    margin: 0 135px;
+    height: auto;
+    background: #FFFFFF;
+    border: 1px solid #909090;
+}
+
+.flex-container2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-sTitle {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    padding-bottom: 15px;
+    padding-left: 8px;
+    border-bottom: 2px solid #C6C6C6;
+}
+
+#sTitle {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 35px;
+    color: #414141;
+}
+
+#peopleNum {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 23px;
+    color: #4E7FF2;
+    margin-left: 25px;
+}
+
+.sub-container {
+    margin-top: 10px;
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 29px;
+    color: #414141;
+}
+
+#textResultBox {
+    height:250px;
+    overflow-y: scroll;
+    margin-top: 5px;
+}
+
+#textResultItem {
+    background: #F4F4F4;
+    box-shadow: 0px 0px 100px rgba(184, 171, 252, 0.1);
+    border-radius: 5px;
+    margin: 7px;
+    margin-left: 0;
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 26px;
+    color: #6C6C6C;
+}
+
+
+/*footer*/
+footer {
+    background-color: white;
+    color: #909090;
+
+    bottom: 0;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#wrapper {
+    min-height: 100vh;
+    position: relative;
+}
+
+table {
+    width: 100%;
+}
+
+footer a {
+    color: #909090;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+#footer_MoA {
+    font-family: 'Montserrat';
+    font-size: 25px;
+    margin: 0;
+    font-weight: 600;
+}
+#from {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+footer ul {
+    padding-inline-start: 100px;
+}
+footer td:nth-child(2) {
+    text-align: right;
+    font-size: 10px;
+}
+footer td p {
+    font-size: 10px;
+}
+#info {
+    padding: 20px 0;
+}
+
+/* 통계 그래프 */
+.resultContainer {
+    font-family: Noto Sans KR;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #6C6C6C;
+}
+.progress-bar {
+    width: 100%;
+    height: 15px;
+    background-color: #dedede;
+}
+
+.progress-bar .progress {
+    height: 15px;
+    padding: 0;
+    background-color: #9CC2FF;
+}
+
+.swal-wide {
+    font-size: 12px !important;
+    height: 200px !important;
+}
