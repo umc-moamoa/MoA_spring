@@ -12,6 +12,7 @@ import java.util.List;
 public class GetUserAnswersRes {
     int format;
     String[] result;
+    String[] result2;
     public GetUserAnswersRes() {
 
     }
