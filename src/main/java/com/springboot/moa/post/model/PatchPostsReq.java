@@ -16,7 +16,6 @@ public class PatchPostsReq {
     private String title;
     private String content;
     private Date deadline;
-    private long postUserId;
     public PatchPostsReq(){
 
     }
