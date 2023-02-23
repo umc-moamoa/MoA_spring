@@ -154,7 +154,7 @@ public class PostDao {
                 "        WHERE p.status='ACTIVE'\n" +
                 "        GROUP BY p.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) DESC" +
-                "        LIMIT 4";
+                "        LIMIT 5";
         return this.jdbcTemplate.query(selectParticipantsDescQuery,
                 (rs, rowNum) -> new GetParticipantsRes(
                         rs.getLong("postId"),
@@ -179,7 +179,7 @@ public class PostDao {
                 "        WHERE p.status='ACTIVE'\n" +
                 "        GROUP BY p.post_id, p.point, p.title, p.status\n" +
                 "        ORDER BY count(distinct r.user_id) ASC" +
-                "        LIMIT 4";
+                "        LIMIT 5";
         return this.jdbcTemplate.query(selectParticipantsAscQuery,
                 (rs, rowNum) -> new GetParticipantsRes(
                         rs.getLong("postId"),
