@@ -122,19 +122,19 @@ public class AuthController {
 
             JsonElement element = JsonParser.parseString(result);
 
-            String id = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+            String email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
             String pwd = element.getAsJsonObject().get("id").getAsString();
             String nick = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
 
-            PostUserReq kakaoUserReq = new PostUserReq(id,nick,pwd, "kakao",accessToken);
-            if (userProvider.checkIdExist(id) != 1) {
+            PostUserReq kakaoUserReq = new PostUserReq(email,nick,pwd, "kakao",accessToken);
+            if (userProvider.checkIdExist(email) != 1) {
                 PostUserRes kakaoUserRes = userService.createUser(kakaoUserReq);
 
                 if(kakaoUserRes != null){
                     String message = "회원가입에 성공하였습니다.";
                 }
             }
-            PostLoginReq kakaoLoginReq = new PostLoginReq(id,pwd);
+            PostLoginReq kakaoLoginReq = new PostLoginReq(email,pwd);
             PostLoginRes kakaoLoinRes = authService.login(kakaoLoginReq);
 
             br.close();
